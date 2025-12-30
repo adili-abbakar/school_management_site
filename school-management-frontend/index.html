@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPro Academy | School Management System</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    
+    <style>
+        /* Refined base font sizes for better readability and hierarchy */
+        body { font-size: 13px; line-height: 1.5; }
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.25rem; }
+        p { font-size: 13px; }
+        .text-xl { font-size: 1.1rem; }
+        .text-sm { font-size: 12px; }
+        .text-xs { font-size: 10px; }
+        /* Mobile menu transitions */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-white">
+  
+  <!-- Navigation -->
+  <nav class="bg-[#19214D] text-white sticky top-0 z-50 shadow-lg">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="index.html" class="text-lg font-bold flex items-center gap-2">
+        <i class="fas fa-graduation-cap text-[#6B8DD6]"></i>
+        <span>EduPro Academy</span>
+      </a>
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center gap-6 text-sm">
+        <a href="index.html" class="hover:text-[#6B8DD6] transition-colors">Home</a>
+        <a href="about.html" class="hover:text-[#6B8DD6] transition-colors">About</a>
+        <a href="#" class="hover:text-[#6B8DD6] transition-colors">Academics</a>
+        <a href="#" class="hover:text-[#6B8DD6] transition-colors">Admissions</a>
+        <a href="#" class="hover:text-[#6B8DD6] transition-colors">News</a>
+        <a href="contact.html" class="hover:text-[#6B8DD6] transition-colors">Contact</a>
+        <a href="dashboard.html" class="bg-[#6B8DD6] hover:bg-opacity-90 text-white px-4 py-2 rounded-md font-medium transition-colors text-sm">
+          Portal Login
+        </a>
+      </div>
+      <!-- Mobile Menu Toggle -->
+      <button id="mobileMenuBtn" class="md:hidden text-white text-xl">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="mobileMenuOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"></div>
+
+  <!-- Mobile Side Menu Overlay -->
+  <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 h-full w-64 bg-[#19214D] text-white z-50 shadow-2xl md:hidden">
+    <div class="p-4 border-b border-gray-700 flex items-center justify-between">
+      <span class="font-bold">Menu</span>
+      <button id="closeMobileMenu" class="text-white text-xl">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <nav class="flex flex-col p-4 space-y-4 text-sm">
+      <a href="index.html" class="hover:text-[#6B8DD6] transition-colors py-2">Home</a>
+      <a href="about.html" class="hover:text-[#6B8DD6] transition-colors py-2">About</a>
+      <a href="#" class="hover:text-[#6B8DD6] transition-colors py-2">Academics</a>
+      <a href="#" class="hover:text-[#6B8DD6] transition-colors py-2">Admissions</a>
+      <a href="#" class="hover:text-[#6B8DD6] transition-colors py-2">News</a>
+      <a href="contact.html" class="hover:text-[#6B8DD6] transition-colors py-2">Contact</a>
+      <a href="dashboard.html" class="bg-[#6B8DD6] hover:bg-opacity-90 text-white px-4 py-2 rounded-md font-medium transition-colors text-sm inline-block text-center mt-4">
+        Portal Login
+      </a>
+    </nav>
+  </div>
+
+  <main class="flex-grow">
+    <!-- Hero Section -->
+    <section class="relative h-[550px] flex items-center justify-center text-white overflow-hidden">
+      <div class="absolute inset-0 bg-[#19214D]/80 z-10"></div>
+      <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=2000&h=1200&fit=crop');"></div>
+      <div class="container mx-auto px-4 relative z-20 text-center" data-aos="fade-up">
+        <h1 class="text-3xl md:text-5xl font-extrabold mb-5">
+          Empowering Minds, Shaping the Future
+        </h1>
+        <p class="text-base mb-7 max-w-2xl mx-auto text-gray-200">
+          Welcome to EduPro Academy, where we combine traditional values with modern innovation.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="apply.html" class="bg-[#6B8DD6] hover:bg-opacity-90 text-white px-7 py-3 rounded-lg font-bold transition-all text-sm">
+            Apply for Admission
+          </a>
+          <a href="about.html" class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 px-7 py-3 rounded-lg font-bold transition-all text-sm">
+            Explore Campus
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12" data-aos="fade-up">
+          <h2 class="text-2xl font-bold text-[#19214D] mb-3">Why Choose EduPro?</h2>
+          <div class="w-20 h-1.5 bg-[#6B8DD6] mx-auto"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-xl transition-shadow group" data-aos="fade-up" data-aos-delay="100">
+            <div class="w-14 h-14 bg-blue-50 flex items-center justify-center rounded-lg mb-5 group-hover:bg-[#6B8DD6] transition-colors">
+              <i class="fas fa-user-graduate text-xl text-[#6B8DD6] group-hover:text-white"></i>
+            </div>
+            <h3 class="text-lg font-bold mb-3 text-[#19214D]">Expert Educators</h3>
+            <p class="text-gray-600 text-sm">Our faculty members are world-class professionals dedicated to student success.</p>
+          </div>
+          <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-xl transition-shadow group" data-aos="fade-up" data-aos-delay="200">
+            <div class="w-14 h-14 bg-blue-50 flex items-center justify-center rounded-lg mb-5 group-hover:bg-[#6B8DD6] transition-colors">
+              <i class="fas fa-microscope text-xl text-[#6B8DD6] group-hover:text-white"></i>
+            </div>
+            <h3 class="text-lg font-bold mb-3 text-[#19214D]">Modern Facilities</h3>
+            <p class="text-gray-600 text-sm">State-of-the-art labs, libraries, and smart classrooms for immersive learning.</p>
+          </div>
+          <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-xl transition-shadow group" data-aos="fade-up" data-aos-delay="300">
+            <div class="w-14 h-14 bg-blue-50 flex items-center justify-center rounded-lg mb-5 group-hover:bg-[#6B8DD6] transition-colors">
+              <i class="fas fa-trophy text-xl text-[#6B8DD6] group-hover:text-white"></i>
+            </div>
+            <h3 class="text-lg font-bold mb-3 text-[#19214D]">Holistic Growth</h3>
+            <p class="text-gray-600 text-sm">Focusing on academic excellence as well as sports, arts, and character building.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Latest News Preview -->
+    <section class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="flex justify-between items-end mb-10" data-aos="fade-up">
+          <div>
+            <h2 class="text-2xl font-bold text-[#19214D] mb-2">School News & Updates</h2>
+            <div class="w-20 h-1.5 bg-[#6B8DD6]"></div>
+          </div>
+          <a href="#" class="text-[#6B8DD6] font-bold hover:underline text-sm">View All News →</a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 group" data-aos="fade-up" data-aos-delay="100">
+            <div class="h-44 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&h=400&fit=crop" alt="news" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+            </div>
+            <div class="p-5">
+              <span class="text-xs font-bold text-[#6B8DD6] uppercase">October 11, 2025</span>
+              <h3 class="text-base font-bold my-2 text-[#19214D]">Annual Science Fair Winners</h3>
+              <p class="text-xs text-gray-600">Our students showcased incredible innovation at this year's Science Fair...</p>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 group" data-aos="fade-up" data-aos-delay="200">
+            <div class="h-44 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&h=400&fit=crop" alt="news" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+            </div>
+            <div class="p-5">
+              <span class="text-xs font-bold text-[#6B8DD6] uppercase">October 12, 2025</span>
+              <h3 class="text-base font-bold my-2 text-[#19214D]">Sports Day Celebrations</h3>
+              <p class="text-xs text-gray-600">An exciting day of athletics and team spirit brought our community together...</p>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 group" data-aos="fade-up" data-aos-delay="300">
+            <div class="h-44 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&h=400&fit=crop" alt="news" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+            </div>
+            <div class="p-5">
+              <span class="text-xs font-bold text-[#6B8DD6] uppercase">October 13, 2025</span>
+              <h3 class="text-base font-bold my-2 text-[#19214D]">New Library Wing Opens</h3>
+              <p class="text-xs text-gray-600">Students now have access to over 10,000 new books and digital resources...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#19214D] text-white py-10 mt-auto">
+    <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div class="space-y-3">
+        <h3 class="text-base font-bold flex items-center gap-2">
+          <i class="fas fa-graduation-cap text-[#6B8DD6]"></i>
+          <span>EduPro Academy</span>
+        </h3>
+        <p class="text-gray-300 text-xs leading-relaxed">
+          Excellence in education and innovation since 1995.
+        </p>
+      </div>
+      <div>
+        <h4 class="font-bold mb-3 text-sm">Quick Links</h4>
+        <ul class="space-y-2 text-xs text-gray-300">
+          <li><a href="about.html" class="hover:text-[#6B8DD6] transition-colors">Our Story</a></li>
+          <li><a href="#" class="hover:text-[#6B8DD6] transition-colors">Programs</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-bold mb-3 text-sm">Academics</h4>
+        <ul class="space-y-2 text-xs text-gray-300">
+          <li><a href="#" class="hover:text-[#6B8DD6] transition-colors">Primary School</a></li>
+          <li><a href="#" class="hover:text-[#6B8DD6] transition-colors">Secondary School</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-bold mb-3 text-sm">Contact Info</h4>
+        <ul class="space-y-2 text-xs text-gray-300">
+          <li class="flex items-center gap-2">
+            <i class="fas fa-map-marker-alt text-[#6B8DD6]"></i>
+            123 Education Way, Tech City
+          </li>
+          <li class="flex items-center gap-2">
+            <i class="fas fa-phone text-[#6B8DD6]"></i>
+            +1 (555) 123-4567
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="container mx-auto px-4 mt-6 pt-6 border-t border-gray-700 text-center text-xs text-gray-400">
+      © 2025 EduPro Academy School Management System. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    AOS.init({ duration: 800, once: true });
+    
+    // Mobile Menu Logic
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMobileMenu = document.getElementById('closeMobileMenu');
+    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.add('active');
+      mobileMenuOverlay.classList.remove('hidden');
+    });
+
+    closeMobileMenu.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      mobileMenuOverlay.classList.add('hidden');
+    });
+
+    mobileMenuOverlay.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      mobileMenuOverlay.classList.add('hidden');
+    });
+  </script>
+</body>
+</html>

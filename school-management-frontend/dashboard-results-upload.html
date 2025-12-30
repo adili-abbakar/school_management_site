@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPro | Upload Results</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a2b4b',
+                        secondary: '#f0f4f8',
+                        accent: '#3b82f6',
+                        muted: '#6b7280',
+                        sidebar: '#0f172a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; font-size: 13px; }
+        .sidebar-link.active { background-color: #1e293b; color: #3b82f6; border-right: 4px solid #3b82f6; }
+        h1, h2, h3 { font-size: 1.1rem; font-weight: 700; }
+        .text-xs { font-size: 11px; }
+        .text-sm { font-size: 12px; }
+    </style>
+</head>
+<body class="bg-slate-50 flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-60 bg-sidebar text-slate-300 flex-shrink-0 flex flex-col hidden md:flex">
+        <div class="p-5 flex items-center gap-3 border-b border-slate-800">
+            <div class="bg-accent text-white p-1.5 rounded">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <span class="text-lg font-bold text-white tracking-tight">EduPro</span>
+        </div>
+        <nav class="flex-grow py-4 space-y-0.5 overflow-y-auto text-sm">
+            <div class="px-5 mb-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Main Menu</div>
+            <a href="dashboard.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-th-large"></i>
+                <span>Overview</span>
+            </a>
+            
+            <div class="px-5 mt-4 mb-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">User Management</div>
+            <a href="dashboard-students.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-user-graduate"></i>
+                <span>Students</span>
+            </a>
+            <a href="dashboard-teachers.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>Teachers</span>
+            </a>
+            <a href="dashboard-admins.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-user-shield"></i>
+                <span>Admins</span>
+            </a>
+            <a href="dashboard-guardians.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-users"></i>
+                <span>Guardians</span>
+            </a>
+
+            <div class="px-5 mt-4 mb-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Academics</div>
+            <a href="dashboard-sessions.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Sessions</span>
+            </a>
+            <a href="dashboard-classes.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-school"></i>
+                <span>Classes</span>
+            </a>
+            <a href="dashboard-promotions.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-arrow-up-right-dots"></i>
+                <span>Promotions</span>
+            </a>
+
+            <div class="px-5 mt-4 mb-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Operations</div>
+            <a href="dashboard-admissions.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-user-plus"></i>
+                <span>Admissions</span>
+            </a>
+            <a href="dashboard-results-upload.html" class="sidebar-link active flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-file-invoice"></i>
+                <span>Results</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-grow flex flex-col min-w-0 bg-slate-50 overflow-y-auto">
+        <header class="h-14 bg-white border-b px-6 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+            <div class="w-8 h-8 bg-accent text-white rounded-full flex items-center justify-center text-xs font-bold">AD</div>
+        </header>
+
+        <div class="p-6">
+            <h1 class="text-xl font-extrabold text-primary mb-6">Upload Examination Results</h1>
+            
+            <div class="bg-white p-8 rounded-xl border border-slate-100 shadow-sm max-w-2xl mx-auto text-center">
+                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-cloud-upload-alt text-2xl"></i>
+                </div>
+                <h2 class="text-lg font-bold text-primary">Select File to Upload</h2>
+                <p class="text-slate-500 text-xs mt-1 mb-8">Upload class results for the current academic session.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 text-left">
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block">Academic Session</label>
+                        <select class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 px-4 text-xs outline-none">
+                            <option>2024/2025 Session</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block">Class</label>
+                        <select class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 px-4 text-xs outline-none">
+                            <option>Select Class...</option>
+                            <option>JSS 1 Gold</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="border-2 border-dashed border-slate-200 rounded-2xl p-10 mb-8 hover:border-accent transition-all cursor-pointer group">
+                    <i class="fas fa-file-csv text-3xl text-slate-300 group-hover:text-accent mb-4"></i>
+                    <p class="text-xs font-bold text-slate-500 group-hover:text-primary transition-all">Click or drag CSV result file here</p>
+                </div>
+
+                <button class="w-full bg-accent text-white py-3 rounded-lg font-bold text-sm shadow-md hover:bg-blue-600 transition-all">
+                    Process Result Sheet
+                </button>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
