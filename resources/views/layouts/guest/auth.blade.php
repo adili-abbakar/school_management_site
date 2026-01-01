@@ -1,4 +1,4 @@
-@extends('layouts.base')
+@extends('layouts.guest.base')
 
 @section('content')
     <body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">

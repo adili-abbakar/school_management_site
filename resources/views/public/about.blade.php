@@ -1,12 +1,8 @@
-@extends('layouts.guest')
+@extends('layouts.guest.app')
 
 @section('title', 'About')
 
 @section('page-content')
-    <!-- Navigation -->
-    <x-guest_nav />
-
-
     <!-- Main Content -->
     <main class="py-16 container mx-auto px-4">
         <header class="bg-primary py-16 text-white text-center" data-aos="fade-down">
@@ -47,23 +43,4 @@
             </div>
         </section>
     </main>
-
-    <!-- Footer -->
-    <footer class="bg-[#19214D] text-white py-10 mt-auto">
-        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="space-y-3">
-                <h3 class="text-lg font-bold flex items-center gap-2">
-                    <i class="fas fa-graduation-cap text-[#6B8DD6]"></i>
-                    <span>EduPro Academy</span>
-                </h3>
-                <p class="text-gray-400 text-xs leading-relaxed">
-                    Excellence in education and innovation since 1995.
-                </p>
-            </div>
-        </div>
-        <div class="container mx-auto px-4 mt-6 pt-6 border-t border-gray-700 text-center text-xs text-gray-400">
-            © 2025 EduPro Academy School Management System. All rights reserved.
-        </div>
-    </footer>
-
 @endsection

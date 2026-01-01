@@ -1,4 +1,4 @@
-@extends('layouts.auth')
+@extends('layouts.guest.auth')
 
 @section('title', 'Forgot Password')
 

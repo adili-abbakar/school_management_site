@@ -9,8 +9,8 @@
           <a href="{{ route('home') }}" class="hover:text-[#6B8DD6] transition-colors">Home</a>
           <a href="{{ route('about') }}" class="hover:text-[#6B8DD6] transition-colors">About</a>
           <a href="" class="hover:text-[#6B8DD6] transition-colors">Academics</a>
-          <a href="{{ route('apply') }}" class="hover:text-[#6B8DD6] transition-colors">Admissions</a>
-          <a href="#" class="hover:text-[#6B8DD6] transition-colors">News</a>
+          <a href="{{ route('admission.apply') }}" class="hover:text-[#6B8DD6] transition-colors">Admissions</a>
+          <a href="{{ route('news') }}" class="hover:text-[#6B8DD6] transition-colors">News</a>
           <a href="{{ route('contact') }}" class="hover:text-[#6B8DD6] transition-colors">Contact</a>
           <a href="{{ route('login') }}"
             class="bg-[#6B8DD6] hover:bg-opacity-90 text-white px-4 py-2 rounded-md font-medium transition-colors text-sm">
@@ -39,8 +39,8 @@
         <a href="{{ route('home') }}" class="hover:text-[#6B8DD6] transition-colors py-2">Home</a>
         <a href="{{ route('about') }}" class="hover:text-[#6B8DD6] transition-colors py-2">About</a>
         <a href="#" class="hover:text-[#6B8DD6] transition-colors py-2">Academics</a>
-        <a href="{{ route('apply') }}" class="hover:text-[#6B8DD6] transition-colors py-2">Admissions</a>
-        <a href="#" class="hover:text-[#6B8DD6] transition-colors py-2">News</a>
+        <a href="{{ route('admission.apply') }}" class="hover:text-[#6B8DD6] transition-colors py-2">Admissions</a>
+        <a href="{{ route('news') }}" class="hover:text-[#6B8DD6] transition-colors py-2">News</a>
         <a href="{{ route('contact') }}" class="hover:text-[#6B8DD6] transition-colors py-2">Contact</a>
         <a href="{{ route('login') }}"
           class="bg-[#6B8DD6] hover:bg-opacity-90 text-white px-4 py-2 rounded-md font-medium transition-colors text-sm inline-block text-center mt-4">
