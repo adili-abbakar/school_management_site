@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('first_name');
+            $table->string(column: 'middle_name');
             $table->string('last_name')->nullable();
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
@@ -24,7 +25,8 @@ return new class extends Migration
             $table->string('nationality', 100);
             $table->string('state', 100);
             $table->string('local_government', 100);
-            $table->string('address', 255);
+            $table->string('religion');
+            $table->string('address');
             $table->enum('type', ['ADMIN', 'TEACHER', 'STUDENT', 'GUARDIAN']);
             $table->rememberToken();
             $table->timestamps();

@@ -15,25 +15,25 @@
         </div>
         <nav class="flex-grow py-4 space-y-1 overflow-y-auto text-xs">
             <div class="px-4 mb-2 text-[9px] font-semibold text-slate-500 uppercase tracking-wider">Main Menu</div>
-            <a href="dashboard.html" class="sidebar-link active flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+            <a href="{{ route('dashboard') }}" class="sidebar-link {{ url()->current() == route('dashboard') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
                 <i class="fas fa-th-large text-xs"></i>
                 <span>Overview</span>
             </a>
             
             <div class="px-4 mt-4 mb-2 text-[9px] font-semibold text-slate-500 uppercase tracking-wider">User Management</div>
-            <a href="dashboard-students.html" class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+            <a href="{{ route('students.index') }}" class="sidebar-link {{ request()->is('students*') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
                 <i class="fas fa-user-graduate text-xs"></i>
                 <span>Students</span>
             </a>
-            <a href="dashboard-teachers.html" class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+            <a href="{{ route('teachers.index') }}" class="sidebar-link {{ request()->is('teachers*') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
                 <i class="fas fa-chalkboard-teacher text-xs"></i>
                 <span>Teachers</span>
             </a>
-            <a href="dashboard-admins.html" class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+            <a href="{{ route('admins.index') }}" class="sidebar-link {{ request()->is('admins*') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
                 <i class="fas fa-user-shield text-xs"></i>
                 <span>Admins</span>
             </a>
-            <a href="dashboard-guardians.html" class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+            <a href="{{  route('guardians.index') }}" class="sidebar-link {{ request()->is('guardians*') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
                 <i class="fas fa-users text-xs"></i>
                 <span>Guardians</span>
             </a>

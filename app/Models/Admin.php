@@ -13,6 +13,10 @@ class Admin extends Model
         'user_id',
         'staff_number',
         'role_type',
+        'highest_qualification',
+        'years_of_experience',
+        'start_date',
+        'employment_type'
     ];
 
     public function user()

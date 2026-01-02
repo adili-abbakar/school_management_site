@@ -1,53 +1,37 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard')
+@section('title', 'Dashboard')
 
 @section('page-content')
     <!-- Main Content -->
     <main class="flex-grow flex flex-col min-w-0 bg-slate-50 overflow-y-auto">
         <!-- Header -->
-        <header class="h-14 bg-white border-b px-4 md:px-6 flex items-center justify-between sticky top-0 z-10 shadow-sm">
-            <!-- Added hamburger menu button for mobile -->
-            <button id="openSidebar" class="text-primary text-lg md:hidden mr-3">
-                <i class="fas fa-bars"></i>
-            </button>
-            
-            <div class="flex items-center gap-3 flex-grow max-w-lg">
+        <x-dashboard-header>
+            <div class="flex items-center gap-4 flex-grow max-w-xl">
                 <div class="relative w-full">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                    <input type="text" placeholder="Search..." class="w-full bg-slate-100 border-none rounded-lg py-1.5 pl-8 pr-3 text-xs focus:ring-2 focus:ring-accent outline-none">
+                    <input type="text" placeholder="Search..."
+                        class="w-full bg-slate-100 border-none rounded-lg py-1.5 pl-9 pr-4 text-xs focus:ring-2 focus:ring-accent outline-none">
                 </div>
             </div>
-            <div class="flex items-center gap-4">
-                <button class="relative text-slate-500 hover:text-primary transition-colors text-sm">
-                    <i class="fas fa-bell"></i>
-                    <span class="absolute -top-1 -right-1 w-1.5 h-1.5 bg-red-500 rounded-full border border-white"></span>
-                </button>
-                <div class="flex items-center gap-2">
-                    <div class="text-right hidden sm:block">
-                        <div class="text-xs font-bold text-primary leading-none">Admin</div>
-                        <div class="text-[9px] text-slate-400 uppercase tracking-wider font-semibold">Super Admin</div>
-                    </div>
-                    <div class="w-8 h-8 bg-accent text-white rounded-full flex items-center justify-center font-bold text-xs shadow-md">
-                        AD
-                    </div>
-                </div>
-            </div>
-        </header>
+
+        </x-dashboard-header>
 
         <!-- Dashboard Content -->
-        <div class="p-4 md:p-6">
+        <div class="p-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
                 <div>
                     <h1 class="text-xl font-extrabold text-primary">Dashboard Overview</h1>
                     <p class="text-slate-500 text-xs">Welcome back, Admin. Here's what's happening today.</p>
                 </div>
                 <div class="flex gap-2">
-                    <button class="bg-white border text-primary px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm hover:bg-slate-50 transition-all flex items-center gap-1.5">
+                    <button
+                        class="bg-white border text-primary px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm hover:bg-slate-50 transition-all flex items-center gap-1.5">
                         <i class="fas fa-download"></i>
                         <span class="hidden sm:inline">Export</span>
                     </button>
-                    <button class="bg-accent text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-md hover:bg-blue-600 transition-all flex items-center gap-1.5">
+                    <button
+                        class="bg-accent text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-md hover:bg-blue-600 transition-all flex items-center gap-1.5">
                         <i class="fas fa-plus"></i>
                         <span class="hidden sm:inline">Add Student</span>
                     </button>
@@ -94,7 +78,8 @@
                         <span class="text-rose-500 text-[9px] font-bold bg-rose-50 px-1.5 py-0.5 rounded">-4%</span>
                     </div>
                     <div class="text-2xl font-extrabold text-primary">92%</div>
-                    <div class="text-slate-400 text-[9px] font-semibold uppercase tracking-wider mt-1">Result Published</div>
+                    <div class="text-slate-400 text-[9px] font-semibold uppercase tracking-wider mt-1">Result Published
+                    </div>
                 </div>
             </div>
 
@@ -120,42 +105,54 @@
                                 <tr class="hover:bg-slate-50 transition-colors">
                                     <td class="px-4 py-3">
                                         <div class="flex items-center gap-2">
-                                            <div class="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500 text-[9px]">JD</div>
+                                            <div
+                                                class="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500 text-[9px]">
+                                                JD</div>
                                             <span class="font-semibold text-primary">John Doe</span>
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 text-slate-600 font-medium">JSS 1</td>
                                     <td class="px-4 py-3 text-slate-500">Oct 12</td>
                                     <td class="px-4 py-3 text-center">
-                                        <span class="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase">Approved</span>
+                                        <span
+                                            class="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase">Approved</span>
                                     </td>
                                 </tr>
                                 <tr class="hover:bg-slate-50 transition-colors">
                                     <td class="px-4 py-3">
                                         <div class="flex items-center gap-2">
-                                            <div class="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500 text-[9px]">AS</div>
+                                            <div
+                                                class="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500 text-[9px]">
+                                                AS</div>
                                             <span class="font-semibold text-primary">Alice Smith</span>
                                         </div>
                                     </td>
                                     <td class="px-4 py-3 text-slate-600 font-medium">SS 2</td>
                                     <td class="px-4 py-3 text-slate-500">Oct 11</td>
                                     <td class="px-4 py-3 text-center">
-                                        <span class="bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase">Pending</span>
+                                        <span
+                                            class="bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase">Pending</span>
                                     </td>
                                 </tr>
-                                <tr class="hover:bg-slate-50 transition-colors">
-                                    <td class="px-4 py-3">
-                                        <div class="flex items-center gap-2">
-                                            <div class="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500 text-[9px]">MB</div>
-                                            <span class="font-semibold text-primary">Mark Brown</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 text-slate-600 font-medium">JSS 3</td>
-                                    <td class="px-4 py-3 text-slate-500">Oct 10</td>
-                                    <td class="px-4 py-3 text-center">
-                                        <span class="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase">Approved</span>
-                                    </td>
-                                </tr>
+                                @for ($i = 0; $i <= 5; $i++)
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="px-4 py-3">
+                                            <div class="flex items-center gap-2">
+                                                <div
+                                                    class="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500 text-[9px]">
+                                                    MB</div>
+                                                <span class="font-semibold text-primary">Mark Brown</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 text-slate-600 font-medium">JSS 3</td>
+                                        <td class="px-4 py-3 text-slate-500">Oct 10</td>
+                                        <td class="px-4 py-3 text-center">
+                                            <span
+                                                class="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase">Approved</span>
+                                        </td>
+
+                                    </tr>
+                                @endfor
                             </tbody>
                         </table>
                     </div>
@@ -170,7 +167,8 @@
                         </h3>
                         <div class="space-y-3">
                             <div class="flex gap-3 p-2 bg-slate-50 rounded-lg">
-                                <div class="text-center bg-white px-1.5 py-1 rounded-md shadow-sm border border-slate-100 h-fit">
+                                <div
+                                    class="text-center bg-white px-1.5 py-1 rounded-md shadow-sm border border-slate-100 h-fit">
                                     <div class="text-[8px] font-bold text-slate-400 uppercase leading-none">Oct</div>
                                     <div class="text-sm font-extrabold text-primary">24</div>
                                 </div>
@@ -180,7 +178,8 @@
                                 </div>
                             </div>
                             <div class="flex gap-3 p-2 bg-slate-50 rounded-lg">
-                                <div class="text-center bg-white px-1.5 py-1 rounded-md shadow-sm border border-slate-100 h-fit">
+                                <div
+                                    class="text-center bg-white px-1.5 py-1 rounded-md shadow-sm border border-slate-100 h-fit">
                                     <div class="text-[8px] font-bold text-slate-400 uppercase leading-none">Nov</div>
                                     <div class="text-sm font-extrabold text-primary">02</div>
                                 </div>
@@ -192,12 +191,14 @@
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-br from-primary to-slate-800 rounded-xl p-4 text-white shadow-lg shadow-primary/20">
+                    <div
+                        class="bg-gradient-to-br from-primary to-slate-800 rounded-xl p-4 text-white shadow-lg shadow-primary/20">
                         <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center mb-3">
                             <i class="fas fa-shield-halved text-accent text-xs"></i>
                         </div>
                         <h4 class="font-bold mb-1.5 text-xs">System Security</h4>
-                        <p class="text-[9px] text-slate-400 mb-3 leading-relaxed">Last backup completed 2 hours ago. Everything is running smoothly.</p>
+                        <p class="text-[9px] text-slate-400 mb-3 leading-relaxed">Last backup completed 2 hours ago.
+                            Everything is running smoothly.</p>
                         <button class="text-[9px] font-bold text-accent hover:underline">View Logs →</button>
                     </div>
                 </div>

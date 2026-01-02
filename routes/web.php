@@ -1,6 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\GuardianController;
+use App\Http\Controllers\AdminController;
+
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdmissionController;
@@ -30,7 +36,15 @@ Route::get("/news", [NewsController::class, 'index'])->name('news');
 
 
 // Route::middleware(['auth'])->group(function () {
-	Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-	Route::get('/dashboard/profile', [DashboardController::class, 'profile'])->name('dashboard.profile');
-	Route::get('/dashboard/settings', [DashboardController::class, 'settings'])->name('dashboard.settings');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard/profile', [DashboardController::class, 'profile'])->name('dashboard.profile');
+Route::get('/dashboard/settings', [DashboardController::class, 'settings'])->name('dashboard.settings');
+
+Route::resource('users', UserController::class);
+Route::resource('students', StudentController::class);
+Route::resource('teachers', TeacherController::class);
+Route::resource('guardians', GuardianController::class);
+Route::resource('admins', AdminController::class);
+
+
 // });

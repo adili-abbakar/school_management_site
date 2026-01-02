@@ -11,6 +11,7 @@
 
     <script src="{{ asset('/js/main.js') }}"></script>
     <script src="{{ asset('/js/mobileMenu.js') }}"></script>
+    <script src="{{ asset('/js/scrollRestorer.js') }}"></script>
 
     </body>
 @endsection
