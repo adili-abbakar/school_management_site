@@ -26,8 +26,6 @@ return new class extends Migration
             $table->string('local_government', 100);
             $table->string('address', 255);
             $table->enum('type', ['ADMIN', 'TEACHER', 'STUDENT', 'GUARDIAN']);
-
-
             $table->rememberToken();
             $table->timestamps();
         });
