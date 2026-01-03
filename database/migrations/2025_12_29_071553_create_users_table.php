@@ -14,22 +14,25 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('first_name');
-            $table->string(column: 'middle_name');
+            $table->string('middle_name');
             $table->string('last_name')->nullable();
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phone', 20)->nullable();
             $table->date('date_of_birth');
-            $table->enum('gender', ['MALE', 'FEMALE']);
+            $table->enum('gender', ['male', 'female']);
             $table->string('nationality', 100);
             $table->string('state', 100);
             $table->string('local_government', 100);
             $table->string('religion');
+            $table->string('tribe');
             $table->string('address');
-            $table->enum('type', ['ADMIN', 'TEACHER', 'STUDENT', 'GUARDIAN']);
+            $table->enum('type', ['admin', 'teacher', 'student', 'guardian']);
             $table->rememberToken();
             $table->timestamps();
+            $table->dateTime('last_login_at')->nullable();
+
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

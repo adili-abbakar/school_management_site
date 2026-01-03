@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id')->primary();
             $table->string('staff_number', 50)->unique();
-            $table->enum('role_type', ['SUPER_ADMIN', 'EXAM_OFFICER', 'ADMISSION_OFFICER']);
+            $table->enum('role_type', ['super_admin', 'exam_officer', 'admission_officer']);
             $table->string('highest_qualification')->nullable();
             $table->integer('years_of_experience')->default(0);
             $table->date('start_date')->nullable();
-            $table->enum('employment_type', ['Fulltime', 'Parttime', 'Contract'])->default('Fulltime');
+            $table->enum('employment_type', ['full_time', 'part_time', 'contract'])->default('full_time');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

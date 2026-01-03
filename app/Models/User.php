@@ -29,10 +29,11 @@ class User extends Authenticatable
         'nationality',
         'state',
         'local_government',
-        'address',
         'type',
         'address',
-        'religion'
+        'religion',
+        'tribe'
+
     ];
 
     /**

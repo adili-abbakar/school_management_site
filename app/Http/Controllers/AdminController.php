@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -11,7 +15,9 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('users.admins.index');
+       $admins = Admin::with('user')->get();
+
+        return view('users.admins.index', ['admins' => $admins]);
     }
 
     /**
@@ -25,9 +31,84 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(Request $request)
     {
-        //
+        // Validate all user + admin fields
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'required|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+            'phone' => 'required|string|max:20',
+            'date_of_birth' => 'required|date',
+            'gender' => 'required|in:male,female',
+            'nationality' => 'required|string|max:100',
+            'state' => 'required|string|max:100',
+            'local_government' => 'required|string|max:100',
+            'religion' => 'required|string|max:100',
+            'tribe' => 'required|string|max:100',
+            'address' => 'required|string|max:255',
+
+            'staff_number' => 'required|string|max:50|unique:admins,staff_number',
+            'role_type' => 'required|in:super_admin,exam_officer,admission_officer',
+            'highest_qualification' => 'nullable|string|max:255',
+            'years_of_experience' => 'nullable|integer|min:0',
+            'start_date' => 'nullable|date',
+            'employment_type' => 'required|in:full_time,part_time,contract',
+        ]);
+
+        try {
+            DB::transaction(function () use ($validated) {
+                // Create user record
+                $user = User::create([
+                    'first_name' => $validated['first_name'],
+                    'middle_name' => $validated['middle_name'],
+                    'last_name' => $validated['last_name'] ?? null,
+                    'email' => $validated['email'],
+                    'password' => Hash::make($validated['password']),
+                    'phone' => $validated['phone'],
+                    'date_of_birth' => $validated['date_of_birth'],
+                    'gender' => $validated['gender'],
+                    'nationality' => $validated['nationality'],
+                    'state' => $validated['state'],
+                    'local_government' => $validated['local_government'],
+                    'religion' => $validated['religion'],
+                    'tribe' => $validated['tribe'], // include tribe
+                    'address' => $validated['address'],
+                    'type' => 'admin',
+                ]);
+
+                // Create admin record linked to user
+                Admin::create([
+                    'user_id' => $user->id,
+                    'staff_number' => $validated['staff_number'],
+                    'role_type' => $validated['role_type'],
+                    'highest_qualification' => $validated['highest_qualification'] ?? null,
+                    'years_of_experience' => $validated['years_of_experience'] ?? 0,
+                    'start_date' => $validated['start_date'] ?? now()->toDateString(),
+                    'employment_type' => $validated['employment_type'],
+                ]);
+            });
+
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'message' => 'Admin created successfully!',
+                    'redirect' => route('admins.index'), // send the route URL back
+                ],
+                201,
+            );
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Something went wrong: ' . $e->getMessage(),
+                ],
+                500,
+            );
+        }
     }
 
     /**
