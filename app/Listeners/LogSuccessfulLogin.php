@@ -20,7 +20,7 @@ class LogSuccessfulLogin
      * Handle the event.
      */
 
- public function handle(Login $event) { 
+     public function handle(Login $event) { 
         $event->user->update([ 'last_login_at' => now() ]); 
     }
 }

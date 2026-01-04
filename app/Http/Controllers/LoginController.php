@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
-
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -14,65 +15,70 @@ class LoginController extends Controller
     {
         return view('auth.login');
     }
+
     public function login(Request $request)
     {
-        //  Validate input
+        // Validate input
         $validator = Validator::make($request->all(), [
-            'email'    => 'required',
+            'email' => 'required',
             'password' => 'required',
         ]);
 
         if ($validator->fails()) {
-            // Return field-specific errors
-            return response()->json([
-                'status' => 'error',
-                'type'   => 'validation',
-                'errors' => $validator->errors()
-            ], 422);
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'type' => 'validation',
+                    'errors' => $validator->errors(),
+                ],
+                422,
+            );
         }
 
-        //  Hard-coded users (prototype)
-        $users = [
-            [
-                'id'       => 1,
-                'name'     => "User 1",
-                'email'    => 'user1@email.com',
-                'username' => 'user_1',
-                'password' => '12345678'
-            ],
-            [
-                'id'       => 2,
-                'name'     => "User 2",
-                'email'    => 'user2@email.com',
-                'username' => 'user_2',
-                'password' => '12345678'
-            ]
-        ];
+        // Find user by email OR admin staff_number
+        $user = User::where('email', $request->email)
+            ->orWhereHas('admin', function ($query) use ($request) {
+                $query->where('staff_number', $request->email);
+            })
+            ->first();
 
-        $matchedUser = collect($users)->first(function ($user) use ($request) {
-            return (
-                ($user['email'] === $request->email || $user['username'] === $request->email)
-                && $user['password'] === $request->password
-            );
-        });
+        // Check password
+        if ($user && Hash::check($request->password, $user->password)) {
+            Auth::login($user);
 
-        if ($matchedUser) {
-            Session::put('logged_in', true);
-            Session::put('user', $matchedUser);
+            // Record last login time
+            $user->update(['last_login_at' => now()]);
 
             return response()->json([
-                'status'   => 'success',
-                'redirect' => redirect()->intended(route('dashboard'))->getTargetUrl()
+                'status' => 'success',
+                'redirect' => redirect()->intended(route('dashboard'))->getTargetUrl(),
             ]);
         }
 
+        // Global auth error
+        return response()->json(
+            [
+                'status' => 'error',
+                'type' => 'auth',
+                'message' => 'Incorrect email/staff number or password.',
+            ],
+            401,
+        );
+    }
 
+    public function logout(Request $request)
+    {
+        // If you’re using Laravel’s Auth
+        Auth::logout();
 
-        //  Global auth error
-        return response()->json([
-            'status' => 'error',
-            'type'   => 'auth',
-            'message' => 'Incorrect username/email or password.'
-        ], 401);
+        // Clear all session data
+        Session::flush();
+
+        // Regenerate session ID for security
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Redirect straight to login page
+        return redirect()->route('home');
     }
 }
