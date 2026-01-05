@@ -38,7 +38,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/profile', [DashboardController::class, 'profile'])->name('dashboard.profile');
     Route::get('/dashboard/settings', [DashboardController::class, 'settings'])->name('dashboard.settings');
 
-    Route::resource('users', UserController::class);
+    Route::get('user/{user}/edit-password', [UserController::class, 'editPassword'])->name('user.edit-password');
+    Route::put('user/{user}/update-password', [UserController::class, 'updatePassword'])->name('user.update-password');
+
     Route::resource('students', StudentController::class);
     Route::resource('teachers', TeacherController::class);
     Route::resource('guardians', GuardianController::class);
