@@ -2,13 +2,12 @@ $("#form").on("submit", function (e) {
   e.preventDefault();
   showLoader();
 
- 
   $(".error-message").text("");
   $("input, select, textarea").removeClass("border-red-600");
 
   let form = $(this);
-  let actionUrl = form.attr("action"); 
-  let method = form.attr("method"); 
+  let actionUrl = form.attr("action");
+  let method = form.attr("method");
 
   $.ajax({
     url: actionUrl,
@@ -16,7 +15,11 @@ $("#form").on("submit", function (e) {
     data: form.serialize(),
     success: function (response) {
       if (response.status === "success") {
-        window.location.href = response.redirect;
+        if (response.redirect) {
+          window.location.href = response.redirect;
+        } else {
+          window.history.back();
+        }
       }
     },
     error: function (xhr) {
