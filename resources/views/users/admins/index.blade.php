@@ -62,9 +62,13 @@
                     </span>
 
                   </td>
-                  <td class="px-6 py-4 text-slate-500">{{ $admin->user->last_login_at ? $admin->user->last_login_at->diffForHumans() : "Never logged in" }}</td>
+                  <td class="px-6 py-4 text-slate-500">
+                    {{ $admin->user->last_login_at ? $admin->user->last_login_at->diffForHumans() : 'Never logged in' }}
+                  </td>
                   <td class="px-6 py-4 text-center">
-                    <button class="text-blue-500"><i class="fas fa-edit"></i></button>
+                    <a href="{{ route('admins.edit', $admin->user_id) }}">
+                      <button class="text-blue-500"><i class="fas fa-edit"></i></button>
+                    </a>
                   </td>
                 </tr>
               @empty

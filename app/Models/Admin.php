@@ -19,6 +19,12 @@ class Admin extends Model
         'employment_type'
     ];
 
+
+    protected $primaryKey = 'user_id';  
+    public $incrementing = false;   
+    protected $keyType = 'int';         
+
+
     public function user()
     {
         return $this->belongsTo(User::class);

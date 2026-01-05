@@ -1,4 +1,4 @@
-// Mobile Menu Logic
+
 const mobileMenuBtn = document.getElementById("mobileMenuBtn");
 const mobileMenu = document.getElementById("mobileMenu");
 const closeMobileMenu = document.getElementById("closeMobileMenu");

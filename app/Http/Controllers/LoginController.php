@@ -18,7 +18,6 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        // Validate input
         $validator = Validator::make($request->all(), [
             'email' => 'required',
             'password' => 'required',
@@ -35,18 +34,15 @@ class LoginController extends Controller
             );
         }
 
-        // Find user by email OR admin staff_number
         $user = User::where('email', $request->email)
             ->orWhereHas('admin', function ($query) use ($request) {
                 $query->where('staff_number', $request->email);
             })
             ->first();
 
-        // Check password
         if ($user && Hash::check($request->password, $user->password)) {
             Auth::login($user);
 
-            // Record last login time
             $user->update(['last_login_at' => now()]);
 
             return response()->json([
@@ -55,7 +51,6 @@ class LoginController extends Controller
             ]);
         }
 
-        // Global auth error
         return response()->json(
             [
                 'status' => 'error',
@@ -68,17 +63,12 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        // If you’re using Laravel’s Auth
+
         Auth::logout();
-
-        // Clear all session data
         Session::flush();
-
-        // Regenerate session ID for security
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
-        // Redirect straight to login page
+        
         return redirect()->route('home');
     }
 }
