@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPro | Guardian Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a2b4b',
+                        secondary: '#f0f4f8',
+                        accent: '#3b82f6',
+                        muted: '#6b7280',
+                        sidebar: '#0f172a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { 
+            font-family: 'Inter', sans-serif; 
+            font-size: 11px;
+        }
+        h1 { font-size: 1.5rem; }
+        h2 { font-size: 1.25rem; }
+        h3 { font-size: 1rem; }
+        h4 { font-size: 0.875rem; }
+        p { font-size: 11px; }
+        .text-xs { font-size: 9px; }
+        .text-sm { font-size: 10px; }
+        .text-base { font-size: 11px; }
+        .text-lg { font-size: 12px; }
+        .text-xl { font-size: 13px; }
+        
+        .sidebar-link.active { background-color: #1e293b; color: #3b82f6; border-right: 4px solid #3b82f6; }
+        .mobile-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-sidebar.active {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 flex h-screen overflow-hidden">
+    <div id="sidebarOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"></div>
+
+    <aside id="sidebar" class="mobile-sidebar md:translate-x-0 w-56 bg-sidebar text-slate-300 flex-shrink-0 flex flex-col fixed md:relative z-40 h-full">
+        <div class="p-4 flex items-center gap-3 border-b border-slate-800">
+            <div class="bg-accent text-white p-1.5 rounded text-xs">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <span class="text-base font-bold text-white tracking-tight">EduPro</span>
+            <button id="closeSidebar" class="ml-auto text-white md:hidden">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <nav class="flex-grow py-4 space-y-1 overflow-y-auto text-xs">
+            <div class="px-4 mb-2 text-[9px] font-semibold text-slate-500 uppercase tracking-wider">Main Menu</div>
+            <a href="dashboard.html" class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+                <i class="fas fa-th-large text-xs"></i>
+                <span>Overview</span>
+            </a>
+            
+            <div class="px-4 mt-4 mb-2 text-[9px] font-semibold text-slate-500 uppercase tracking-wider">User Management</div>
+            <a href="dashboard-students.html" class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+                <i class="fas fa-user-graduate text-xs"></i>
+                <span>Students</span>
+            </a>
+            <a href="dashboard-teachers.html" class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+                <i class="fas fa-chalkboard-teacher text-xs"></i>
+                <span>Teachers</span>
+            </a>
+            <a href="dashboard-admins.html" class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+                <i class="fas fa-user-shield text-xs"></i>
+                <span>Admins</span>
+            </a>
+            <a href="dashboard-guardians.html" class="sidebar-link active flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+                <i class="fas fa-users text-xs"></i>
+                <span>Guardians</span>
+            </a>
+
+            <div class="px-4 mt-4 mb-2 text-[9px] font-semibold text-slate-500 uppercase tracking-wider">Academics</div>
+            <a href="dashboard-sessions.html" class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+                <i class="fas fa-calendar-alt text-xs"></i>
+                <span>Sessions</span>
+            </a>
+            <a href="dashboard-classes.html" class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+                <i class="fas fa-school text-xs"></i>
+                <span>Classes</span>
+            </a>
+            <a href="dashboard-promotions.html" class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+                <i class="fas fa-arrow-up-right-dots text-xs"></i>
+                <span>Promotions</span>
+            </a>
+
+            <div class="px-4 mt-4 mb-2 text-[9px] font-semibold text-slate-500 uppercase tracking-wider">Operations</div>
+            <a href="dashboard-admissions.html" class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+                <i class="fas fa-file-import text-xs"></i>
+                <span>Admissions</span>
+            </a>
+            <a href="dashboard-results-upload.html" class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+                <i class="fas fa-upload text-xs"></i>
+                <span>Upload Results</span>
+            </a>
+            <a href="dashboard-results-check.html" class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+                <i class="fas fa-search text-xs"></i>
+                <span>Check Results</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Navigation Bar -->
+        <header class="bg-white border-b border-slate-200 flex items-center justify-between px-4 md:px-6 py-3 flex-shrink-0">
+            <button id="sidebarToggle" class="text-slate-600 md:hidden mr-2">
+                <i class="fas fa-bars text-lg"></i>
+            </button>
+            <h2 class="text-lg font-semibold text-slate-800">Guardian Details</h2>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-500">Guardian User</span>
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=32&h=32&fit=crop" alt="Profile" class="w-8 h-8 rounded-full">
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="flex-1 overflow-y-auto p-4 md:p-6">
+            <div class="max-w-4xl mx-auto">
+                <!-- Header with Back Button -->
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <a href="dashboard-guardians.html" class="text-accent text-xs mb-2 flex items-center gap-1 hover:underline">
+                            <i class="fas fa-arrow-left text-xs"></i> Back to Guardians
+                        </a>
+                        <h1 class="text-xl font-bold text-slate-800">Michael Johnson</h1>
+                        <p class="text-xs text-slate-500">Guardian ID: GDN-2024-156</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <a href="dashboard-edit-guardian.html" class="px-3 py-1.5 bg-accent text-white text-xs rounded font-medium hover:bg-blue-600 transition flex items-center gap-1">
+                            <i class="fas fa-edit text-xs"></i> Edit
+                        </a>
+                        <button onclick="window.location.href='dashboard-delete-guardian.html'" class="px-3 py-1.5 bg-red-500 text-white text-xs rounded font-medium hover:bg-red-600 transition flex items-center gap-1">
+                            <i class="fas fa-trash text-xs"></i> Delete
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Guardian Details Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <!-- Personal Information -->
+                    <div class="bg-white rounded-lg border border-slate-200 p-4">
+                        <h3 class="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-user text-accent text-xs"></i> Personal Information
+                        </h3>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-xs font-medium text-slate-600">Full Name</label>
+                                <p class="text-sm text-slate-800 mt-1">Michael Johnson</p>
+                            </div>
+                            <div>
+                                <label class="text-xs font-medium text-slate-600">Email</label>
+                                <p class="text-sm text-slate-800 mt-1">michael.johnson@email.com</p>
+                            </div>
+                            <div>
+                                <label class="text-xs font-medium text-slate-600">Phone</label>
+                                <p class="text-sm text-slate-800 mt-1">+1 (555) 345-6789</p>
+                            </div>
+                            <div>
+                                <label class="text-xs font-medium text-slate-600">Occupation</label>
+                                <p class="text-sm text-slate-800 mt-1">Software Engineer</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Details -->
+                    <div class="bg-white rounded-lg border border-slate-200 p-4">
+                        <h3 class="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-map-marker-alt text-accent text-xs"></i> Address
+                        </h3>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-xs font-medium text-slate-600">Street Address</label>
+                                <p class="text-sm text-slate-800 mt-1">456 Elm Street</p>
+                            </div>
+                            <div>
+                                <label class="text-xs font-medium text-slate-600">City</label>
+                                <p class="text-sm text-slate-800 mt-1">New York</p>
+                            </div>
+                            <div>
+                                <label class="text-xs font-medium text-slate-600">State/Province</label>
+                                <p class="text-sm text-slate-800 mt-1">NY</p>
+                            </div>
+                            <div>
+                                <label class="text-xs font-medium text-slate-600">Postal Code</label>
+                                <p class="text-sm text-slate-800 mt-1">10002</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Associated Children Section -->
+                <div class="bg-white rounded-lg border border-slate-200 p-4 mb-6">
+                    <h3 class="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                        <i class="fas fa-children text-accent text-xs"></i> Associated Children
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs">
+                            <thead class="bg-slate-100 border-b border-slate-200">
+                                <tr>
+                                    <th class="px-3 py-2 text-left font-medium text-slate-700">Student Name</th>
+                                    <th class="px-3 py-2 text-left font-medium text-slate-700">Student ID</th>
+                                    <th class="px-3 py-2 text-left font-medium text-slate-700">Class</th>
+                                    <th class="px-3 py-2 text-left font-medium text-slate-700">Relationship</th>
+                                    <th class="px-3 py-2 text-center font-medium text-slate-700">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-3 py-2 text-slate-800">Emma Johnson</td>
+                                    <td class="px-3 py-2 text-slate-600">STU-2024-2341</td>
+                                    <td class="px-3 py-2 text-slate-600">Grade 10-A</td>
+                                    <td class="px-3 py-2 text-slate-600">Daughter</td>
+                                    <td class="px-3 py-2 text-center">
+                                        <a href="dashboard-show-student.html" class="text-accent text-xs font-medium hover:underline">View</a>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-3 py-2 text-slate-800">David Johnson</td>
+                                    <td class="px-3 py-2 text-slate-600">STU-2024-2342</td>
+                                    <td class="px-3 py-2 text-slate-600">Grade 8-B</td>
+                                    <td class="px-3 py-2 text-slate-600">Son</td>
+                                    <td class="px-3 py-2 text-center">
+                                        <a href="dashboard-show-student.html" class="text-accent text-xs font-medium hover:underline">View</a>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-3 py-2 text-slate-800">Sophie Johnson</td>
+                                    <td class="px-3 py-2 text-slate-600">STU-2024-2343</td>
+                                    <td class="px-3 py-2 text-slate-600">Grade 6-C</td>
+                                    <td class="px-3 py-2 text-slate-600">Daughter</td>
+                                    <td class="px-3 py-2 text-center">
+                                        <a href="dashboard-show-student.html" class="text-accent text-xs font-medium hover:underline">View</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Account & Status -->
+                <div class="bg-white rounded-lg border border-slate-200 p-4 mb-6">
+                    <h3 class="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                        <i class="fas fa-lock text-accent text-xs"></i> Account & Status
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-medium text-slate-600">Username</label>
+                            <p class="text-sm text-slate-800 mt-1">michael.johnson</p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-medium text-slate-600">Status</label>
+                            <p class="text-sm text-slate-800 mt-1">
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Active</span>
+                            </p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-medium text-slate-600">Account Created</label>
+                            <p class="text-sm text-slate-800 mt-1">September 01, 2024</p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-medium text-slate-600">Last Login</label>
+                            <p class="text-sm text-slate-800 mt-1">Jan 16, 2025 at 2:15 PM</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-3 flex-wrap">
+                    <a href="dashboard-edit-guardian.html?field=password" class="px-4 py-2 bg-slate-600 text-white text-xs rounded font-medium hover:bg-slate-700 transition flex items-center gap-2">
+                        <i class="fas fa-key text-xs"></i> Change Password
+                    </a>
+                    <a href="dashboard-guardians.html" class="px-4 py-2 bg-slate-300 text-slate-800 text-xs rounded font-medium hover:bg-slate-400 transition flex items-center gap-2">
+                        <i class="fas fa-arrow-left text-xs"></i> Back to List
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.add('active');
+            document.getElementById('sidebarOverlay').classList.remove('hidden');
+        });
+        document.getElementById('closeSidebar').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('sidebarOverlay').classList.add('hidden');
+        });
+        document.getElementById('sidebarOverlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('active');
+            this.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

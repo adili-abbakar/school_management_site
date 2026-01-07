@@ -45,8 +45,7 @@
               @forelse ($admins as $admin)
                 <tr class="hover:bg-slate-50 transition-colors">
                   <td class="px-6 py-4 font-bold text-slate-400 uppercase">{{ $admin->staff_number }}</td>
-                  <td class="px-6 py-4 font-semibold text-primary">{{ $admin->user->first_name }}
-                    {{ $admin->user->middle_name }} {{ $admin->user->last_name }}</td>
+                  <td class="px-6 py-4 font-semibold text-primary">{{ $admin->user->name() }}</td>
                   <td class="px-6 py-4">
                     @php
                       $roleColors = [

@@ -61,7 +61,6 @@ class AdminController extends Controller
 
         try {
             DB::transaction(function () use ($validated) {
-
                 $user = User::create([
                     'first_name' => $validated['first_name'],
                     'middle_name' => $validated['middle_name'],
@@ -95,7 +94,8 @@ class AdminController extends Controller
                 [
                     'status' => 'success',
                     'message' => 'Admin created successfully!',
-                    'redirect' => route('admins.index'),                 ],
+                    'redirect' => route('admins.index'),
+                ],
                 201,
             );
         } catch (\Exception $e) {
@@ -131,73 +131,74 @@ class AdminController extends Controller
      * Update the specified resource in storage.
      */
 
-public function update(Request $request, Admin $admin)
-{
-    $validated = $request->validate([
-        'first_name' => 'required|string|max:255',
-        'middle_name' => 'nullable|string|max:255',
-        'last_name' => 'nullable|string|max:255',
-        'email' => 'required|email|unique:users,email,' . $admin->user_id,
-        'phone' => 'nullable|string|max:20',
-        'date_of_birth' => 'required|date',
-        'gender' => 'required|in:male,female',
-        'nationality' => 'required|string|max:100',
-        'state' => 'required|string|max:100',
-        'local_government' => 'required|string|max:100',
-        'religion' => 'required|string|max:100',
-        'tribe' => 'required|string|max:100',
-        'address' => 'required|string|max:255',
+    public function update(Request $request, Admin $admin)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $admin->user_id,
+            'phone' => 'nullable|string|max:20',
+            'date_of_birth' => 'required|date',
+            'gender' => 'required|in:male,female',
+            'nationality' => 'required|string|max:100',
+            'state' => 'required|string|max:100',
+            'local_government' => 'required|string|max:100',
+            'religion' => 'required|string|max:100',
+            'tribe' => 'required|string|max:100',
+            'address' => 'required|string|max:255',
 
-        'staff_number' => 'required|string|max:50|unique:admins,staff_number,' . $admin->user_id . ',user_id',
-        'role_type' => 'required|in:super_admin,exam_officer,admission_officer',
-        'highest_qualification' => 'nullable|string|max:255',
-        'years_of_experience' => 'nullable|integer|min:0',
-        'start_date' => 'nullable|date',
-        'employment_type' => 'required|in:full_time,part_time,contract',
-    ]);
+            'staff_number' => 'required|string|max:50|unique:admins,staff_number,' . $admin->user_id . ',user_id',
+            'role_type' => 'required|in:super_admin,exam_officer,admission_officer',
+            'highest_qualification' => 'nullable|string|max:255',
+            'years_of_experience' => 'nullable|integer|min:0',
+            'start_date' => 'nullable|date',
+            'employment_type' => 'required|in:full_time,part_time,contract',
+        ]);
 
-    try {
-        DB::transaction(function () use ($validated, $admin) {
-            $admin->user->update([
-                'first_name' => $validated['first_name'],
-                'middle_name' => $validated['middle_name'] ?? null,
-                'last_name' => $validated['last_name'] ?? null,
-                'email' => $validated['email'],
-                'phone' => $validated['phone'] ?? null,
-                'date_of_birth' => $validated['date_of_birth'],
-                'gender' => $validated['gender'],
-                'nationality' => $validated['nationality'],
-                'state' => $validated['state'],
-                'local_government' => $validated['local_government'],
-                'religion' => $validated['religion'],
-                'tribe' => $validated['tribe'],
-                'address' => $validated['address'],
-            ]);
-            
-            $admin->update([
-                'staff_number' => $validated['staff_number'],
-                'role_type' => $validated['role_type'],
-                'highest_qualification' => $validated['highest_qualification'] ?? null,
-                'years_of_experience' => $validated['years_of_experience'] ?? 0,
-                'start_date' => $validated['start_date'] ?? null,
-                'employment_type' => $validated['employment_type'],
-            ]);
-        });
+        try {
+            DB::transaction(function () use ($validated, $admin) {
+                $admin->user->update([
+                    'first_name' => $validated['first_name'],
+                    'middle_name' => $validated['middle_name'] ?? null,
+                    'last_name' => $validated['last_name'] ?? null,
+                    'email' => $validated['email'],
+                    'phone' => $validated['phone'] ?? null,
+                    'date_of_birth' => $validated['date_of_birth'],
+                    'gender' => $validated['gender'],
+                    'nationality' => $validated['nationality'],
+                    'state' => $validated['state'],
+                    'local_government' => $validated['local_government'],
+                    'religion' => $validated['religion'],
+                    'tribe' => $validated['tribe'],
+                    'address' => $validated['address'],
+                ]);
 
-      return response()->json([
-    'status' => 'success',
-    'message' => 'Admin updated successfully',
-    'redirect' => route('admins.index')
-]);
-;
+                $admin->update([
+                    'staff_number' => $validated['staff_number'],
+                    'role_type' => $validated['role_type'],
+                    'highest_qualification' => $validated['highest_qualification'] ?? null,
+                    'years_of_experience' => $validated['years_of_experience'] ?? 0,
+                    'start_date' => $validated['start_date'] ?? null,
+                    'employment_type' => $validated['employment_type'],
+                ]);
+            });
 
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Update failed: ' . $e->getMessage(),
-        ], 500);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Admin updated successfully',
+                'redirect' => route('admins.index'),
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Update failed: ' . $e->getMessage(),
+                ],
+                500,
+            );
+        }
     }
-}
 
     /**
      * Remove the specified resource from storage.

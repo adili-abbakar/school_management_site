@@ -17,35 +17,14 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = [
-        'first_name',
-        'middle_name',
-        'last_name',
-        'email',
-        'password',
-        'phone',
-        'date_of_birth',
-        'gender',
-        'nationality',
-        'state',
-        'local_government',
-        'type',
-        'address',
-        'religion',
-        'tribe',
-        'last_login_at'
-
-    ];
+    protected $fillable = ['first_name', 'middle_name', 'last_name', 'email', 'password', 'phone', 'date_of_birth', 'gender', 'nationality', 'state', 'local_government', 'type', 'address', 'religion', 'tribe', 'last_login_at'];
 
     /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
     /**
      * Get the attributes that should be cast.
@@ -59,6 +38,14 @@ class User extends Authenticatable
             'last_login_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function name()
+    {
+        return trim(
+            collect([$this->first_name, $this->middle_name, $this->last_name])
+                ->filter()
+                ->implode(' '),
+        );
     }
 
     public function student()

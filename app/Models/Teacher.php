@@ -9,13 +9,11 @@ class Teacher extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'staff_number',
-        'occupation',
-        'place_of_work',
-        'subjects_taught',
-    ];
+    protected $fillable = ['user_id', 'staff_number', 'specialized_subject', 'highest_qualification', 'years_of_experience', 'start_date', 'employment_type'];
+
+    protected $primaryKey = 'user_id';
+    public $incrementing = false;
+    protected $keyType = 'int';
 
     public function user()
     {

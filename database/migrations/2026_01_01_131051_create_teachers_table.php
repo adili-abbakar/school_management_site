@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,9 +13,14 @@ return new class extends Migration
         Schema::create('teachers', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id')->primary();
             $table->string('staff_number', 50)->unique();
-            $table->string('occupation', 100)->nullable();
-            $table->string('place_of_work', 100)->nullable();
-            $table->string('subjects_taught', 255)->nullable();
+
+            $table->string('specialized_subject', 255)->nullable();
+
+            $table->string('highest_qualification')->nullable();
+            $table->integer('years_of_experience')->default(0);
+            $table->date('start_date')->nullable();
+            $table->enum('employment_type', ['full_time', 'part_time', 'contract'])->default('full_time');
+
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

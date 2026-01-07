@@ -1,0 +1,91 @@
+@props(['admin' => null])
+
+
+<x-users.user-personal-info-fields :user="$admin?->user" />
+
+
+
+<div class="mb-6">
+  <h3 class="text-base font-bold text-primary mb-1 flex items-center gap-2">
+    <i class="fas fa-graduation-cap text-accent text-xs"></i>
+    Professional Information
+  </h3>
+  <p class="text-xs text-slate-500">Teaching qualifications and experience</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+  <div>
+    <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Staff ID Number *</label>
+    <input type="text" placeholder="e.g., TCH001" name="staff_number"
+      class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none"
+      value="{{ old('staff_number', $admin?->staff_number) }}">
+    <span class="text-red-600 text-[10px] error-message" data-name="staff_number"></span>
+  </div>
+  <div>
+    <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Highest Qualification
+      *</label>
+    <input name="highest_qualification" type="text" placeholder="Enter Qualification"
+      class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none"
+      value="{{ old('highest_qualification', $admin?->highest_qualification) }}">
+    <span class="text-red-600 text-[10px] error-message" data-name="highest_qualification"></span>
+  </div>
+  <div>
+    <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Years of
+      Experience</label>
+    <input type="number" placeholder="Enter years" min="0" name="years_of_experience"
+      value="{{ old('years_of_experience', $admin?->years_of_experience) }}"
+      class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none">
+    <span class="text-red-600 text-[10px] error-message" data-name="years_of_experience"></span>
+  </div>
+  <div>
+    <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Employment Type *</label>
+    <select name="employment_type"
+      class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none">
+      <option value="">Select type</option>
+
+      <option value="full_time"
+        {{ old('employment_type', $admin?->employment_type) === 'full_time' ? 'selected' : '' }}>
+        Full Time
+      </option>
+
+      <option value="part_time"
+        {{ old('employment_type', $admin?->employment_type) === 'part_time' ? 'selected' : '' }}>
+        Part Time
+      </option>
+
+      <option value="contract" {{ old('employment_type', $admin?->employment_type) === 'contract' ? 'selected' : '' }}>
+        Contract
+      </option>
+    </select>
+    <span class="text-red-600 text-[10px] error-message" data-name="employment_type"></span>
+  </div>
+
+  <div>
+    <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Admin Role *</label>
+    <select name="role_type"
+      class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none">
+      <option value="">Select role</option>
+
+      <option value="super_admin" {{ old('role_type', $admin?->role_type) === 'super_admin' ? 'selected' : '' }}>
+        Super Admin
+      </option>
+
+      <option value="exam_officer" {{ old('role_type', $admin?->role_type) === 'exam_officer' ? 'selected' : '' }}>
+        Exam Officer
+      </option>
+
+      <option value="admission_officer"
+        {{ old('role_type', $admin?->role_type) === 'admission_officer' ? 'selected' : '' }}>
+        Admission Officer
+      </option>
+    </select>
+    <span class="text-red-600 text-[10px] error-message" data-name="role_type"></span>
+  </div>
+  <div>
+    <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Date of Joining *</label>
+    <input type="date" name="start_date" value="{{ old('start_date', $admin?->start_date) }}"
+      class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none">
+    <span class="text-red-600 text-[10px] error-message" data-name="start_date"></span>
+  </div>
+</div>
+
+<x-users.address-field :user="$admin?->user" />

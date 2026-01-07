@@ -30,7 +30,7 @@ class LoginController extends Controller
                     'type' => 'validation',
                     'errors' => $validator->errors(),
                 ],
-                422,
+                200,
             );
         }
 
@@ -57,7 +57,7 @@ class LoginController extends Controller
                 'type' => 'auth',
                 'message' => 'Incorrect email/staff number or password.',
             ],
-            401,
+            200,
         );
     }
 
