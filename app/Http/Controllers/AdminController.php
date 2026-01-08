@@ -112,9 +112,11 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Admin $admin)
     {
-        //
+        $admin->load('user');
+
+        return view('users.admins.show', compact('admin'));
     }
 
     /**

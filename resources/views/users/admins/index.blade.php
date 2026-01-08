@@ -65,9 +65,18 @@
                     {{ $admin->user->last_login_at ? $admin->user->last_login_at->diffForHumans() : 'Never logged in' }}
                   </td>
                   <td class="px-6 py-4 text-center">
-                    <a href="{{ route('admins.edit', $admin->user_id) }}">
-                      <button class="text-blue-500"><i class="fas fa-edit"></i></button>
-                    </a>
+                    <div class="flex justify-center gap-2">
+                      <a href="{{ route('admins.edit', $admin->user_id) }}">
+                        <button class="text-blue-500" title="Edit"><i class="fas fa-edit"></i></button>
+                      </a>
+                      <a href="{{ route('admins.show', $admin->user_id) }}">
+                        <button class="text-green-500" title="View Details"><i class="fas fa-eye"></i></button>
+                      </a>
+
+                      <a href="{{ route('admins.show', $admin->user_id) }}">
+                        <button class="text-red-500" title="Delete"><i class="fas fa-trash"></i></button>
+                      </a>
+                    </div>
                   </td>
                 </tr>
               @empty
