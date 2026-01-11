@@ -16,7 +16,6 @@ class AdminController extends Controller
     public function index()
     {
         $admins = Admin::with('user')->get();
-
         return view('users.admins.index', ['admins' => $admins]);
     }
 
@@ -74,7 +73,7 @@ class AdminController extends Controller
                     'state' => $validated['state'],
                     'local_government' => $validated['local_government'],
                     'religion' => $validated['religion'],
-                    'tribe' => $validated['tribe'], // include tribe
+                    'tribe' => $validated['tribe'],
                     'address' => $validated['address'],
                     'type' => 'admin',
                 ]);
@@ -90,14 +89,11 @@ class AdminController extends Controller
                 ]);
             });
 
-            return response()->json(
-                [
-                    'status' => 'success',
-                    'message' => 'Admin created successfully!',
-                    'redirect' => route('admins.index'),
-                ],
-                201,
-            );
+            return redirect()
+                ->back()
+                ->with('success', 'Admin created successfully!')
+                ->getTargetUrl();
+            
         } catch (\Exception $e) {
             return response()->json(
                 [
@@ -115,7 +111,6 @@ class AdminController extends Controller
     public function show(Admin $admin)
     {
         $admin->load('user');
-
         return view('users.admins.show', compact('admin'));
     }
 
@@ -189,8 +184,11 @@ class AdminController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Admin updated successfully',
-                'redirect' => route('admins.index'),
-            ], 201);
+                'redirect' => redirect()
+                    ->intended(route('admins.index'))
+                    ->with('success', 'Admin updated successfully!')
+                    ->getTargetUrl(),
+            ]);
         } catch (\Exception $e) {
             return response()->json(
                 [

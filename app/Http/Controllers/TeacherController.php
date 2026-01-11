@@ -87,14 +87,9 @@ class TeacherController extends Controller
                 ]);
             });
 
-            return response()->json(
-                [
-                    'status' => 'success',
-                    'message' => 'Teacher created successfully',
-                    'redirect' => route('teachers.index'),
-                ],
-                201,
-            );
+            return redirect()->back()
+                ->with('success', 'Teacher created successfully!')
+                ->getTargetUrl();
         } catch (\Exception $e) {
             return response()->json(
                 [
@@ -182,7 +177,10 @@ class TeacherController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Teacher Updated successfully',
-                'redirect' => route('teachers.index'),
+                'redirect' => redirect()
+                    ->intended(route('teachers.index'))
+                    ->with('success', 'Teacher Updated successfully!')
+                    ->getTargetUrl(),
             ], 201);
         } catch (\Exception $e) {
             return response()->json([

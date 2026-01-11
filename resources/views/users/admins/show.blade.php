@@ -14,8 +14,8 @@
             <a href="{{ route('admins.index') }}" class="text-accent text-xs mb-2 flex items-center gap-1 hover:underline">
               <i class="fas fa-arrow-left text-xs"></i> Back to Admins
             </a>
-            <h1 class="text-xl font-bold text-slate-800">John Anderson</h1>
-            <p class="text-xs text-slate-500">Admin ID: ADM-2024-001</p>
+            <h1 class="text-xl font-bold text-slate-800">{{ $admin->user->name() }}</h1>
+            <p class="text-xs text-slate-500">Admin ID: {{ $admin->staff_number }}</p>
           </div>
           <div class="flex gap-2">
             <a href="{{ route('admins.edit', $admin->user_id) }}"
@@ -30,70 +30,7 @@
         </div>
 
         <!-- Admin Details Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <!-- Personal Information -->
-          <div class="bg-white rounded-lg border border-slate-200 p-4">
-            <h3 class="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
-              <i class="fas fa-user text-accent text-xs"></i> Personal Information
-            </h3>
-            <div class="space-y-3">
-              <div>
-                <label class="text-xs font-medium text-slate-600">Full Name</label>
-                <p class="text-sm text-slate-800 mt-1">{{ $admin->user->name() }}</p>
-              </div>
-              <div>
-                <label class="text-xs font-medium text-slate-600">Email</label>
-                <p class="text-sm text-slate-800 mt-1">{{ $admin->user->email }}</p>
-              </div>
-              <div>
-                <label class="text-xs font-medium text-slate-600">Phone</label>
-                <p class="text-sm text-slate-800 mt-1">{{ $admin->user->phone }}</p>
-              </div>
-              <div>
-                <label class="text-xs font-medium text-slate-600">Date of Birth</label>
-                <p class="text-sm text-slate-800 mt-1">{{ $admin->user->date_of_birth }}</p>
-              </div>
-              
-              <div>
-                <label class="text-xs font-medium text-slate-600">Religion</label>
-                <p class="text-sm text-slate-800 mt-1">{{ $admin->user->religion }}</p>
-              </div>
-              <div>
-                <label class="text-xs font-medium text-slate-600">Tribe</label>
-                <p class="text-sm text-slate-800 mt-1">{{ $admin->user->tribe }}</p>
-              </div>
-                            <div>
-                <label class="text-xs font-medium text-slate-600">Gender</label>
-                <p class="text-sm text-slate-800 mt-1">{{ strtoupper($admin->user->gender) }}</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Address Information -->
-          <div class="bg-white rounded-lg border border-slate-200 p-4">
-            <h3 class="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
-              <i class="fas fa-map-marker-alt text-accent text-xs"></i> Address
-            </h3>
-            <div class="space-y-3">
-              <div>
-                <label class="text-xs font-medium text-slate-600">Residential Address</label>
-                <p class="text-sm text-slate-800 mt-1">{{ $admin->user->address }}</p>
-              </div>
-              <div>
-                <label class="text-xs font-medium text-slate-600">Nationality (Origin)</label>
-                <p class="text-sm text-slate-800 mt-1">{{ $admin->user->nationality }}</p>
-              </div>
-              <div>
-                <label class="text-xs font-medium text-slate-600">State/Province (Orogin)</label>
-                <p class="text-sm text-slate-800 mt-1">{{ $admin->user->state }}</p>
-              </div>
-              <div>
-                <label class="text-xs font-medium text-slate-600">Local Goverment Area/District</label>
-                <p class="text-sm text-slate-800 mt-1">{{ $admin->user->local_government }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <x-users.personal-details :user="$admin->user" />
 
             <!-- Professional Information -->
         <div class="bg-white rounded-lg border border-slate-200 p-4 mb-6">
@@ -119,12 +56,12 @@
 
              <div>
               <label class="text-xs font-medium text-slate-600">Employment Type</label>
-              <p class="text-sm text-slate-800 mt-1">{{ strtoupper($admin->employment_type) }}</p>
+              <p class="text-sm text-slate-800 mt-1">{{ str_replace('_', ' ', strtoupper($admin->role_type)) }}</p>
             </div>
 
              <div>
               <label class="text-xs font-medium text-slate-600">Start Date</label>
-              <p class="text-sm text-slate-800 mt-1">{{ $admin->start_date }}</p>
+              <p class="text-sm text-slate-800 mt-1">{{ $admin->start_date != null ? $admin->start_date->translatedFormat('l jS F Y') : "Not set" }}</p>
             </div>
           </div>
         </div>

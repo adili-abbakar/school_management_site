@@ -31,6 +31,9 @@ class UserController extends Controller
                 [
                     'status' => 'success',
                     'message' => 'Password updated successfully',
+                    'redirect' => redirect()->back()
+                    ->with('success', 'Password updated successfully!')
+                    ->getTargetUrl(),
                 ],
                 201,
             );

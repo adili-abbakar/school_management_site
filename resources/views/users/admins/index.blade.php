@@ -69,6 +69,9 @@
                       <a href="{{ route('admins.edit', $admin->user_id) }}">
                         <button class="text-blue-500" title="Edit"><i class="fas fa-edit"></i></button>
                       </a>
+                      <a href="{{ route('user.edit-password', $admin->user_id) }}">
+                        <button class="text-blue-500" title="Edit Password"><i class="fas fa-key"></i></button>
+                      </a>
                       <a href="{{ route('admins.show', $admin->user_id) }}">
                         <button class="text-green-500" title="View Details"><i class="fas fa-eye"></i></button>
                       </a>

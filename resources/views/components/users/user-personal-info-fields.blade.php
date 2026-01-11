@@ -47,7 +47,7 @@
   </div>
   <div>
     <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Date of Birth *</label>
-    <input type="date" name="date_of_birth" value="{{ old('date_of_birth', $user?->date_of_birth) }}"
+    <input type="date" name="date_of_birth" value="{{ old('date_of_birth', $user?->date_of_birth?->format('Y-m-d')) }}"
       class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none">
     <span class="text-red-600 text-[10px] error-message" data-name="date_of_birth"></span>
   </div>

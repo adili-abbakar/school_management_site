@@ -47,7 +47,10 @@ class LoginController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'redirect' => redirect()->intended(route('dashboard'))->getTargetUrl(),
+                'redirect' => redirect()
+                    ->intended(route('dashboard'))
+                    ->with('success', 'Logged In Successfully')
+                    ->getTargetUrl(),
             ]);
         }
 
