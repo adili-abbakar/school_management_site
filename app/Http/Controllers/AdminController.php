@@ -15,7 +15,8 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $admins = Admin::with('user')->get();
+        $admins = Admin::with('user')->latest('updated_at')->get();
+
         return view('users.admins.index', ['admins' => $admins]);
     }
 
@@ -93,7 +94,6 @@ class AdminController extends Controller
                 ->back()
                 ->with('success', 'Admin created successfully!')
                 ->getTargetUrl();
-            
         } catch (\Exception $e) {
             return response()->json(
                 [

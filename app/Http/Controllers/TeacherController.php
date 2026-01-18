@@ -104,9 +104,10 @@ class TeacherController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Teacher $teacher)
     {
-        //
+        $teacher->load('user');
+        return view('users.teachers.show', compact('teacher'));
     }
 
     /**

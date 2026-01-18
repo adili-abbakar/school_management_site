@@ -99,7 +99,7 @@
             </div>
             <div>
               <label class="text-xs font-medium text-slate-600">Last Login</label>
-              <p class="text-sm text-slate-800 mt-1">{{ $admin->user->last_login_at ? $admin->user->last_login_at->diffForHumans() : 'Never logged in' }}</p>
+              <p class="text-sm text-slate-800 mt-1">{{ $admin->user->lastLogin() }}</p>
             </div>
           </div>
         </div>

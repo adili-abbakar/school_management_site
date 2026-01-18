@@ -27,13 +27,23 @@ class UserController extends Controller
                 ]);
             });
 
+            if ($user->type === 'admin') {
+                $redirectUrl = 'admins.index';
+            } elseif ($user->type === 'teacher') {
+                $redirectUrl = 'teachers.index';
+            } elseif ($user->type === 'guardian') {
+                $redirectUrl = 'guardians.index';
+            } elseif ($user->type === 'student') {
+                $redirectUrl = 'students.index';
+            }
+
             return response()->json(
                 [
                     'status' => 'success',
                     'message' => 'Password updated successfully',
-                    'redirect' => redirect()->back()
-                    ->with('success', 'Password updated successfully!')
-                    ->getTargetUrl(),
+                    'redirect' => redirect()->route($redirectUrl)
+                        ->with('success', 'Password updated successfully!')
+                        ->getTargetUrl(),
                 ],
                 201,
             );

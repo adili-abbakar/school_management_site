@@ -48,6 +48,11 @@ class User extends Authenticatable
                 ->implode(' '),
         );
     }
+    
+    function lastLogin()
+    {
+        return $this->last_login_at ? $this->last_login_at->diffForHumans() : 'Never logged in';
+    }
 
     public function student()
     {

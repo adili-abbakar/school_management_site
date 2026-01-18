@@ -6,17 +6,22 @@
        </a>
        <!-- Desktop Menu -->
        <div class="hidden md:flex items-center gap-6 text-sm">
-         <a href="{{ route('home') }}" class="hover:text-[#6B8DD6] transition-colors">Home</a>
-         <a href="{{ route('about') }}" class="hover:text-[#6B8DD6] transition-colors">About</a>
+         <a href="{{ route('home') }}" class="hover:text-[#6B8DD6] transition-colors {{ url()->current() === route('home') ? 'text-[#6B8DD6]' : '' }}">Home</a>
+         <a href="{{ route('about') }}" class="hover:text-[#6B8DD6] transition-colors {{ url()->current() === route('about') ? 'text-[#6B8DD6]' : '' }}">About</a>
+
          <a href="" class="hover:text-[#6B8DD6] transition-colors">Academics</a>
-         <a href="{{ route('admission.apply') }}" class="hover:text-[#6B8DD6] transition-colors">Admissions</a>
-         <a href="{{ route('news') }}" class="hover:text-[#6B8DD6] transition-colors">News</a>
-         <a href="{{ route('contact') }}" class="hover:text-[#6B8DD6] transition-colors">Contact</a>
+         <a href="{{ route('admission.apply') }}" class="hover:text-[#6B8DD6] transition-colors {{ url()->current() === route('admission.apply') ? 'text-[#6B8DD6]' : '' }}">Admissions</a>
+         <a href="{{ route('news') }}" class="hover:text-[#6B8DD6] transition-colors {{ url()->current() === route('news') ? 'text-[#6B8DD6]' : '' }}">News</a>
+         <a href="{{ route('contact') }}" class="hover:text-[#6B8DD6] transition-colors {{ url()->current() === route('contact') ? 'text-[#6B8DD6]' : '' }}">Contact</a>
+          @auth        
+         <a href="{{ route('dashboard') }}" class="hover:text-[#6B8DD6] transition-colors">Dashboard</a>
+         @else
          <a href="{{ route('login') }}"
            class="bg-[#6B8DD6] hover:bg-opacity-90 text-white px-4 py-2 rounded-md font-medium transition-colors text-sm">
            Portal Login
          </a>
-       </div>
+         @endauth
+        </div>
        <!-- Mobile Menu Toggle -->
        <button id="mobileMenuBtn" class="md:hidden text-white text-xl">
          <i class="fas fa-bars"></i>
