@@ -14,6 +14,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\SessionController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');
@@ -41,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('user/{user}/edit-password', [UserController::class, 'editPassword'])->name('user.edit-password');
     Route::put('user/{user}/update-password', [UserController::class, 'updatePassword'])->name('user.update-password');
 
+    Route::resource('sessions', SessionController::class);
     Route::resource('students', StudentController::class);
     Route::resource('teachers', TeacherController::class);
     Route::resource('guardians', GuardianController::class);

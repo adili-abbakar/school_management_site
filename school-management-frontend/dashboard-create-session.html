@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPro | Create Session</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a2b4b',
+                        secondary: '#f0f4f8',
+                        accent: '#3b82f6',
+                        muted: '#6b7280',
+                        sidebar: '#0f172a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { 
+            font-family: 'Inter', sans-serif; 
+            font-size: 11px;
+        }
+        h1 { font-size: 1.5rem; }
+        h2 { font-size: 1.25rem; }
+        h3 { font-size: 1rem; }
+        p { font-size: 11px; }
+        .text-sm { font-size: 10px; }
+        .text-base { font-size: 11px; }
+        .text-lg { font-size: 12px; }
+        .sidebar-link.active { background-color: #1e293b; color: #3b82f6; border-right: 4px solid #3b82f6; }
+        .mobile-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-sidebar.active {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 flex h-screen overflow-hidden">
+    <!-- Mobile Menu Overlay -->
+    <div id="sidebarOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"></div>
+
+    <!-- Sidebar -->
+    <aside class="mobile-sidebar fixed md:relative w-60 bg-sidebar text-slate-300 flex-shrink-0 flex flex-col z-40 h-full md:translate-x-0">
+        <div class="p-5 flex items-center gap-3 border-b border-slate-800">
+            <div class="bg-accent text-white p-1.5 rounded">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <span class="text-lg font-bold text-white tracking-tight">EduPro</span>
+        </div>
+        <nav class="flex-grow py-4 space-y-0.5 overflow-y-auto text-sm">
+            <div class="px-5 mb-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Main Menu</div>
+            <a href="dashboard.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-th-large"></i>
+                <span>Overview</span>
+            </a>
+            <div class="px-5 mt-4 mb-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">User Management</div>
+            <a href="dashboard-students.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-users"></i>
+                <span>Students</span>
+            </a>
+            <a href="dashboard-teachers.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-chalkboard-user"></i>
+                <span>Teachers</span>
+            </a>
+            <a href="dashboard-admins.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-user-tie"></i>
+                <span>Admins</span>
+            </a>
+            <a href="dashboard-guardians.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-shield"></i>
+                <span>Guardians</span>
+            </a>
+            <div class="px-5 mt-4 mb-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Academics</div>
+            <a href="dashboard-sessions.html" class="sidebar-link active flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-calendar"></i>
+                <span>Sessions</span>
+            </a>
+            <a href="dashboard-classes.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-door-open"></i>
+                <span>Classes</span>
+            </a>
+            <a href="dashboard-promotions.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-arrow-up-right"></i>
+                <span>Promotions</span>
+            </a>
+            <div class="px-5 mt-4 mb-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Operations</div>
+            <a href="dashboard-admissions.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-check-circle"></i>
+                <span>Admissions</span>
+            </a>
+            <a href="dashboard-results-check.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-chart-bar"></i>
+                <span>Results</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Navigation -->
+        <header class="bg-white border-b border-slate-200 px-4 md:px-8 py-3 flex items-center justify-between sticky top-0 z-20">
+            <div class="flex items-center gap-4">
+                <button id="menuToggle" class="md:hidden text-primary hover:bg-slate-100 p-2 rounded">
+                    <i class="fas fa-bars text-lg"></i>
+                </button>
+                <h1 class="text-primary font-bold">Create Academic Session</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <input type="text" placeholder="Search..." class="hidden md:block px-3 py-1.5 border border-slate-300 rounded text-xs bg-slate-50 focus:outline-none focus:ring-2 focus:ring-accent">
+                <div class="w-8 h-8 bg-accent text-white rounded-full flex items-center justify-center text-xs font-bold">JD</div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="flex-1 overflow-y-auto">
+            <div class="p-4 md:p-8">
+                <!-- Form Card -->
+                <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+                    <div class="flex items-center gap-2 mb-6">
+                        <i class="fas fa-plus-circle text-accent text-lg"></i>
+                        <h2 class="text-primary font-semibold">New Academic Session</h2>
+                    </div>
+
+                    <form class="space-y-6">
+                        <!-- Session Basic Information -->
+                        <div>
+                            <h3 class="text-sm font-semibold text-primary mb-4">Session Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Session Name</label>
+                                    <input type="text" placeholder="e.g., 2023/2024" class="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Session Start Date</label>
+                                    <input type="date" class="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">Session End Date</label>
+                                    <input type="date" class="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="border-t border-slate-200 pt-4"></div>
+
+                        <!-- Terms -->
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-sm font-semibold text-primary">Terms</h3>
+                                <button type="button" id="addTermBtn" class="flex items-center gap-1 px-3 py-1 bg-accent text-white rounded text-xs hover:bg-blue-600 transition-colors">
+                                    <i class="fas fa-plus"></i>
+                                    <span>Add Term</span>
+                                </button>
+                            </div>
+
+                            <!-- Terms Container -->
+                            <div id="termsContainer" class="space-y-4">
+                                <div class="term-block bg-slate-50 p-4 rounded border border-slate-200">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <label class="text-xs font-semibold text-slate-700">Term 1</label>
+                                        <button type="button" class="remove-term text-red-500 hover:text-red-700 text-xs">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                        <div>
+                                            <label class="block text-xs font-semibold text-slate-700 mb-1">Term Name</label>
+                                            <input type="text" placeholder="First Term" class="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:outline-none focus:ring-2 focus:ring-accent bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-semibold text-slate-700 mb-1">Start Date</label>
+                                            <input type="date" class="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:outline-none focus:ring-2 focus:ring-accent bg-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-semibold text-slate-700 mb-1">End Date</label>
+                                            <input type="date" class="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:outline-none focus:ring-2 focus:ring-accent bg-white">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="border-t border-slate-200 pt-4"></div>
+
+                        <!-- Form Actions -->
+                        <div class="flex gap-3 justify-end">
+                            <a href="dashboard-sessions.html" class="px-4 py-1.5 border border-slate-300 text-slate-700 rounded text-xs hover:bg-slate-50 transition-colors">
+                                Cancel
+                            </a>
+                            <button type="submit" class="px-4 py-1.5 bg-accent text-white rounded text-xs hover:bg-blue-600 transition-colors flex items-center gap-2">
+                                <i class="fas fa-save"></i>
+                                <span>Create Session</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileSidebar = document.querySelector('.mobile-sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        menuToggle.addEventListener('click', () => {
+            mobileSidebar.classList.toggle('active');
+            sidebarOverlay.classList.toggle('hidden');
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+            mobileSidebar.classList.remove('active');
+            sidebarOverlay.classList.add('hidden');
+        });
+
+        // Add term functionality
+        let termCount = 1;
+        const addTermBtn = document.getElementById('addTermBtn');
+        const termsContainer = document.getElementById('termsContainer');
+
+        addTermBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            termCount++;
+            const newTerm = document.createElement('div');
+            newTerm.className = 'term-block bg-slate-50 p-4 rounded border border-slate-200';
+            newTerm.innerHTML = `
+                <div class="flex items-center justify-between mb-3">
+                    <label class="text-xs font-semibold text-slate-700">Term ${termCount}</label>
+                    <button type="button" class="remove-term text-red-500 hover:text-red-700 text-xs">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Term Name</label>
+                        <input type="text" placeholder="Second Term" class="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:outline-none focus:ring-2 focus:ring-accent bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Start Date</label>
+                        <input type="date" class="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:outline-none focus:ring-2 focus:ring-accent bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">End Date</label>
+                        <input type="date" class="w-full px-3 py-1.5 border border-slate-300 rounded text-xs focus:outline-none focus:ring-2 focus:ring-accent bg-white">
+                    </div>
+                </div>
+            `;
+            termsContainer.appendChild(newTerm);
+            attachRemoveListener(newTerm.querySelector('.remove-term'));
+        });
+
+        function attachRemoveListener(btn) {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                btn.closest('.term-block').remove();
+            });
+        }
+
+        document.querySelectorAll('.remove-term').forEach(btn => {
+            attachRemoveListener(btn);
+        });
+    </script>
+</body>
+</html>

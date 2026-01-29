@@ -8,7 +8,7 @@ class AdmissionController extends Controller
 {
     public function index()
     {
-        return view('admission.apply');
+        return view('admissions.apply');
     }
 
     public function apply(){
