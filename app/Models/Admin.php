@@ -19,15 +19,15 @@ class Admin extends Model
         'employment_type'
     ];
 
-        protected function casts(): array
-        {
-            return [
-                'start_date' => 'date'
-            ];
+    protected function casts(): array
+    {
+        return [
+            'start_date' => 'date'
+        ];
     }
-    protected $primaryKey = 'user_id';  
-    public $incrementing = false;   
-    protected $keyType = 'int';         
+    protected $primaryKey = 'user_id';
+    public $incrementing = false;
+    protected $keyType = 'int';
 
 
     public function user()

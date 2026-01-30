@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('academic_sessions', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();

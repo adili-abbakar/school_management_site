@@ -14,6 +14,25 @@ class Session extends Model
         'end_date'
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'start_date' => 'date',
+            'end_date' => 'date'
+
+        ];
+    }
+
+    
+    public function startDate()
+    {
+        return $this->start_date ? $this->start_date->translatedFormat('l, jS F, Y') : 'Not Set';
+    }
+
+    public function endDate()
+    {
+        return $this->end_date ? $this->end_date->translatedFormat('l, jS F, Y') : 'Not Set';
+    }
 
     public function terms(): HasMany
     {

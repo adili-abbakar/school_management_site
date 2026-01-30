@@ -11,11 +11,30 @@ class Term extends Model
         'name',
         'start_date',
         'end_date',
-        'is_active',
+        'activity',
         'session_id'
     ];
 
-    public function session() : BelongsTo {
+    protected function casts(): array
+    {
+        return [
+            'end_date' => 'date',
+            'start_date' => 'date'
+        ];
+    }
+
+    public function startDate()
+    {
+        return $this->start_date ? $this->start_date->translatedFormat('l, jS F, Y') : 'Not Set';
+    }
+
+    public function endDate()
+    {
+        return $this->end_date ? $this->end_date->translatedFormat('l, jS F, Y') : 'Not Set';
+    }
+
+    public function session(): BelongsTo
+    {
         return $this->belongsTo(Session::class, 'session_id');
     }
 }
