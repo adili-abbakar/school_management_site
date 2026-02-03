@@ -5,12 +5,13 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -40,6 +41,7 @@ class User extends Authenticatable
             'date_of_birth' => 'date'
         ];
     }
+    
     public function name()
     {
         return trim(
@@ -48,7 +50,7 @@ class User extends Authenticatable
                 ->implode(' '),
         );
     }
-    
+
     function lastLogin()
     {
         return $this->last_login_at ? $this->last_login_at->diffForHumans() : 'Never logged in';

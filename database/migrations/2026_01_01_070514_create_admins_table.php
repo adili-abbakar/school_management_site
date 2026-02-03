@@ -20,6 +20,8 @@ return new class extends Migration
             $table->date('start_date')->nullable();
             $table->enum('employment_type', ['full_time', 'part_time', 'contract'])->default('full_time');
             $table->timestamps();
+            $table->softDeletes();
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

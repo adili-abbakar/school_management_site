@@ -60,7 +60,7 @@
                       <a href="{{ route('teachers.show', $teacher->user_id) }}">
                         <button class="text-green-500" title="View Details"><i class="fas fa-eye"></i></button>
                       </a>
-                      <a href="">
+                      <a href="{{ route('teachers.delete', $teacher->user_id) }}">
                         <button class="text-rose-500"><i class="fas fa-trash"></i></button>
                       </a>
                     </div>

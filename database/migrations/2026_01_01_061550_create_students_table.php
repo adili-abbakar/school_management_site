@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('admission_number', 50)->unique();
             $table->string('class_grade', 50)->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

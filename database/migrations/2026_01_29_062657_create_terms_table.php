@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->enum('activity', ['active', 'completed', 'upcoming'])->default('upcoming');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

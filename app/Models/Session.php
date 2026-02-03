@@ -3,10 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Session extends Model
 {
+    use HasFactory, SoftDeletes;
+
+
     protected $table = 'academic_sessions';
     protected $fillable = [
         'name',
@@ -23,7 +28,7 @@ class Session extends Model
         ];
     }
 
-    
+
     public function startDate()
     {
         return $this->start_date ? $this->start_date->translatedFormat('l, jS F, Y') : 'Not Set';

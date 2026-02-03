@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Session;
+use App\Models\Term;
 use Illuminate\Http\Request;
 
-class TermController extends Controller
+class TeacherControllerTermController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,17 +19,45 @@ class TermController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Session $session)
     {
-        //
+        return view('terms.create', compact('session'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Session $session)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+        ]);
+
+        try {
+            $session->terms()->create([
+                'name' => $validated['name'],
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+            ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Term created successfully',
+                'redirect' => redirect()
+                    ->intended(route('sessions.index'))
+                    ->with('success', 'Term created successfully!')
+                    ->getTargetUrl(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Something went wrong: ' . $e->getMessage(),
+                ],
+                500,
+            );
+        }
     }
 
     /**
@@ -41,17 +71,45 @@ class TermController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Term $term, Session $session)
     {
-        //
+        return view('terms.edit', compact('term', 'session'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Term $term, Session $session)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+        ]);
+
+          try {
+            $session->terms()->update([
+                'name' => $validated['name'],
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+            ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Term updated successfully',
+                'redirect' => redirect()
+                    ->intended(route('sessions.index'))
+                    ->with('success', 'Term updated successfully!')
+                    ->getTargetUrl(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Something went wrong: ' . $e->getMessage(),
+                ],
+                500,
+            );
+        }
     }
 
     /**

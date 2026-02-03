@@ -194,8 +194,43 @@ class TeacherController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+
+    public function destroy(Teacher $teacher)
     {
-        //
+        try {
+            DB::transaction(function () use ($teacher) {
+                $teacher->user->delete();
+                $teacher->delete();
+
+            });
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Teacher Deleted successfully',
+                'redirect' => redirect()
+                    ->intended(route('teachers.index'))
+                    ->with('success', 'Teacher Deleted successfully!')
+                    ->getTargetUrl(),
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'Error',
+                'message' => 'Something went wrong: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function delete(Teacher $teacher)
+    {
+        $user = $teacher->load('user');
+        $route = route('teachers.destroy', $teacher->user_id);
+        $userType = 'Teacher';
+
+        $messages = [
+            "This account will be deactivated. Their records will be hidden but can be restored later.",
+            "All associated data and records will be reversibly removed from the system. They can be restored later if needed."
+        ];
+
+        return view('users.soft-delete', compact('user', 'route', 'messages'));
     }
 }

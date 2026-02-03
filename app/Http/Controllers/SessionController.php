@@ -93,7 +93,7 @@ class SessionController extends Controller
                 ],
                 500,
             );
-        }  
+        }
     }
 
     /**
@@ -107,17 +107,50 @@ class SessionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Session $session)
     {
-        //
+        $session->load('terms');
+        return view('sessions.edit', compact('session'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Session $session)
     {
-        //
+        $validated =  $request->validate([
+            'session_name' => 'required|string|max:255|unique:academic_sessions,name' . $session->id,
+            'session_start_date' => 'required|date',
+            'session_end_date' => 'required|date'
+        ]);
+
+        try {
+            DB::transaction(
+                function () use ($validated, $session) {
+                    $session->update([
+                        'name' => $validated['session_name'],
+                        'start_date' => $validated['session_start_date'],
+                        'end_date' => $validated['session_end_date'],
+                    ]);
+                }
+            );
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Session updated successfully',
+                'redirect' => redirect()
+                    ->intended(route('sessions.index'))
+                    ->with('success', 'Session updated successfully!')
+                    ->getTargetUrl(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Something went wrong: ' . $e->getMessage(),
+                ],
+                500,
+            );
+        }
     }
 
     /**

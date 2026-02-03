@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('occupation', 100)->nullable();
             $table->string('place_of_work', 100)->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

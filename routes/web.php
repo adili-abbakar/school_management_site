@@ -15,6 +15,7 @@ use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\TermController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');
@@ -34,7 +35,7 @@ Route::get('admission/apply', [AdmissionController::class, 'index'])->name('admi
 Route::get('/news', [NewsController::class, 'index'])->name('news');
 
 Route::middleware(['auth'])->group(function () {
-	Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/profile', [DashboardController::class, 'profile'])->name('dashboard.profile');
     Route::get('/dashboard/settings', [DashboardController::class, 'settings'])->name('dashboard.settings');
@@ -42,9 +43,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('user/{user}/edit-password', [UserController::class, 'editPassword'])->name('user.edit-password');
     Route::put('user/{user}/update-password', [UserController::class, 'updatePassword'])->name('user.update-password');
 
+
+    Route::get('terms/{session}/create', [TermController::class, 'create'])->name('terms.create');
+    Route::POST('terms/{session}/store', [TermController::class, 'store'])->name('terms.store');
+    Route::get('terms/{term}/{session}/edit', [TermController::class, 'edit'])->name('terms.edit');
+    Route::put('terms/{term}/{session}/update', [TermController::class, 'update'])->name('terms.update');
+
+
+
+
     Route::resource('sessions', SessionController::class);
     Route::resource('students', StudentController::class);
     Route::resource('teachers', TeacherController::class);
+    Route::get('teachers/{teacher}/delete', [TeacherController::class, 'delete'])->name('teachers.delete');
+
     Route::resource('guardians', GuardianController::class);
     Route::resource('admins', AdminController::class);
 });
