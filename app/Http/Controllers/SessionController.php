@@ -156,8 +156,38 @@ class SessionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Session $session)
     {
-        //
+        try {
+            DB::transaction(
+                function() use ($session) {
+                    $session->terms()->delete();
+                    $session->delete();
+
+                }
+            );
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Something went wrong: ' . $e->getMessage(),
+                ],
+                500,
+            );
+        }
+    }
+
+    public function delete(Session $session)
+    {
+        $session = $session->load('terms');
+        $route = route('sessions.destroy', $session->id);
+        $userType = 'Sessions';
+
+        $messages = [
+            "This session will be deactivated. Its records will be hidden but can be restored later.",
+            "All associated data and records will be reversibly removed from the system. They can be restored later if needed."
+        ];
+
+        return view('sessions.soft-delete', compact('session', 'route', 'messages'));
     }
 }
