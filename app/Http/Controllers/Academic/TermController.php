@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Academic;
 
-use App\Models\Session;
-use App\Models\Term;
+use App\Models\Academic\Session;
+use App\Models\Academic\Term;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class TeacherControllerTermController extends Controller
+class TermController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +22,7 @@ class TeacherControllerTermController extends Controller
      */
     public function create(Session $session)
     {
-        return view('terms.create', compact('session'));
+        return view('academic.terms.create', compact('session'));
     }
 
     /**
@@ -73,7 +74,7 @@ class TeacherControllerTermController extends Controller
      */
     public function edit(Term $term, Session $session)
     {
-        return view('terms.edit', compact('term', 'session'));
+        return view('academic.terms.edit', compact('term', 'session'));
     }
 
     /**
@@ -87,7 +88,7 @@ class TeacherControllerTermController extends Controller
             'end_date' => 'required|date',
         ]);
 
-          try {
+        try {
             $session->terms()->update([
                 'name' => $validated['name'],
                 'start_date' => $validated['start_date'],
@@ -115,8 +116,41 @@ class TeacherControllerTermController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Session $session, Term $term)
     {
-        //
+        try {
+            $term->delete();
+        
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Term deleted successfully',
+                'redirect' => redirect()
+                    ->intended(route('sessions.index'))
+                    ->with('success', 'Term deleted successfully!')
+                    ->getTargetUrl(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Something went wrong: ' . $e->getMessage(),
+                ],
+                500,
+            );
+        }
+    }
+
+    public function delete(Session $session, Term $term)
+    {
+        $title = 'term';
+        $data = $term->load('session');
+        $route = route('sessions.terms.destroy', [$session, $term]);;
+
+        $messages = [
+            "This term will be deactivated. Its records will be hidden but can be restored later.",
+            "All associated data and records will be reversibly removed from the system. They can be restored later if needed."
+        ];
+
+        return view('academic.soft-delete', compact('data', 'title', 'route', 'messages'));
     }
 }

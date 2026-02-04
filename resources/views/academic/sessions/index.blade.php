@@ -41,17 +41,17 @@
                                     </div>
                                 </div>
                                 <div class="flex gap-2 flex-wrap">
-                                    <a href="{{ route('terms.create', $session->id) }}"
+                                    <a href="{{ route('sessions.terms.create', $session) }}"
                                         class="flex items-center gap-1 px-3 py-1 bg-green-100 text-green-600 rounded text-xs hover:bg-greeb-100 transition-colors">
                                         <i class="fas fa-add"></i>
                                         <span>Add Term</span>
                                     </a>
-                                    <a href="{{ route('sessions.edit', $session->id) }}"
+                                    <a href="{{ route('sessions.edit', $session) }}"
                                         class="flex items-center gap-1 px-3 py-1 bg-blue-50 text-accent rounded text-xs hover:bg-blue-100 transition-colors">
                                         <i class="fas fa-edit"></i>
                                         <span>Edit</span>
                                     </a>
-                                    <a href="#"
+                                    <a href="{{ route('sessions.delete', $session) }}"
                                         class="flex items-center gap-1 px-3 py-1 bg-red-50 text-red-600 rounded text-xs hover:bg-red-100 transition-colors">
                                         <i class="fas fa-trash"></i>
                                         <span>Delete</span>
@@ -87,29 +87,31 @@
                                                 </div>
                                             </div>
                                             <div class="mt-3 flex gap-2">
-                                                <a href="{{ route('terms.edit', ['term' => $term->id, 'session' => $session->id]) }}"
+                                                <a href="{{ route('sessions.terms.edit', [$session, $term]) }}"
                                                     class="flex-1 text-center px-2 py-1 bg-white text-accent rounded text-xs hover:bg-slate-50 transition-colors border border-accent">
                                                     Edit
                                                 </a>
-                                                <a href="#"
+                                                <a href="{{ route('sessions.terms.delete', [$session, $term]) }}"
                                                     class="flex-1 text-center px-2 py-1 bg-white text-red-600 rounded text-xs hover:bg-slate-50 transition-colors border border-red-200">
                                                     Delete
                                                 </a>
                                             </div>
                                         </div>
                                     @empty
-                                    <div class="bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-lg p-4 text-center text-sm">
-                                        No term exist been created for this session yet.
-                                    </div>
-                                @endforelse
+                                        <div
+                                            class="bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-lg p-4 text-center text-sm">
+                                            No term exist been created for this session yet.
+                                        </div>
+                                    @endforelse
                                 </div>
                             </div>
                         </div>
                     @empty
-        <div class="bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-lg p-4 text-center text-sm">
-            No academic sessions have been created yet.
-        </div>
-    @endforelse
+                        <div
+                            class="bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-lg p-4 text-center text-sm">
+                            No academic sessions have been created yet.
+                        </div>
+                    @endforelse
                 </div>
 
 

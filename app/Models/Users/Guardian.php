@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Users;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Student extends Model
+
+class Guardian extends Model
 {
     use HasFactory, SoftDeletes;
 
-
     protected $fillable = [
         'user_id',
-        'admission_number',
-        'class_grade',
+        'occupation',
+        'place_of_work',
     ];
 
     public function user()

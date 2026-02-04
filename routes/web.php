@@ -1,21 +1,23 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\TeacherController;
-use App\Http\Controllers\GuardianController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Users\UserController;
+use App\Http\Controllers\Users\StudentController;
+use App\Http\Controllers\Users\TeacherController;
+use App\Http\Controllers\Users\GuardianController;
+use App\Http\Controllers\Users\AdminController;
+
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+
+use App\Http\Controllers\Academic\SessionController;
+use App\Http\Controllers\Academic\TermController;
 
 use App\Http\Controllers\PublicController;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdmissionController;
-use App\Http\Controllers\ForgotPasswordController;
-use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NewsController;
-use App\Http\Controllers\SessionController;
-use App\Http\Controllers\TermController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');
@@ -43,16 +45,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('user/{user}/edit-password', [UserController::class, 'editPassword'])->name('user.edit-password');
     Route::put('user/{user}/update-password', [UserController::class, 'updatePassword'])->name('user.update-password');
 
-
-    Route::get('terms/{session}/create', [TermController::class, 'create'])->name('terms.create');
-    Route::POST('terms/{session}/store', [TermController::class, 'store'])->name('terms.store');
-    Route::get('terms/{term}/{session}/edit', [TermController::class, 'edit'])->name('terms.edit');
-    Route::put('terms/{term}/{session}/update', [TermController::class, 'update'])->name('terms.update');
-
+    Route::resource('sessions.terms', TermController::class)->except(['show', 'index']);
+    Route::get('sessions/{session}/term/{term}/delete', [TermController::class, 'delete'])->name('sessions.terms.delete');
 
 
 
     Route::resource('sessions', SessionController::class);
+    Route::get('sessions/{session}/delete', [SessionController::class, 'delete'])->name('sessions.delete');
+
+
+
     Route::resource('students', StudentController::class);
     Route::resource('teachers', TeacherController::class);
     Route::get('teachers/{teacher}/delete', [TeacherController::class, 'delete'])->name('teachers.delete');

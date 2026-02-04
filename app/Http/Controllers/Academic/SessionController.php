@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Academic;
 
-use App\Models\Session;
-use App\Models\Term;
+use App\Http\Controllers\Controller;
+use App\Models\Academic\Session;
+use App\Models\Academic\Term;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,7 +17,7 @@ class SessionController extends Controller
     {
         $sessions = Session::get();
 
-        return view('sessions.index', compact('sessions'));
+        return view('academic.sessions.index', compact('sessions'));
     }
 
     /**
@@ -24,7 +25,7 @@ class SessionController extends Controller
      */
     public function create()
     {
-        return view('sessions.create');
+        return view('academic.sessions.create');
     }
 
     /**
@@ -110,7 +111,7 @@ class SessionController extends Controller
     public function edit(Session $session)
     {
         $session->load('terms');
-        return view('sessions.edit', compact('session'));
+        return view('academic.sessions.edit', compact('session'));
     }
 
     /**
@@ -166,6 +167,14 @@ class SessionController extends Controller
 
                 }
             );
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Session deleted successfully',
+                'redirect' => redirect()
+                    ->intended(route('sessions.index'))
+                    ->with('success', 'Session deleted successfully!')
+                    ->getTargetUrl(),
+            ]); 
         } catch (\Exception $e) {
             return response()->json(
                 [
@@ -179,7 +188,8 @@ class SessionController extends Controller
 
     public function delete(Session $session)
     {
-        $session = $session->load('terms');
+        $title = 'session';
+        $data = $session->load('terms');
         $route = route('sessions.destroy', $session->id);
         $userType = 'Sessions';
 
@@ -188,6 +198,6 @@ class SessionController extends Controller
             "All associated data and records will be reversibly removed from the system. They can be restored later if needed."
         ];
 
-        return view('sessions.soft-delete', compact('session', 'route', 'messages'));
+        return view('academic.soft-delete', compact('data', 'title', 'route', 'messages'));
     }
 }

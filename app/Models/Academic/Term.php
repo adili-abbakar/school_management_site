@@ -1,33 +1,31 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Academic;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Session extends Model
+class Term extends Model
 {
     use HasFactory, SoftDeletes;
 
-
-    protected $table = 'academic_sessions';
     protected $fillable = [
         'name',
         'start_date',
-        'end_date'
+        'end_date',
+        'activity',
+        'session_id'
     ];
 
     protected function casts(): array
     {
         return [
-            'start_date' => 'date',
-            'end_date' => 'date'
-
+            'end_date' => 'date',
+            'start_date' => 'date'
         ];
     }
-
 
     public function startDate()
     {
@@ -39,8 +37,8 @@ class Session extends Model
         return $this->end_date ? $this->end_date->translatedFormat('l, jS F, Y') : 'Not Set';
     }
 
-    public function terms(): HasMany
+    public function session(): BelongsTo
     {
-        return $this->hasMany(Term::class, 'session_id');
+        return $this->belongsTo(Session::class, 'session_id');
     }
 }

@@ -1,23 +1,24 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Users;
 
-use App\Models\User;
-use App\Models\Admin;
+use App\Http\Controllers\Controller;
+use App\Models\Users\Teacher;
+use App\Models\Users\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class AdminController extends Controller
+class TeacherController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $admins = Admin::with('user')->latest('updated_at')->get();
-
-        return view('users.admins.index', ['admins' => $admins]);
+        $teachers = Teacher::with('user')->get();
+        return view('users.teachers.index', compact('teachers'));
     }
 
     /**
@@ -25,22 +26,19 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('users.admins.create');
+        return view('users.teachers.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-
     public function store(Request $request)
     {
-        // Validate all user + admin fields
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'middle_name' => 'required|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
             'phone' => 'required|string|max:20',
             'date_of_birth' => 'required|date',
             'gender' => 'required|in:male,female',
@@ -52,7 +50,7 @@ class AdminController extends Controller
             'address' => 'required|string|max:255',
 
             'staff_number' => 'required|string|max:50|unique:admins,staff_number',
-            'role_type' => 'required|in:super_admin,exam_officer,admission_officer',
+            'specialized_subject' => 'nullable|string|max:255',
             'highest_qualification' => 'nullable|string|max:255',
             'years_of_experience' => 'nullable|integer|min:0',
             'start_date' => 'nullable|date',
@@ -66,7 +64,7 @@ class AdminController extends Controller
                     'middle_name' => $validated['middle_name'],
                     'last_name' => $validated['last_name'] ?? null,
                     'email' => $validated['email'],
-                    'password' => Hash::make($validated['password']),
+                    'password' => Hash::make($validated['staff_number']),
                     'phone' => $validated['phone'],
                     'date_of_birth' => $validated['date_of_birth'],
                     'gender' => $validated['gender'],
@@ -76,13 +74,13 @@ class AdminController extends Controller
                     'religion' => $validated['religion'],
                     'tribe' => $validated['tribe'],
                     'address' => $validated['address'],
-                    'type' => 'admin',
+                    'type' => 'teacher',
                 ]);
 
-                Admin::create([
+                Teacher::create([
                     'user_id' => $user->id,
                     'staff_number' => $validated['staff_number'],
-                    'role_type' => $validated['role_type'],
+                    'specialized_subject' => $validated['specialized_subject'],
                     'highest_qualification' => $validated['highest_qualification'] ?? null,
                     'years_of_experience' => $validated['years_of_experience'] ?? 0,
                     'start_date' => $validated['start_date'] ?? now()->toDateString(),
@@ -90,14 +88,13 @@ class AdminController extends Controller
                 ]);
             });
 
-            return redirect()
-                ->back()
-                ->with('success', 'Admin created successfully!')
+            return redirect()->back()
+                ->with('success', 'Teacher created successfully!')
                 ->getTargetUrl();
         } catch (\Exception $e) {
             return response()->json(
                 [
-                    'status' => 'error',
+                    'status' => 'Error',
                     'message' => 'Something went wrong: ' . $e->getMessage(),
                 ],
                 500,
@@ -108,33 +105,31 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Admin $admin)
+    public function show(Teacher $teacher)
     {
-        $admin->load('user');
-        return view('users.admins.show', compact('admin'));
+        $teacher->load('user');
+        return view('users.teachers.show', compact('teacher'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Admin $admin)
+    public function edit(Teacher $teacher)
     {
-        $admin->load('user');
-
-        return view('users.admins.edit', compact('admin'));
+        $teacher->load('user');
+        return view('users.teachers.edit', compact('teacher'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-
-    public function update(Request $request, Admin $admin)
+    public function update(Request $request, Teacher $teacher)
     {
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $admin->user_id,
+            'email' => 'required|email|unique:users,email,' . $teacher->user_id,
             'phone' => 'nullable|string|max:20',
             'date_of_birth' => 'required|date',
             'gender' => 'required|in:male,female',
@@ -144,9 +139,9 @@ class AdminController extends Controller
             'religion' => 'required|string|max:100',
             'tribe' => 'required|string|max:100',
             'address' => 'required|string|max:255',
+            'specialized_subject' => 'nullable|string|max:255',
+            'staff_number' => 'required|string|max:50|unique:admins,staff_number,' . $teacher->user_id . ',user_id',
 
-            'staff_number' => 'required|string|max:50|unique:admins,staff_number,' . $admin->user_id . ',user_id',
-            'role_type' => 'required|in:super_admin,exam_officer,admission_officer',
             'highest_qualification' => 'nullable|string|max:255',
             'years_of_experience' => 'nullable|integer|min:0',
             'start_date' => 'nullable|date',
@@ -154,8 +149,8 @@ class AdminController extends Controller
         ]);
 
         try {
-            DB::transaction(function () use ($validated, $admin) {
-                $admin->user->update([
+            DB::transaction(function () use ($validated, $teacher) {
+                $teacher->user->update([
                     'first_name' => $validated['first_name'],
                     'middle_name' => $validated['middle_name'] ?? null,
                     'last_name' => $validated['last_name'] ?? null,
@@ -171,9 +166,9 @@ class AdminController extends Controller
                     'address' => $validated['address'],
                 ]);
 
-                $admin->update([
+                $teacher->update([
                     'staff_number' => $validated['staff_number'],
-                    'role_type' => $validated['role_type'],
+                    'specialized_subject' => $validated['specialized_subject'],
                     'highest_qualification' => $validated['highest_qualification'] ?? null,
                     'years_of_experience' => $validated['years_of_experience'] ?? 0,
                     'start_date' => $validated['start_date'] ?? null,
@@ -183,28 +178,60 @@ class AdminController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Admin updated successfully',
+                'message' => 'Teacher Updated successfully',
                 'redirect' => redirect()
-                    ->intended(route('admins.index'))
-                    ->with('success', 'Admin updated successfully!')
+                    ->intended(route('teachers.index'))
+                    ->with('success', 'Teacher Updated successfully!')
                     ->getTargetUrl(),
-            ]);
+            ], 201);
         } catch (\Exception $e) {
-            return response()->json(
-                [
-                    'status' => 'error',
-                    'message' => 'Update failed: ' . $e->getMessage(),
-                ],
-                500,
-            );
+            return response()->json([
+                'status' => 'Error',
+                'message' => 'Something went wrong: ' . $e->getMessage(),
+            ], 500);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+
+    public function destroy(Teacher $teacher)
     {
-        //
+        try {
+            DB::transaction(function () use ($teacher) {
+                $teacher->user->delete();
+                $teacher->delete();
+
+            });
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Teacher Deleted successfully',
+                'redirect' => redirect()
+                    ->intended(route('teachers.index'))
+                    ->with('success', 'Teacher Deleted successfully!')
+                    ->getTargetUrl(),
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'Error',
+                'message' => 'Something went wrong: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function delete(Teacher $teacher)
+    {
+        $user = $teacher->load('user');
+        $route = route('teachers.destroy', $teacher->user_id);
+        $userType = 'Teacher';
+
+        $messages = [
+            "This account will be deactivated. Their records will be hidden but can be restored later.",
+            "All associated data and records will be reversibly removed from the system. They can be restored later if needed."
+        ];
+
+        return view('users.soft-delete', compact('user', 'route', 'messages'));
     }
 }
