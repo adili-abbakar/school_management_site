@@ -18,12 +18,12 @@
                         <p class="text-xs text-slate-500">Teacher ID: {{ $teacher->staff_number }}</p>
                     </div>
                     <div class="flex gap-2">
-                        <a href="{{ route('teachers.edit', $teacher->user_id) }}" class="px-3 py-1.5 bg-accent text-white text-xs rounded font-medium hover:bg-blue-600 transition flex items-center gap-1">
+                        <a href="{{ route('teachers.edit', $teacher) }}" class="px-3 py-1.5 bg-accent text-white text-xs rounded font-medium hover:bg-blue-600 transition flex items-center gap-1">
                             <i class="fas fa-edit text-xs"></i> Edit
                         </a>
-                        <button onclick="" class="px-3 py-1.5 bg-red-500 text-white text-xs rounded font-medium hover:bg-red-600 transition flex items-center gap-1">
+                        <a href="{{ route('teachers.delete', $teacher) }}" class="px-3 py-1.5 bg-red-500 text-white text-xs rounded font-medium hover:bg-red-600 transition flex items-center gap-1">
                             <i class="fas fa-trash text-xs"></i> Delete
-                        </button>
+                        </a>
                     </div>
                 </div>
                  <!-- Personal Information -->
@@ -64,7 +64,7 @@
 
                             <div>
                                 <label class="text-xs font-medium text-slate-600">Start Date</label>
-                                <p class="text-sm text-slate-800 mt-1">{{ $teacher->start_date != null ? $teacher->start_date->translatedFormat('l jS F Y') : "Not set" }}</p>
+                                <p class="text-sm text-slate-800 mt-1">{{ $teacher->start_date != null ? $teacher->startDate() : "Not set" }}</p>
                             </div>
                             <div>
                                 <label class="text-xs font-medium text-slate-600">Specialized Subject</label>

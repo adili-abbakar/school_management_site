@@ -6,6 +6,7 @@ namespace App\Models\Users;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Teacher extends Model
 {
     use HasFactory, SoftDeletes;
@@ -15,6 +16,20 @@ class Teacher extends Model
     protected $primaryKey = 'user_id';
     public $incrementing = false;
     protected $keyType = 'int';
+    
+    protected function casts(): array
+    {
+        return [
+            'start_date' => 'date',
+
+        ];
+    }
+
+
+    public function startDate()
+    {
+        return $this->start_date ? $this->start_date->translatedFormat('l, jS F, Y') : 'Not Set';
+    }
 
     public function user()
     {

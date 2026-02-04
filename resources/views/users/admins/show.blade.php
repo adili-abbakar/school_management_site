@@ -18,14 +18,14 @@
             <p class="text-xs text-slate-500">Admin ID: {{ $admin->staff_number }}</p>
           </div>
           <div class="flex gap-2">
-            <a href="{{ route('admins.edit', $admin->user_id) }}"
+            <a href="{{ route('admins.edit', $admin) }}"
               class="px-3 py-1.5 bg-accent text-white text-xs rounded font-medium hover:bg-blue-600 transition flex items-center gap-1">
               <i class="fas fa-edit text-xs"></i> Edit
             </a>
-            <button onclick="window.location.href='dashboard-delete-admin.html'"
+            <a href="{{ route('admins.delete', $admin) }}"
               class="px-3 py-1.5 bg-red-500 text-white text-xs rounded font-medium hover:bg-red-600 transition flex items-center gap-1">
               <i class="fas fa-trash text-xs"></i> Delete
-            </button>
+            </a>
           </div>
         </div>
 
