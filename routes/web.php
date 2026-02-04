@@ -54,11 +54,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('sessions/{session}/delete', [SessionController::class, 'delete'])->name('sessions.delete');
 
 
+    Route::resource('admins', AdminController::class);
+    Route::get('admins/{admin}/delete', [AdminController::class, 'delete'])->name('admins.delete');
 
-    Route::resource('students', StudentController::class);
     Route::resource('teachers', TeacherController::class);
     Route::get('teachers/{teacher}/delete', [TeacherController::class, 'delete'])->name('teachers.delete');
-
+    
+    Route::resource('students', StudentController::class);
     Route::resource('guardians', GuardianController::class);
-    Route::resource('admins', AdminController::class);
 });

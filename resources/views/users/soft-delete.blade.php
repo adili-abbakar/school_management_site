@@ -60,7 +60,7 @@
                 </button>
                 <button id="deleteBtn" disabled type="submit"
                     class="flex-1 px-4 py-2 bg-red-400 text-white text-sm rounded-lg font-medium hover:bg-red-500 transition disabled:opacity-50 disabled:cursor-not-allowed">
-                    Delete Account 
+                    Delete Account
                 </button>
             </div>
         </form>

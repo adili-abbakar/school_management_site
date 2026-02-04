@@ -66,17 +66,17 @@
                   </td>
                   <td class="px-6 py-4 text-center">
                     <div class="flex justify-center gap-2">
-                      <a href="{{ route('admins.edit', $admin->user_id) }}">
+                      <a href="{{ route('admins.edit', $admin) }}">
                         <button class="text-blue-500" title="Edit"><i class="fas fa-edit"></i></button>
                       </a>
-                      <a href="{{ route('user.edit-password', $admin->user_id) }}">
+                      <a href="{{ route('user.edit-password', $admin) }}">
                         <button class="text-blue-500" title="Edit Password"><i class="fas fa-key"></i></button>
                       </a>
-                      <a href="{{ route('admins.show', $admin->user_id) }}">
+                      <a href="{{ route('admins.show', $admin) }}">
                         <button class="text-green-500" title="View Details"><i class="fas fa-eye"></i></button>
                       </a>
 
-                      <a href="{{ route('admins.show', $admin->user_id) }}">
+                      <a href="{{ route('admins.delete', $admin) }}">
                         <button class="text-red-500" title="Delete"><i class="fas fa-trash"></i></button>
                       </a>
                     </div>
