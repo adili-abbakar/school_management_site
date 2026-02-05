@@ -24,7 +24,7 @@
                         <h2 class="text-primary font-semibold">New Academic Session</h2>
                     </div>
 
-                    <form id="form" class="space-y-6" action="{{ route('sessions.store') }}" method="POST">
+                    <form  class="form space-y-6" action="{{ route('sessions.store') }}" method="POST">
                         @csrf
 
                         <!-- Session Basic Information -->

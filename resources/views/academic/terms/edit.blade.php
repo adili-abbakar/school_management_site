@@ -24,7 +24,7 @@
                         <h2 class="text-primary font-semibold">Update Term For</h2>
                     </div>
 
-                    <form id="form" class="space-y-6"
+                    <form class="form space-y-6"
                         action="{{ route('terms.update', ['term' => $term->id, 'session' => $session->id]) }}"
                         method="POST">
                         @csrf

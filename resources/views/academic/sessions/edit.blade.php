@@ -25,7 +25,7 @@
                         <h2 class="text-primary font-semibold">Update Academic Session</h2>
                     </div>
 
-                    <form id="form" class="space-y-6" action="{{ route('sessions.update', $session->id) }}"
+                    <form  class="form space-y-6" action="{{ route('sessions.update', $session->id) }}"
                         method="POST">
                         @csrf
                         @method('PUT')

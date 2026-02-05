@@ -24,7 +24,7 @@
                         <h2 class="text-primary font-semibold">New Term For</h2>
                     </div>
 
-                    <form id="form" class="space-y-6" action="{{ route('terms.store', $session->id) }}" method="POST">
+                    <form  class="form space-y-6" action="{{ route('terms.store', $session->id) }}" method="POST">
                         @csrf
                         <x-terms.form-fields :session="$session" />
                     </form>

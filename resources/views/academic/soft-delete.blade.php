@@ -15,7 +15,7 @@
         </div>
 
         <!-- Content -->
-        <form method="POST" id="form" action="{{ $route }}" class="p-6">
+        <form method="POST" action="{{ $route }}" class="form p-6">
             <x-loader-component />
             @csrf
             @method('DELETE')

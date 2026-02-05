@@ -21,8 +21,8 @@
         </a>
       </div>
 
-      <form id="form" action="{{ route('admins.update', $admin->user_id) }}" method="POST"
-        class="bg-white rounded-xl border border-slate-100 shadow-sm p-4 md:p-6">
+      <form  action="{{ route('admins.update', $admin->user_id) }}" method="POST"
+        class="form bg-white rounded-xl border border-slate-100 shadow-sm p-4 md:p-6">
         @csrf
         @method('PUT')
 

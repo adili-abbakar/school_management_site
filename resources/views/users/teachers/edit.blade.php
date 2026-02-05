@@ -23,8 +23,8 @@
       </div>
 
       <!-- Responsive 2-3 column form grid for teacher creation -->
-      <form id="form" method="POST" action="{{ route('teachers.update', $teacher->user_id) }}"
-        class="bg-white rounded-xl border border-slate-100 shadow-sm p-4 md:p-6">
+      <form  method="POST" action="{{ route('teachers.update', $teacher->user_id) }}"
+        class="form bg-white rounded-xl border border-slate-100 shadow-sm p-4 md:p-6">
         @csrf
         @method('PUT')
 
