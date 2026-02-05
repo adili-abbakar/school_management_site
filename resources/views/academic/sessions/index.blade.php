@@ -5,6 +5,8 @@
 @section('page-content')
     <main class="flex-grow flex flex-col min-w-0 bg-slate-50 overflow-y-auto">
         <x-dashboard-header />
+        <x-loader-component />
+
         <div class="flex-1 overflow-y-auto">
             <div class="p-4 md:p-8">
                 <div class="flex justify-between items-center mb-6">
@@ -96,6 +98,41 @@
                                                     Delete
                                                 </a>
                                             </div>
+                                            <div class="mt-3 flex gap-2">
+                                                @if ($term->activity !== 'active')
+                                                    <form method="POST" action="{{ route('terms.set-active', $term) }}"
+                                                        class="form flex-1 flex">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <button type="submit"
+                                                            class="flex-1 text-center px-2 py-1 bg-white text-green-600 rounded text-xs hover:bg-slate-50 transition-colors border border-green-400">
+                                                            Set Active
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                                @if ($term->activity !== 'completed')
+                                                    <form method="POST" action="{{ route('terms.set-completed', $term) }}"
+                                                        class="form flex-1 flex">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <button type="submit"
+                                                            class="flex-1 text-center px-2 py-1 bg-white text-accent rounded text-xs hover:bg-slate-50 transition-colors border border-accent">
+                                                            Set Completed
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                                @if ($term->activity !== 'upcoming')
+                                                    <form method="POST" action="{{ route('terms.set-upcoming', $term) }}"
+                                                        class=" form flex-1 flex">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <button type="submit"
+                                                            class="flex-1 text-center px-2 py-1 bg-white text-purple-600 rounded text-xs hover:bg-slate-50 transition-colors border border-purple-400">
+                                                            Set Upcoming
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            </div>
                                         </div>
                                     @empty
                                         <div
@@ -119,5 +156,6 @@
         </div>
 
     </main>
+    <script src="{{ asset('js/formSubmitter.js') }}"></script>
 
 @endsection

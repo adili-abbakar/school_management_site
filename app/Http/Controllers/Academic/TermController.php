@@ -6,6 +6,7 @@ use App\Models\Academic\Session;
 use App\Models\Academic\Term;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Exception;
 
 class TermController extends Controller
 {
@@ -120,7 +121,7 @@ class TermController extends Controller
     {
         try {
             $term->delete();
-        
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Term deleted successfully',
@@ -152,5 +153,69 @@ class TermController extends Controller
         ];
 
         return view('academic.soft-delete', compact('data', 'title', 'route', 'messages'));
+    }
+
+    public function setActive(Term $term)
+    {
+        try {
+            Term::where('activity', 'active')->update(['activity' => 'completed']);
+            $term->update(['activity' => 'active']);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Term activated successfully',
+                'redirect' => redirect()
+                    ->intended(route('sessions.index'))
+                    ->with('success', 'Term activated successfully!')
+                    ->getTargetUrl(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function setCompleted(Term $term)
+    {
+        try {
+            $term->update(['activity' => 'completed']);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Term completed successfully',
+                'redirect' => redirect()
+                    ->intended(route('sessions.index'))
+                    ->with('success', 'Term completed successfully!')
+                    ->getTargetUrl(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function setUpcoming(Term $term)
+    {
+        try {
+            $term->update(['activity' => 'upcoming']);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Term set to upcoming successfully',
+                'redirect' => redirect()
+                    ->intended(route('sessions.index'))
+                    ->with('success', 'Term set to upcoming successfully!')
+                    ->getTargetUrl(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

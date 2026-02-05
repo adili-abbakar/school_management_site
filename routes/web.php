@@ -47,6 +47,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('sessions.terms', TermController::class)->except(['show', 'index']);
     Route::get('sessions/{session}/term/{term}/delete', [TermController::class, 'delete'])->name('sessions.terms.delete');
+    Route::put('terms/{term}/set-active/', [Termcontroller::class, 'setActive'])->name('terms.set-active');
+    Route::put('terms/{term}/set-completed/', [Termcontroller::class, 'setCompleted'])->name('terms.set-completed');
+    Route::put('terms/{term}/set-upcoming/', [Termcontroller::class, 'setUpcoming'])->name('terms.set-upcoming');
+
 
 
 
