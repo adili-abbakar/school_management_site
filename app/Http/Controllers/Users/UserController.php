@@ -26,17 +26,26 @@ class UserController extends Controller
                 $user->update([
                     'password' => Hash::make($validated['password']),
                 ]);
+
+                $relation = match ($user->type) {
+                    'admin'   => $user->admin,
+                    'teacher' => $user->teacher,
+                    'guardian' => $user->guardian,
+                    'student' => $user->student,
+                    default   => null,
+                };
+
+                if ($relation) {
+                    $relation->touch();
+                }
             });
 
-            if ($user->type === 'admin') {
-                $redirectUrl = 'admins.index';
-            } elseif ($user->type === 'teacher') {
-                $redirectUrl = 'teachers.index';
-            } elseif ($user->type === 'guardian') {
-                $redirectUrl = 'guardians.index';
-            } elseif ($user->type === 'student') {
-                $redirectUrl = 'students.index';
-            }
+            $redirectUrl = match ($user->type) {
+                'admin' => 'admins.index',
+                'teacher' => 'teachers.index',
+                'guardian' => 'guardians.index',
+                'student' => 'students.index',
+            };
 
             return response()->json(
                 [

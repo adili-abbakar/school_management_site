@@ -17,7 +17,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        $teachers = Teacher::with('user')->get();
+        $teachers = Teacher::with('user')->latest('updated_at')->get();
         return view('users.teachers.index', compact('teachers'));
     }
 
