@@ -91,10 +91,14 @@ class AdminController extends Controller
                 ]);
             });
 
-            return redirect()
-                ->back()
-                ->with('success', 'Admin created successfully!')
-                ->getTargetUrl();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Admin updated successfully',
+                'redirect' => redirect()
+                    ->intended(route('admins.index'))
+                    ->with('success', 'Admin updated successfully!')
+                    ->getTargetUrl(),
+            ]);
         } catch (\Exception $e) {
             return response()->json(
                 [

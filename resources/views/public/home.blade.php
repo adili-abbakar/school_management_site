@@ -8,7 +8,7 @@
         <section class="relative h-[550px] flex items-center justify-center text-white overflow-hidden">
             <div class="absolute inset-0 bg-[#19214D]/80 z-10"></div>
             <div class="absolute inset-0 bg-cover bg-center"
-                style="background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=2000&h=1200&fit=crop');">
+                style="background-image: url('{{ asset('images/banner.png') }}?w=2000&h=1200&fit=crop');">
             </div>
             <div class="container mx-auto px-4 relative z-20 text-center" data-aos="fade-up">
                 <h1 class="text-3xl md:text-5xl font-extrabold mb-5">

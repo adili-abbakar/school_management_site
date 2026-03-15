@@ -21,7 +21,7 @@
                 </a>
             </div>
 
-            <form  action="{{ route('admins.store') }}" method="POST"
+            <form action="{{ route('admins.store') }}" method="POST"
                 class="form bg-white rounded-xl border border-slate-100 shadow-sm p-4 md:p-6">
                 @csrf
 
@@ -40,11 +40,8 @@
                         <i class="fas fa-redo"></i>
                         <span>Reset Form</span>
                     </button>
-                    <a href="dashboard-admins.html"
-                        class="bg-slate-100 text-slate-600 px-5 py-2 rounded-lg text-xs font-semibold hover:bg-slate-200 transition-all flex items-center gap-2">
-                        <i class="fas fa-times"></i>
-                        <span>Cancel</span>
-                    </a>
+                    <x-buttons.gray-cancel />
+
                 </div>
             </form>
         </div>

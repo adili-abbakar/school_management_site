@@ -9,6 +9,9 @@
                     showSuccess("{{ session('success') }}");
                 });
             </script>
+            @php
+                session()->forget('success');
+            @endphp
         @endif
 
         <x-dashboard-sidebar />
