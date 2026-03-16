@@ -55,7 +55,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>  
 
 <!-- Divider -->
 <div class="border-t border-slate-200 pt-4"></div>

@@ -41,6 +41,6 @@ class Session extends Model
 
     public function terms(): HasMany
     {
-        return $this->hasMany(Term::class, 'session_id');
+        return $this->hasMany(Term::class, 'session_id')->orderBy('start_date', 'asc');
     }
 }

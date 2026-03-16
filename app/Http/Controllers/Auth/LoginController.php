@@ -50,7 +50,7 @@ class LoginController extends Controller
             return response()->json([
                 'status' => 'success',
                 'redirect' => redirect()
-                    ->intended(route('dashboard'))
+                    ->intended(route('dashboard.index'))
                     ->with('success', 'Logged In Successfully')
                     ->getTargetUrl(),
             ]);
@@ -73,7 +73,7 @@ class LoginController extends Controller
         Session::flush();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return redirect()->route('home');
     }
 }

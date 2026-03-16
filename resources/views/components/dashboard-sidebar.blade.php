@@ -21,8 +21,8 @@
                 <i class="fas fa-home text-xs"></i>
                 <span>Home</span>
             </a>
-            <a href="{{ route('dashboard') }}"
-                class="sidebar-link {{ url()->current() == route('dashboard') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+            <a href="{{ route('dashboard.index') }}"
+                class="sidebar-link {{ url()->current() == route('dashboard.index') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
                 <i class="fas fa-th-large text-xs"></i>
                 <span>Overview</span>
             </a>

@@ -15,7 +15,7 @@ class SessionController extends Controller
      */
     public function index()
     {
-        $sessions = Session::get();
+        $sessions = Session::latest('end_date')->get();
 
         return view('academic.sessions.index', compact('sessions'));
     }
@@ -35,17 +35,19 @@ class SessionController extends Controller
     {
         $validated =  $request->validate([
             'session_name' => 'required|string|max:255|unique:academic_sessions,name',
-            'session_start_date' => 'required|date',
-            'session_end_date' => 'required|date',
 
-            'first_term_start_date' => 'required|date',
-            'first_term_end_date' => 'required|date',
+            'session_start_date' => ['required', 'date'],
+            'session_end_date'   => ['required', 'date', 'after:session_start_date'],
 
-            'second_term_start_date' => 'required|date',
-            'second_term_end_date' => 'required|date',
 
-            'third_term_start_date' => 'required|date',
-            'third_term_end_date' => 'required|date',
+            'first_term_start_date' => ['required', 'date', 'after_or_equal:session_start_date', 'before_or_equal:session_end_date'],
+            'first_term_end_date'   => ['required', 'date', 'after:first_term_start_date', 'before_or_equal:session_end_date'],
+
+            'second_term_start_date' => ['required', 'date', 'after_or_equal:session_start_date', 'after:first_term_end_date', 'before_or_equal:session_end_date'],
+            'second_term_end_date'   => ['required', 'date', 'after:second_term_start_date', 'before_or_equal:session_end_date'],
+
+            'third_term_start_date' => ['required', 'date', 'after_or_equal:session_start_date', 'after:second_term_end_date', 'before_or_equal:session_end_date'],
+            'third_term_end_date'   => ['required', 'date', 'after:third_term_start_date', 'before_or_equal:session_end_date'],
         ]);
 
         try {
@@ -121,8 +123,8 @@ class SessionController extends Controller
     {
         $validated =  $request->validate([
             'session_name' => 'required|string|max:255|unique:academic_sessions,name' . $session->id,
-            'session_start_date' => 'required|date',
-            'session_end_date' => 'required|date'
+            'session_start_date' => ['required', 'date'],
+            'session_end_date'   => ['required', 'date', 'after:session_start_date'],
         ]);
 
         try {
@@ -161,10 +163,9 @@ class SessionController extends Controller
     {
         try {
             DB::transaction(
-                function() use ($session) {
+                function () use ($session) {
                     $session->terms()->delete();
                     $session->delete();
-
                 }
             );
             return response()->json([
@@ -174,7 +175,7 @@ class SessionController extends Controller
                     ->intended(route('sessions.index'))
                     ->with('success', 'Session deleted successfully!')
                     ->getTargetUrl(),
-            ]); 
+            ]);
         } catch (\Exception $e) {
             return response()->json(
                 [

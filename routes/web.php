@@ -38,21 +38,29 @@ Route::get('/news', [NewsController::class, 'index'])->name('news');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard/profile', [DashboardController::class, 'profile'])->name('dashboard.profile');
-    Route::get('/dashboard/settings', [DashboardController::class, 'settings'])->name('dashboard.settings');
 
-    Route::get('user/{user}/edit-password', [UserController::class, 'editPassword'])->name('user.edit-password');
-    Route::put('user/{user}/update-password', [UserController::class, 'updatePassword'])->name('user.update-password');
+    Route::prefix('dashboard/')->name('dashboard.')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('index');
+        Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
+        Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
+    });
+
+
+    Route::prefix('user/')->name('user.')->group(function () {
+        Route::get('{user}/edi  t-password', [UserController::class, 'editPassword'])->name('edit-password');
+        Route::put('{user}/update-password', [UserController::class, 'updatePassword'])->name('update-password');
+    });
+
 
     Route::resource('sessions.terms', TermController::class)->except(['show', 'index']);
     Route::get('sessions/{session}/term/{term}/delete', [TermController::class, 'delete'])->name('sessions.terms.delete');
-    Route::put('terms/{term}/set-active/', [Termcontroller::class, 'setActive'])->name('terms.set-active');
-    Route::put('terms/{term}/set-completed/', [Termcontroller::class, 'setCompleted'])->name('terms.set-completed');
-    Route::put('terms/{term}/set-upcoming/', [Termcontroller::class, 'setUpcoming'])->name('terms.set-upcoming');
 
 
-
+    Route::prefix('term/')->name('term.')->group(function () {
+        Route::put('{term}/set-active/', [Termcontroller::class, 'setActive'])->name('set-active');
+        Route::put('{term}/set-completed/', [Termcontroller::class, 'setCompleted'])->name('set-completed');
+        Route::put('{term}/set-upcoming/', [Termcontroller::class, 'setUpcoming'])->name('set-upcoming');
+    });
 
     Route::resource('sessions', SessionController::class);
     Route::get('sessions/{session}/delete', [SessionController::class, 'delete'])->name('sessions.delete');
@@ -63,7 +71,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('teachers', TeacherController::class);
     Route::get('teachers/{teacher}/delete', [TeacherController::class, 'delete'])->name('teachers.delete');
-    
+
     Route::resource('students', StudentController::class);
     Route::resource('guardians', GuardianController::class);
 });

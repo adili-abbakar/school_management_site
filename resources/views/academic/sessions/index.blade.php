@@ -100,7 +100,7 @@
                                             </div>
                                             <div class="mt-3 flex gap-2">
                                                 @if ($term->activity !== 'active')
-                                                    <form method="POST" action="{{ route('terms.set-active', $term) }}"
+                                                    <form method="POST" action="{{ route('term.set-active', $term) }}"
                                                         class="form flex-1 flex">
                                                         @csrf
                                                         @method('PUT')
@@ -111,7 +111,7 @@
                                                     </form>
                                                 @endif
                                                 @if ($term->activity !== 'completed')
-                                                    <form method="POST" action="{{ route('terms.set-completed', $term) }}"
+                                                    <form method="POST" action="{{ route('term.set-completed', $term) }}"
                                                         class="form flex-1 flex">
                                                         @csrf
                                                         @method('PUT')
@@ -122,7 +122,7 @@
                                                     </form>
                                                 @endif
                                                 @if ($term->activity !== 'upcoming')
-                                                    <form method="POST" action="{{ route('terms.set-upcoming', $term) }}"
+                                                    <form method="POST" action="{{ route('term.set-upcoming', $term) }}"
                                                         class=" form flex-1 flex">
                                                         @csrf
                                                         @method('PUT')

@@ -19,7 +19,15 @@
                <a href="{{ route('contact') }}"
                    class="hover:text-[#6B8DD6] transition-colors {{ url()->current() === route('contact') ? 'text-[#6B8DD6]' : '' }}">Contact</a>
                @auth
-                   <a href="{{ route('dashboard') }}" class="hover:text-[#6B8DD6] transition-colors">Dashboard</a>
+                   <a href="{{ route('dashboard.index') }}" class="hover:text-[#6B8DD6] transition-colors">Dashboard</a>
+                   <form action="{{ route('logout') }}" method="POST">
+                       @csrf
+                       <button type="submit"
+                           class="bg-[#6B8DD6] hover:bg-opacity-90 text-white px-4 py-2 rounded-md font-medium transition-colors text-sm flex items-center gap-2">
+                           <i class="fas fa-sign-out-alt"></i>
+                           <span>Logout</span>
+                       </button>
+                   </form>
                @else
                    <a href="{{ route('login') }}">
                        <button
@@ -56,11 +64,23 @@
            <a href="{{ route('news') }}" class="hover:text-[#6B8DD6] transition-colors py-2">News</a>
            <a href="{{ route('contact') }}" class="hover:text-[#6B8DD6] transition-colors py-2">Contact</a>
            @auth
-               <a href="{{ route('dashboard') }}" class="hover:text-[#6B8DD6] transition-colors py-2">Dashboard</a>
+               <a href="{{ route('dashboard.index') }}" class="hover:text-[#6B8DD6] transition-colors py-2">Dashboard</a>
+               <a href="{{ route('logout') }}">
+                   <button
+                       class="w-full flex items-center justify-center gap-2 bg-[#6B8DD6] hover:bg-opacity-90 text-white px-4 py-2
+                       rounded-md font-medium transition-colors text-sm inline-block text-center mt-4">
+                       <i class="fas fa-sign-out-alt"></i>
+                       <span>Logout</span>
+                   </button>
+               </a>
            @else
-               <a href="{{ route('login') }}"
-                   class="bg-[#6B8DD6] hover:bg-opacity-90 text-white px-4 py-2 rounded-md font-medium transition-colors text-sm inline-block text-center mt-4">
-                   Portal Login
+               <a href="{{ route('login') }}">
+                   <button
+                       class="w-full flex items-center justify-center gap-2 bg-[#6B8DD6] hover:bg-opacity-90 text-white px-4 py-2
+                       rounded-md font-medium transition-colors text-sm inline-block text-center mt-4">
+                       <i class="fas fa-sign-in-alt"></i>
+                       <span>Login</span>
+                   </button>
                </a>
            @endauth
        </nav>

@@ -25,10 +25,12 @@
                     </div>
 
                     <form class="form space-y-6"
-                        action="{{ route('terms.update', ['term' => $term->id, 'session' => $session->id]) }}"
+                        action="{{ route('sessions.terms.update', ['session' => $session, 'term' => $term]) }}"
                         method="POST">
                         @csrf
                         @method('PUT')
+                        <input type="hidden" name="session_start_date" value="{{ $session->start_date }}">
+                        <input type="hidden" name="session_end_date" value="{{ $session->end_date }}">
                         <x-terms.form-fields :term="$term" :session="$session" />
                     </form>
                 </div>

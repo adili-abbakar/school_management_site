@@ -73,7 +73,7 @@ class TermController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Term $term, Session $session)
+    public function edit(Session $session, Term $term)
     {
         return view('academic.terms.edit', compact('term', 'session'));
     }
@@ -81,20 +81,23 @@ class TermController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Term $term, Session $session)
+    public function update(Request $request, Session $session, Term $term)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'session_start_date' => "required|date",
+            'session_end_date' => "required|date|after:session_start_date",
+            'start_date' => 'required|date|after_or_equal:session_start_date',
+            'end_date' => 'required|date|after:start_date|before_or_equal:session_end_date',
         ]);
 
         try {
-            $session->terms()->update([
+            $term->update([
                 'name' => $validated['name'],
                 'start_date' => $validated['start_date'],
                 'end_date' => $validated['end_date'],
             ]);
+            $term->session()->touch();
             return response()->json([
                 'status' => 'success',
                 'message' => 'Term updated successfully',
@@ -121,6 +124,8 @@ class TermController extends Controller
     {
         try {
             $term->delete();
+            $term->session()->touch();
+
 
             return response()->json([
                 'status' => 'success',
@@ -160,6 +165,8 @@ class TermController extends Controller
         try {
             Term::where('activity', 'active')->update(['activity' => 'completed']);
             $term->update(['activity' => 'active']);
+            $term->session()->touch();
+
 
             return response()->json([
                 'status' => 'success',
@@ -181,6 +188,8 @@ class TermController extends Controller
     {
         try {
             $term->update(['activity' => 'completed']);
+            $term->session()->touch();
+
 
             return response()->json([
                 'status' => 'success',
@@ -202,6 +211,7 @@ class TermController extends Controller
     {
         try {
             $term->update(['activity' => 'upcoming']);
+            $term->session()->touch();
 
             return response()->json([
                 'status' => 'success',
