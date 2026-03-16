@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPro | Delete Class</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a2b4b',
+                        secondary: '#f0f4f8',
+                        accent: '#3b82f6',
+                        muted: '#6b7280',
+                        sidebar: '#0f172a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { 
+            font-family: 'Inter', sans-serif; 
+            font-size: 11px;
+        }
+        h1 { font-size: 1.5rem; }
+        h2 { font-size: 1.25rem; }
+        h3 { font-size: 1rem; }
+        p { font-size: 11px; }
+        .text-sm { font-size: 10px; }
+        .text-base { font-size: 11px; }
+        .text-lg { font-size: 12px; }
+        .sidebar-link.active { background-color: #1e293b; color: #3b82f6; border-right: 4px solid #3b82f6; }
+        .mobile-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-sidebar.active {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 flex h-screen overflow-hidden">
+    <!-- Mobile Menu Overlay -->
+    <div id="sidebarOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"></div>
+
+    <!-- Sidebar -->
+    <aside class="mobile-sidebar fixed md:relative w-60 bg-sidebar text-slate-300 flex-shrink-0 flex flex-col z-40 h-full md:translate-x-0">
+        <div class="p-5 flex items-center gap-3 border-b border-slate-800">
+            <div class="bg-accent text-white p-1.5 rounded">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <span class="text-lg font-bold text-white tracking-tight">EduPro</span>
+        </div>
+        <nav class="flex-grow py-4 space-y-0.5 overflow-y-auto text-sm">
+            <div class="px-5 mb-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Main Menu</div>
+            <a href="dashboard.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-th-large"></i>
+                <span>Overview</span>
+            </a>
+            <div class="px-5 mt-4 mb-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">User Management</div>
+            <a href="dashboard-students.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-users"></i>
+                <span>Students</span>
+            </a>
+            <a href="dashboard-teachers.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-chalkboard-user"></i>
+                <span>Teachers</span>
+            </a>
+            <a href="dashboard-admins.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-user-tie"></i>
+                <span>Admins</span>
+            </a>
+            <a href="dashboard-guardians.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-shield"></i>
+                <span>Guardians</span>
+            </a>
+            <div class="px-5 mt-4 mb-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Academics</div>
+            <a href="dashboard-sessions.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Sessions</span>
+            </a>
+            <a href="dashboard-classes.html" class="sidebar-link active flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-school"></i>
+                <span>Classes</span>
+            </a>
+            <a href="dashboard-promotions.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-arrow-up-right-dots"></i>
+                <span>Promotions</span>
+            </a>
+            <div class="px-5 mt-4 mb-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Operations</div>
+            <a href="dashboard-admissions.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-user-plus"></i>
+                <span>Admissions</span>
+            </a>
+            <a href="dashboard-results-upload.html" class="sidebar-link flex items-center px-5 py-2 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-file-invoice"></i>
+                <span>Results</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-grow flex flex-col min-w-0 bg-slate-50 overflow-y-auto">
+        <header class="h-14 bg-white border-b px-6 flex items-center justify-between sticky top-0 z-10 shadow-sm md:flex hidden">
+            <div class="flex items-center gap-4 flex-grow max-w-xl">
+                <button id="mobileMenuBtn" class="md:hidden text-primary text-lg">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="relative w-full">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" placeholder="Search..." class="w-full bg-slate-100 border-none rounded-lg py-1.5 pl-9 pr-4 text-xs focus:ring-2 focus:ring-accent outline-none">
+                </div>
+            </div>
+            <div class="w-8 h-8 bg-accent text-white rounded-full flex items-center justify-center text-xs font-bold">AD</div>
+        </header>
+
+        <div class="p-6 flex items-center justify-center min-h-full">
+            <!-- Delete Confirmation Modal -->
+            <div class="w-full max-w-md bg-white rounded-xl border border-red-200 shadow-xl">
+                <div class="bg-red-50 px-6 py-4 border-b border-red-200 flex items-center gap-3">
+                    <div class="bg-red-100 text-red-600 p-2 rounded-lg text-lg">
+                        <i class="fas fa-trash-alt"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-primary text-sm">Delete Class - JSS 1</h2>
+                        <p class="text-slate-500 text-xs">This action cannot be undone</p>
+                    </div>
+                </div>
+
+                <div class="p-6 space-y-4">
+                    <!-- Warning Box -->
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <div class="flex gap-3">
+                            <i class="fas fa-exclamation-triangle text-yellow-600 text-lg flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <p class="font-bold text-yellow-800 text-xs mb-2">Warning: Permanent Deletion</p>
+                                <ul class="text-yellow-700 text-[10px] space-y-1">
+                                    <li>• Class JSS 1 will be completely removed</li>
+                                    <li>• All 3 arms (Gold, Silver, Bronze) will be deleted</li>
+                                    <li>• 105 students will lose class assignment</li>
+                                    <li>• All related academic records will be affected</li>
+                                    <li>• This cannot be reversed</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Class Details -->
+                    <div class="border-t pt-4">
+                        <p class="text-[10px] text-slate-500 font-semibold mb-3">Class Details:</p>
+                        <div class="bg-slate-50 p-3 rounded-lg space-y-1 text-[10px]">
+                            <div class="flex justify-between"><span class="text-slate-600">Class Name:</span> <span class="font-semibold">JSS 1</span></div>
+                            <div class="flex justify-between"><span class="text-slate-600">Level:</span> <span class="font-semibold">JSS 1</span></div>
+                            <div class="flex justify-between"><span class="text-slate-600">Category:</span> <span class="font-semibold">General</span></div>
+                            <div class="flex justify-between"><span class="text-slate-600">Total Students:</span> <span class="font-semibold">105</span></div>
+                            <div class="flex justify-between"><span class="text-slate-600">Total Arms:</span> <span class="font-semibold">3</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Confirmation Input -->
+                    <div class="border-t pt-4">
+                        <p class="text-[10px] text-slate-500 font-semibold mb-2">Type <span class="bg-slate-100 px-1.5 py-0.5 rounded text-primary font-bold">CONFIRM</span> to proceed:</p>
+                        <input type="text" id="confirmInput" placeholder="Type CONFIRM here..." class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none">
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-3 pt-4 border-t">
+                        <a href="dashboard-classes.html" class="flex-1 bg-slate-200 text-slate-700 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-300 transition-all text-center">
+                            Cancel
+                        </a>
+                        <button id="deleteBtn" disabled class="flex-1 bg-red-300 text-red-700 px-4 py-2.5 rounded-lg text-xs font-semibold hover:bg-red-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                            <i class="fas fa-trash"></i> Delete Class
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.querySelector('.mobile-sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('hidden');
+            });
+            overlay.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+                overlay.classList.add('hidden');
+            });
+        }
+
+        // Confirmation input handling
+        const confirmInput = document.getElementById('confirmInput');
+        const deleteBtn = document.getElementById('deleteBtn');
+
+        confirmInput.addEventListener('input', () => {
+            if (confirmInput.value === 'CONFIRM') {
+                deleteBtn.disabled = false;
+                deleteBtn.classList.remove('bg-red-300');
+                deleteBtn.classList.add('bg-red-600', 'hover:bg-red-700', 'text-white');
+            } else {
+                deleteBtn.disabled = true;
+                deleteBtn.classList.remove('bg-red-600', 'hover:bg-red-700', 'text-white');
+                deleteBtn.classList.add('bg-red-300', 'text-red-700');
+            }
+        });
+
+        deleteBtn.addEventListener('click', (e) => {
+            if (!deleteBtn.disabled) {
+                alert('Class deleted successfully!');
+                window.location.href = 'dashboard-classes.html';
+            }
+        });
+    </script>
+</body>
+</html>
