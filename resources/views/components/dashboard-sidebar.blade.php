@@ -56,7 +56,7 @@
                 <i class="fas fa-calendar-alt text-xs"></i>
                 <span>Sessions</span>
             </a>
-            <a href="dashboard-classes.html"
+            <a href="{{ route('classes.index') }}"
                 class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
                 <i class="fas fa-school text-xs"></i>
                 <span>Classes</span>
