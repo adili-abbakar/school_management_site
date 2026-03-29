@@ -1,3 +1,14 @@
+function convertFormat(input) {
+    const parts = input.split(".");
+    let result = parts[0];
+
+    for (let i = 1; i < parts.length; i++) {
+        result += `[${parts[i]}]`;
+    }
+
+    return result;
+}
+
 $(".form").on("submit", function (e) {
     e.preventDefault();
     showLoader();
@@ -24,7 +35,8 @@ $(".form").on("submit", function (e) {
                 let errors = xhr.responseJSON.errors;
                 $.each(errors, function (field, messages) {
                     $(`.error-message[data-name="${field}"]`).text(messages[0]);
-                    $(`[name="${field}"]`).addClass("border-red-600");
+                    let inputName = convertFormat(field);
+                    $(`[name="${inputName}"]`).addClass("border-red-600");
                 });
             } else {
                 console.error("Server error:", xhr.responseText);
@@ -32,3 +44,4 @@ $(".form").on("submit", function (e) {
         },
     });
 });
+

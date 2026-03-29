@@ -15,8 +15,9 @@
                 <p class="text-slate-500 text-xs">Add a new class with multiple arms to the system</p>
             </div>
 
-            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-                <form class="space-y-6">
+            <form class="form space-y-6" action="{{ route('classes.store') }}" method="POST">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+                    @csrf
                     <!-- Class Information Section -->
                     <div>
                         <h3 class="text-sm font-bold text-primary mb-4">Class Information</h3>
@@ -24,133 +25,135 @@
                             <div>
                                 <label class="block text-[10px] font-semibold text-slate-700 mb-2">Class Name <span
                                         class="text-red-500">*</span></label>
-                                <input type="text" placeholder="e.g., JSS 1"
+                                <input type="text" placeholder="e.g., JSS 1" name="class_name"
                                     class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none">
+                                <span class="text-red-600 text-[10px] error-message" data-name="class_name"></span>
                             </div>
                             <div>
                                 <label class="block text-[10px] font-semibold text-slate-700 mb-2">Class Level <span
                                         class="text-red-500">*</span></label>
-                                <select
+                                <select name="class_level"
                                     class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none">
                                     <option>Select Level</option>
-                                    <option>JSS 1</option>
-                                    <option>JSS 2</option>
-                                    <option>JSS 3</option>
-                                    <option>SSS 1</option>
-                                    <option>SSS 2</option>
-                                    <option>SSS 3</option>
+                                    <option value="nursery">Nursery</option>
+                                    <option value="primary">Primary</option>
+                                    <option value="jss">Junior Secondary (JSS)</option>
+                                    <option value="sss">Senior Secondary (SS)</option>
                                 </select>
+                                <span class="text-red-600 text-[10px] error-message" data-name="class_level"></span>
                             </div>
                             <div>
-                                <label class="block text-[10px] font-semibold text-slate-700 mb-2">Category <span
-                                        class="text-red-500">*</span></label>
-                                <select
+                                <label class="block text-[10px] font-semibold text-slate-700 mb-2">Previous Class</label>
+                                <select name="previous_class_id"
                                     class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none">
-                                    <option>Select Category</option>
-                                    <option>Arts</option>
-                                    <option>Science</option>
-                                    <option>Commercial</option>
-                                    <option>General</option>
+                                    <option value="{{ null }}">Select Previous Class</option>
+                                    @forelse ($classes as $class)
+                                        <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                    @empty
+                                        <option>No classes yet — create one first</option>
+                                    @endforelse
                                 </select>
+                                <span class="text-red-600 text-[10px] error-message" data-name="previous_class_id"></span>
                             </div>
-                        </div>
-                    </div>
+                            <div class="flex items-center gap-3">
+                                <!-- ensure a value is always sent -->
+                                <input type="hidden" name="force_overwrite" value="0">
 
-                    <!-- Arms Section -->
-                    <div class="border-t pt-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-sm font-bold text-primary">Class Arms</h3>
-                            <button type="button" id="addArmBtn"
-                                class="bg-accent text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-blue-600 transition-all flex items-center gap-2">
-                                <i class="fas fa-plus"></i> Add Arm
-                            </button>
-                        </div>
+                                <input id="force_overwrite" name="force_overwrite" type="checkbox" value="1"
+                                    class="h-4 w-4 text-accent border-slate-300 rounded focus:ring-2 focus:ring-accent" />
 
-                        <div id="armsContainer" class="space-y-4">
-                            <!-- Sample Arm -->
-                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 arm-item">
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    <div>
-                                        <label class="block text-[10px] font-semibold text-slate-700 mb-2">Arm Name <span
-                                                class="text-red-500">*</span></label>
-                                        <input type="text" placeholder="e.g., Gold"
-                                            class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none">
-                                    </div>
-                                    <div>
-                                        <label class="block text-[10px] font-semibold text-slate-700 mb-2">Form Teacher
-                                            <span class="text-red-500">*</span></label>
-                                        <input type="text" placeholder="Enter teacher name"
-                                            class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none">
-                                    </div>
-                                    <div>
-                                        <label class="block text-[10px] font-semibold text-slate-700 mb-2">Max
-                                            Students</label>
-                                        <input type="number" placeholder="e.g., 40"
-                                            class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none">
+                                <label for="force_overwrite" class="text-xs font-semibold text-slate-700">
+                                    Overwrite existing link if any
+                                </label>
+
+                                <p class="text-xs text-slate-500 ml-2">Check to allow replacing an existing next pointer.
+                                </p>
+                            </div>
+                            <div id="confirmModal"
+                                class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 hidden">
+                                <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-5">
+                                    <h3 class="text-sm font-semibold mb-2">Confirm overwrite</h3>
+                                    <p class="text-sm text-slate-600 mb-4">
+                                        Another class already points to the selected next class. Overwriting will remove
+                                        that link.
+                                        Are you sure you want to continue?
+                                    </p>
+                                    <div class="flex justify-end gap-2">
+                                        <button id="cancelConfirm" type="button"
+                                            class="px-3 py-1 border rounded text-sm">Cancel</button>
+                                        <button id="confirmSubmit" type="button"
+                                            class="px-3 py-1 bg-red-600 text-white rounded text-sm">Yes, overwrite</button>
                                     </div>
                                 </div>
-                                <button type="button" class="text-red-500 text-xs mt-3 hover:text-red-700 remove-arm-btn">
-                                    <i class="fas fa-trash mr-1"></i> Remove Arm
-                                </button>
                             </div>
                         </div>
+
+                    </div>
+                </div>
+
+                <!-- Arms Section -->
+                <div class="border-t pt-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-sm font-bold text-primary">Class Arms</h3>
+                        <button type="button" id="addArmBtn"
+                            class="bg-accent text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-blue-600 transition-all flex items-center gap-2">
+                            <i class="fas fa-plus"></i> Add Arm
+                        </button>
+
                     </div>
 
-                    <!-- Form Actions -->
-                    <div class="flex gap-4 pt-6 border-t">
-                        <button type="submit"
-                            class="bg-accent text-white px-6 py-2.5 rounded-lg text-xs font-semibold hover:bg-blue-600 transition-all flex items-center gap-2">
-                            <i class="fas fa-save"></i> Create Class
-                        </button>
-                        <a href="dashboard-classes.html"
-                            class="bg-slate-200 text-slate-700 px-6 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-300 transition-all">
-                            Cancel
-                        </a>
+                    <div id="armsContainer" class="space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 arm-item">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] font-semibold text-slate-700 mb-2">Arm Name <span
+                                            class="text-red-500">*</span></label>
+                                    <input type="text" placeholder="e.g., Gold" name="arms[0][name]"
+                                        class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none">
+                                    <span class="text-red-600 text-[10px] error-message" data-name="arms.0.name"></span>
+
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-semibold text-slate-700 mb-2">Form Teacher
+                                        <span class="text-red-500">*</span></label>
+                                    <select type="text" placeholder="Enter teacher name" name="arms[0][form_teacher]"
+                                        class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none">
+                                        <option value="{{ null }}">Select teacher</option>
+                                        @forelse ($teachers as $teacher)
+                                            <option value="{{ $teacher->user_id }}">{{ $teacher->user->name() }}</option>
+                                        @empty
+                                            <option value="{{ null }}">No teachers yet — create one first</option>
+                                        @endforelse
+                                    </select>
+                                    <span class="text-red-600 text-[10px] error-message"
+                                        data-name="arms.0.form_teacher"></span>
+                                </div>
+                                
+                            </div>
+                            <button type="button" class="text-red-500 text-xs mt-3 hover:text-red-700 remove-arm-btn">
+                                <i class="fas fa-trash mr-1"></i> Remove Arm
+                            </button>
+                        </div>
                     </div>
-                </form>
-            </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex gap-4 pt-6 border-t">
+                    <button type="submit"
+                        class="bg-accent text-white px-6 py-2.5 rounded-lg text-xs font-semibold hover:bg-blue-600 transition-all flex items-center gap-2">
+                        <i class="fas fa-save"></i> Create Class
+                    </button>
+                    <a href="dashboard-classes.html"
+                        class="bg-slate-200 text-slate-700 px-6 py-2.5 rounded-lg text-xs font-semibold hover:bg-slate-300 transition-all">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
         </div>
     </main>
 
-    <script>
-        // Add arm functionality
-        const addArmBtn = document.getElementById('addArmBtn');
-        const armsContainer = document.getElementById('armsContainer');
-
-        addArmBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const newArm = document.createElement('div');
-            newArm.className = 'bg-slate-50 p-4 rounded-lg border border-slate-200 arm-item';
-            newArm.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div>
-                            <label class="block text-[10px] font-semibold text-slate-700 mb-2">Arm Name <span class="text-red-500">*</span></label>
-                            <input type="text" placeholder="e.g., Silver" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-semibold text-slate-700 mb-2">Form Teacher <span class="text-red-500">*</span></label>
-                            <input type="text" placeholder="Enter teacher name" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-semibold text-slate-700 mb-2">Max Students</label>
-                            <input type="number" placeholder="e.g., 40" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none">
-                        </div>
-                    </div>
-                    <button type="button" class="text-red-500 text-xs mt-3 hover:text-red-700 remove-arm-btn">
-                        <i class="fas fa-trash mr-1"></i> Remove Arm
-                    </button>
-                `;
-            armsContainer.appendChild(newArm);
-            attachRemoveListener(newArm.querySelector('.remove-arm-btn'));
-        });
-
-        function attachRemoveListener(btn) {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                btn.closest('.arm-item').remove();
-            });
-        }
-
-        document.querySelectorAll('.remove-arm-btn').forEach(btn => attachRemoveListener(btn));
-    </script>
+    <script src="{{ asset('js/class-overider.js') }}"></script>
+    <script src="{{ asset('js/class-form.js') }}"></script>
+    <script src="{{ asset('/js/formSubmitter.js') }}"></script>
 @endsection

@@ -30,221 +30,61 @@
 
             <!-- Classes List with Collapsible Arms -->
             <div class="space-y-3 mb-8">
-                <!-- JSS 1 Class -->
-                <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-                    <button onclick="toggleArms(this)"
-                        class="w-full px-5 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors text-left">
-                        <div class="flex items-center gap-4 flex-grow">
-                            <i class="fas fa-chevron-down text-accent transition-transform duration-300"></i>
-                            <div class="flex-grow">
-                                <h3 class="font-bold text-primary text-sm">JSS 1</h3>
-                                <p class="text-slate-500 text-xs">Junior Secondary School</p>
+                @forelse ($classes as $class)
+                    <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+                        <button onclick="toggleArms(this)"
+                            class="w-full px-5 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors text-left">
+                            <div class="flex items-center gap-4 flex-grow">
+                                <i class="fas fa-chevron-down text-accent transition-transform duration-300"></i>
+                                <div class="flex-grow">
+                                    <h3 class="font-bold text-primary text-sm">{{ $class->name }}</h3>
+                                    <p class="text-slate-500 text-xs">{{ ucwords($class->level) }}</p>
+                                </div>
+                                <div class="flex items-center gap-4 text-xs text-slate-600">
+                                    <span><i class="fas fa-users text-accent mr-1"></i>98 Students</span>
+                                    <span><i class="fas fa-chalkboard-teacher text-accent mr-1"></i>{{ $class->teachersCount() }} Teachers</span>
+                                    <span class="bg-blue-100 text-accent px-2 py-0.5 rounded">3 Arms</span>
+                                </div>
                             </div>
-                            <div class="flex items-center gap-4 text-xs text-slate-600">
-                                <span><i class="fas fa-users text-accent mr-1"></i>105 Students</span>
-                                <span><i class="fas fa-chalkboard-teacher text-accent mr-1"></i>3 Teachers</span>
-                                <span class="bg-blue-100 text-accent px-2 py-0.5 rounded">3 Arms</span>
-                            </div>
-                        </div>
-                    </button>
+                        </button>
 
-                    <!-- Arms Container -->
-                    <div class="arms-container hidden border-t bg-slate-50">
-                        <div class="p-4 space-y-2">
-                            <div
-                                class="flex items-center justify-between bg-white p-3 rounded-lg border border-slate-100 text-xs">
-                                <div class="flex-grow">
-                                    <p class="font-semibold text-primary">JSS 1 Gold</p>
-                                    <p class="text-slate-500 text-[10px]">35 Students • Teacher: Prof. Alan Turing</p>
+                        <!-- Arms Container -->
+                        <div class="arms-container hidden border-t bg-slate-50">
+                            <div class="p-4 space-y-2">
+                                @foreach ($class->arms as $arm)                                
+                                <div
+                                    class="flex items-center justify-between bg-white p-3 rounded-lg border border-slate-100 text-xs">
+                                    <div class="flex-grow">
+                                        <p class="font-semibold text-primary">{{ $class->name . ' ' . $arm->name }}</p>
+                                        <p class="text-slate-500 text-[10px]">33 Students • Teacher: {{ $arm->teacher->name() }}</p>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <a href="dashboard-show-class.html" class="text-accent hover:text-blue-700"><i
+                                                class="fas fa-eye"></i></a>
+                                        <a href="dashboard-edit-class.html" class="text-blue-500 hover:text-blue-700"><i
+                                                class="fas fa-edit"></i></a>
+                                    </div>
                                 </div>
-                                <div class="flex gap-2">
-                                    <a href="dashboard-show-class.html" class="text-accent hover:text-blue-700"><i
-                                            class="fas fa-eye"></i></a>
-                                    <a href="dashboard-edit-class.html" class="text-blue-500 hover:text-blue-700"><i
-                                            class="fas fa-edit"></i></a>
-                                </div>
+                                @endforeach
                             </div>
-                            <div
-                                class="flex items-center justify-between bg-white p-3 rounded-lg border border-slate-100 text-xs">
-                                <div class="flex-grow">
-                                    <p class="font-semibold text-primary">JSS 1 Silver</p>
-                                    <p class="text-slate-500 text-[10px]">35 Students • Teacher: Dr. Grace Lee</p>
-                                </div>
-                                <div class="flex gap-2">
-                                    <a href="dashboard-show-class.html" class="text-accent hover:text-blue-700"><i
-                                            class="fas fa-eye"></i></a>
-                                    <a href="dashboard-edit-class.html" class="text-blue-500 hover:text-blue-700"><i
-                                            class="fas fa-edit"></i></a>
-                                </div>
+                            <div class="flex gap-2 px-4 pb-4 text-xs">
+                                <a href="dashboard-edit-class.html"
+                                    class="flex-1 bg-blue-50 text-accent px-3 py-2 rounded hover:bg-blue-100 transition text-center font-semibold"><i
+                                        class="fas fa-edit mr-1"></i>Edit Class</a>
+                                <a href="dashboard-delete-class.html"
+                                    class="flex-1 bg-red-50 text-red-500 px-3 py-2 rounded hover:bg-red-100 transition text-center font-semibold"><i
+                                        class="fas fa-trash mr-1"></i>Delete</a>
                             </div>
-                            <div
-                                class="flex items-center justify-between bg-white p-3 rounded-lg border border-slate-100 text-xs">
-                                <div class="flex-grow">
-                                    <p class="font-semibold text-primary">JSS 1 Bronze</p>
-                                    <p class="text-slate-500 text-[10px]">35 Students • Teacher: Mr. James Smith</p>
-                                </div>
-                                <div class="flex gap-2">
-                                    <a href="dashboard-show-class.html" class="text-accent hover:text-blue-700"><i
-                                            class="fas fa-eye"></i></a>
-                                    <a href="dashboard-edit-class.html" class="text-blue-500 hover:text-blue-700"><i
-                                            class="fas fa-edit"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex gap-2 px-4 pb-4 text-xs">
-                            <a href="dashboard-edit-class.html"
-                                class="flex-1 bg-blue-50 text-accent px-3 py-2 rounded hover:bg-blue-100 transition text-center font-semibold"><i
-                                    class="fas fa-edit mr-1"></i>Edit Class</a>
-                            <a href="dashboard-delete-class.html"
-                                class="flex-1 bg-red-50 text-red-500 px-3 py-2 rounded hover:bg-red-100 transition text-center font-semibold"><i
-                                    class="fas fa-trash mr-1"></i>Delete</a>
                         </div>
                     </div>
-                </div>
+                 @empty
+                        <div
+                            class="bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-lg p-4 text-center text-sm">
+                            No academic classes have been created yet.
+                        </div>
+                    @endforelse
 
-                <!-- JSS 2 Class -->
-                <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-                    <button onclick="toggleArms(this)"
-                        class="w-full px-5 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors text-left">
-                        <div class="flex items-center gap-4 flex-grow">
-                            <i class="fas fa-chevron-down text-accent transition-transform duration-300"></i>
-                            <div class="flex-grow">
-                                <h3 class="font-bold text-primary text-sm">JSS 2</h3>
-                                <p class="text-slate-500 text-xs">Junior Secondary School</p>
-                            </div>
-                            <div class="flex items-center gap-4 text-xs text-slate-600">
-                                <span><i class="fas fa-users text-accent mr-1"></i>102 Students</span>
-                                <span><i class="fas fa-chalkboard-teacher text-accent mr-1"></i>3 Teachers</span>
-                                <span class="bg-blue-100 text-accent px-2 py-0.5 rounded">3 Arms</span>
-                            </div>
-                        </div>
-                    </button>
-
-                    <!-- Arms Container -->
-                    <div class="arms-container hidden border-t bg-slate-50">
-                        <div class="p-4 space-y-2">
-                            <div
-                                class="flex items-center justify-between bg-white p-3 rounded-lg border border-slate-100 text-xs">
-                                <div class="flex-grow">
-                                    <p class="font-semibold text-primary">JSS 2 Gold</p>
-                                    <p class="text-slate-500 text-[10px]">34 Students • Teacher: Prof. Sarah Johnson</p>
-                                </div>
-                                <div class="flex gap-2">
-                                    <a href="dashboard-show-class.html" class="text-accent hover:text-blue-700"><i
-                                            class="fas fa-eye"></i></a>
-                                    <a href="dashboard-edit-class.html" class="text-blue-500 hover:text-blue-700"><i
-                                            class="fas fa-edit"></i></a>
-                                </div>
-                            </div>
-                            <div
-                                class="flex items-center justify-between bg-white p-3 rounded-lg border border-slate-100 text-xs">
-                                <div class="flex-grow">
-                                    <p class="font-semibold text-primary">JSS 2 Silver</p>
-                                    <p class="text-slate-500 text-[10px]">34 Students • Teacher: Mrs. Emily Brown</p>
-                                </div>
-                                <div class="flex gap-2">
-                                    <a href="dashboard-show-class.html" class="text-accent hover:text-blue-700"><i
-                                            class="fas fa-eye"></i></a>
-                                    <a href="dashboard-edit-class.html" class="text-blue-500 hover:text-blue-700"><i
-                                            class="fas fa-edit"></i></a>
-                                </div>
-                            </div>
-                            <div
-                                class="flex items-center justify-between bg-white p-3 rounded-lg border border-slate-100 text-xs">
-                                <div class="flex-grow">
-                                    <p class="font-semibold text-primary">JSS 2 Bronze</p>
-                                    <p class="text-slate-500 text-[10px]">34 Students • Teacher: Mr. David Wilson</p>
-                                </div>
-                                <div class="flex gap-2">
-                                    <a href="dashboard-show-class.html" class="text-accent hover:text-blue-700"><i
-                                            class="fas fa-eye"></i></a>
-                                    <a href="dashboard-edit-class.html" class="text-blue-500 hover:text-blue-700"><i
-                                            class="fas fa-edit"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex gap-2 px-4 pb-4 text-xs">
-                            <a href="dashboard-edit-class.html"
-                                class="flex-1 bg-blue-50 text-accent px-3 py-2 rounded hover:bg-blue-100 transition text-center font-semibold"><i
-                                    class="fas fa-edit mr-1"></i>Edit Class</a>
-                            <a href="dashboard-delete-class.html"
-                                class="flex-1 bg-red-50 text-red-500 px-3 py-2 rounded hover:bg-red-100 transition text-center font-semibold"><i
-                                    class="fas fa-trash mr-1"></i>Delete</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- JSS 3 Class -->
-                <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-                    <button onclick="toggleArms(this)"
-                        class="w-full px-5 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors text-left">
-                        <div class="flex items-center gap-4 flex-grow">
-                            <i class="fas fa-chevron-down text-accent transition-transform duration-300"></i>
-                            <div class="flex-grow">
-                                <h3 class="font-bold text-primary text-sm">JSS 3</h3>
-                                <p class="text-slate-500 text-xs">Junior Secondary School</p>
-                            </div>
-                            <div class="flex items-center gap-4 text-xs text-slate-600">
-                                <span><i class="fas fa-users text-accent mr-1"></i>98 Students</span>
-                                <span><i class="fas fa-chalkboard-teacher text-accent mr-1"></i>3 Teachers</span>
-                                <span class="bg-blue-100 text-accent px-2 py-0.5 rounded">3 Arms</span>
-                            </div>
-                        </div>
-                    </button>
-
-                    <!-- Arms Container -->
-                    <div class="arms-container hidden border-t bg-slate-50">
-                        <div class="p-4 space-y-2">
-                            <div
-                                class="flex items-center justify-between bg-white p-3 rounded-lg border border-slate-100 text-xs">
-                                <div class="flex-grow">
-                                    <p class="font-semibold text-primary">JSS 3 Gold</p>
-                                    <p class="text-slate-500 text-[10px]">33 Students • Teacher: Prof. Michael Chen</p>
-                                </div>
-                                <div class="flex gap-2">
-                                    <a href="dashboard-show-class.html" class="text-accent hover:text-blue-700"><i
-                                            class="fas fa-eye"></i></a>
-                                    <a href="dashboard-edit-class.html" class="text-blue-500 hover:text-blue-700"><i
-                                            class="fas fa-edit"></i></a>
-                                </div>
-                            </div>
-                            <div
-                                class="flex items-center justify-between bg-white p-3 rounded-lg border border-slate-100 text-xs">
-                                <div class="flex-grow">
-                                    <p class="font-semibold text-primary">JSS 3 Silver</p>
-                                    <p class="text-slate-500 text-[10px]">32 Students • Teacher: Dr. Lisa Anderson</p>
-                                </div>
-                                <div class="flex gap-2">
-                                    <a href="dashboard-show-class.html" class="text-accent hover:text-blue-700"><i
-                                            class="fas fa-eye"></i></a>
-                                    <a href="dashboard-edit-class.html" class="text-blue-500 hover:text-blue-700"><i
-                                            class="fas fa-edit"></i></a>
-                                </div>
-                            </div>
-                            <div
-                                class="flex items-center justify-between bg-white p-3 rounded-lg border border-slate-100 text-xs">
-                                <div class="flex-grow">
-                                    <p class="font-semibold text-primary">JSS 3 Bronze</p>
-                                    <p class="text-slate-500 text-[10px]">33 Students • Teacher: Mr. Robert King</p>
-                                </div>
-                                <div class="flex gap-2">
-                                    <a href="dashboard-show-class.html" class="text-accent hover:text-blue-700"><i
-                                            class="fas fa-eye"></i></a>
-                                    <a href="dashboard-edit-class.html" class="text-blue-500 hover:text-blue-700"><i
-                                            class="fas fa-edit"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex gap-2 px-4 pb-4 text-xs">
-                            <a href="dashboard-edit-class.html"
-                                class="flex-1 bg-blue-50 text-accent px-3 py-2 rounded hover:bg-blue-100 transition text-center font-semibold"><i
-                                    class="fas fa-edit mr-1"></i>Edit Class</a>
-                            <a href="dashboard-delete-class.html"
-                                class="flex-1 bg-red-50 text-red-500 px-3 py-2 rounded hover:bg-red-100 transition text-center font-semibold"><i
-                                    class="fas fa-trash mr-1"></i>Delete</a>
-                        </div>
-                    </div>
-                </div>
+             
             </div>
 
 

@@ -16,7 +16,7 @@ class Teacher extends Model
     protected $primaryKey = 'user_id';
     public $incrementing = false;
     protected $keyType = 'int';
-    
+
     protected function casts(): array
     {
         return [
@@ -34,5 +34,18 @@ class Teacher extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function arms()
+    {
+        return $this->hasMany(ClassArm::class, 'teacher_id');
+    }
+
+    public function name()
+    {
+        if ($this->user && $this->user->gender === 'male') {
+            return "Mr. " . $this->user->name();
+        }
+        return "Mrs. " . $this->user?->name();
     }
 }

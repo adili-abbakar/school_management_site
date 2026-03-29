@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->index();
+            $table->enum('level', ['nursery', 'primary', 'jss', 'sss'])->default('nursery')->index();
+            $table->foreignId('next_class_id')->nullable()->unique()->constrained('classes')->nullOnDelete();
             $table->timestamps();
         });
     }
