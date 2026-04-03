@@ -37,13 +37,15 @@
                             <div class="flex items-center gap-4 flex-grow">
                                 <i class="fas fa-chevron-down text-accent transition-transform duration-300"></i>
                                 <div class="flex-grow">
-                                    <h3 class="font-bold text-primary text-sm">{{ $class->name }}</h3>
+                                    <h3 class="font-bold text-primary text-sm">{{ $class->name }} <small>({{$class->nextClass ? "Next: " . $class->nextClass->name : 'Final'}})</small></h3>
                                     <p class="text-slate-500 text-xs">{{ ucwords($class->level) }}</p>
                                 </div>
                                 <div class="flex items-center gap-4 text-xs text-slate-600">
                                     <span><i class="fas fa-users text-accent mr-1"></i>98 Students</span>
-                                    <span><i class="fas fa-chalkboard-teacher text-accent mr-1"></i>{{ $class->teachersCount() }} Teachers</span>
-                                    <span class="bg-blue-100 text-accent px-2 py-0.5 rounded">3 Arms</span>
+                                    <span><i
+                                            class="fas fa-chalkboard-teacher text-accent mr-1"></i>{{ $class->teachersCount() }}
+                                        Teachers</span>
+                                    <span class="bg-blue-100 text-accent px-2 py-0.5 rounded">{{ count($class->arms) }} Arms</span>
                                 </div>
                             </div>
                         </button>
@@ -51,24 +53,25 @@
                         <!-- Arms Container -->
                         <div class="arms-container hidden border-t bg-slate-50">
                             <div class="p-4 space-y-2">
-                                @foreach ($class->arms as $arm)                                
-                                <div
-                                    class="flex items-center justify-between bg-white p-3 rounded-lg border border-slate-100 text-xs">
-                                    <div class="flex-grow">
-                                        <p class="font-semibold text-primary">{{ $class->name . ' ' . $arm->name }}</p>
-                                        <p class="text-slate-500 text-[10px]">33 Students • Teacher: {{ $arm->teacher->name() }}</p>
+                                @foreach ($class->arms as $arm)
+                                    <div
+                                        class="flex items-center justify-between bg-white p-3 rounded-lg border border-slate-100 text-xs">
+                                        <div class="flex-grow">
+                                            <p class="font-semibold text-primary">{{ $class->name . ' ' . $arm->name }}</p>
+                                            <p class="text-slate-500 text-[10px]">33 Students • Teacher:
+                                                {{ $arm->teacher->name() }}</p>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <a href="dashboard-show-class.html" class="text-accent hover:text-blue-700"><i
+                                                    class="fas fa-eye"></i></a>
+                                            <a href="" class="text-blue-500 hover:text-blue-700"><i
+                                                    class="fas fa-edit"></i></a>
+                                        </div>
                                     </div>
-                                    <div class="flex gap-2">
-                                        <a href="dashboard-show-class.html" class="text-accent hover:text-blue-700"><i
-                                                class="fas fa-eye"></i></a>
-                                        <a href="dashboard-edit-class.html" class="text-blue-500 hover:text-blue-700"><i
-                                                class="fas fa-edit"></i></a>
-                                    </div>
-                                </div>
                                 @endforeach
                             </div>
                             <div class="flex gap-2 px-4 pb-4 text-xs">
-                                <a href="dashboard-edit-class.html"
+                                <a href="{{ route('classes.edit', $class) }}"
                                     class="flex-1 bg-blue-50 text-accent px-3 py-2 rounded hover:bg-blue-100 transition text-center font-semibold"><i
                                         class="fas fa-edit mr-1"></i>Edit Class</a>
                                 <a href="dashboard-delete-class.html"
@@ -77,14 +80,13 @@
                             </div>
                         </div>
                     </div>
-                 @empty
-                        <div
-                            class="bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-lg p-4 text-center text-sm">
-                            No academic classes have been created yet.
-                        </div>
-                    @endforelse
+                @empty
+                    <div class="bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-lg p-4 text-center text-sm">
+                        No academic classes have been created yet.
+                    </div>
+                @endforelse
 
-             
+
             </div>
 
 

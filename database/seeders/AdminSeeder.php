@@ -9,13 +9,14 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminSeeder extends Seeder
 {
+    
     public function run()
     {
         $user = User::create([
             'first_name' => 'Super',
             'middle_name' => 'Test',
             'last_name' => 'Admin',
-            'email' => 'admin@school.com',w
+            'email' => 'admin@school.com',
             'password' => Hash::make('12345678'),
             'phone' => '08012345678',
             'date_of_birth' => '1990-01-01',

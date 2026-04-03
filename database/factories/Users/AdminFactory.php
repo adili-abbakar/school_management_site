@@ -1,8 +1,9 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Users;
 
-use App\Models\User;
+use App\Models\Users\User;
+use App\models\Users\Admin;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -16,6 +17,7 @@ class AdminFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
     public function definition(): array
     {
 

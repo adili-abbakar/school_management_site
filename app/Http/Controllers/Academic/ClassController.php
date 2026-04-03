@@ -8,7 +8,8 @@ use App\Models\Academic\ClassArm;
 use App\Models\Users\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ClassController extends Controller
 {
@@ -17,7 +18,7 @@ class ClassController extends Controller
      */
     public function index()
     {
-        $classes = AcademicClass::get();
+        $classes = AcademicClass::orderdChain()->flatten();
         return view('academic.classes.index', compact('classes'));
     }
 
@@ -44,7 +45,7 @@ class ClassController extends Controller
                 'force_overwrite' => 'sometimes|boolean',
 
                 'arms' => 'required|array|min:1',
-                'arms.*.name' => "required|string|max:50",
+                'arms.*.name' => "required|string|max:50|distinct",
                 'arms.*.form_teacher' => 'required|exists:teachers,user_id',
             ],
             [
@@ -55,6 +56,7 @@ class ClassController extends Controller
                 'arms.*.name.required' => 'Each arm must have a name.',
                 'arms.*.name.string' => 'Arm names must be text.',
                 'arms.*.name.max' => 'Arm names may not be longer than 50 characters.',
+                'arms.*.name.distinct' => 'Arm names must be unique.',
 
                 'arms.*.form_teacher.required' => 'Each arm must have a form teacher.',
                 'arms.*.form_teacher.exists' => 'The selected teacher does not exist.',
@@ -95,7 +97,7 @@ class ClassController extends Controller
                 'status' => 'success',
                 'message' => 'Class created successfully',
                 'redirect' => redirect()
-                    ->intended(route('admins.index'))
+                    ->intended(route('classes.index'))
                     ->with('success', 'Class created successfully!')
                     ->getTargetUrl(),
             ]);
@@ -123,7 +125,9 @@ class ClassController extends Controller
      */
     public function edit(AcademicClass $class)
     {
-        return view('academic.classes.edit');
+        $classes = AcademicClass::where('id', "!=", $class->id)->get();
+        $teachers = Teacher::with('user')->get();
+        return view('academic.classes.edit', compact('class', 'classes', 'teachers'));
     }
 
     /**
@@ -131,7 +135,113 @@ class ClassController extends Controller
      */
     public function update(Request $request, AcademicClass $class)
     {
-        //
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'class_name' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    Rule::unique('classes', 'name')->ignore($class->id),
+                ],
+                'class_level' => 'required|in:nursery,primary,jss,sss',
+                'previous_class_id' => 'nullable|exists:classes,id|different:' . $class->id,
+                'force_overwrite' => 'sometimes|boolean',
+
+                'arms' => 'required|array|min:1',
+                'arms.*.name' => "required|string|max:50|distinct",
+                'arms.*.form_teacher' => 'required|exists:teachers,user_id',
+            ],
+            [
+                'arms.required' => 'You must add at least one arm.',
+                'arms.array' => 'Arms must be submitted as a list.',
+                'arms.min' => 'You must add at least one arm.',
+
+                'arms.*.name.required' => 'Each arm must have a name.',
+                'arms.*.name.string' => 'Arm names must be text.',
+                'arms.*.name.max' => 'Arm names may not be longer than 50 characters.',
+                'arms.*.name.distinct' => 'Arm names must be unique.',
+
+                'arms.*.form_teacher.required' => 'Each arm must have a form teacher.',
+                'arms.*.form_teacher.exists' => 'The selected teacher does not exist.',
+            ]
+        );
+
+        if (!$request->force_overwrite) {
+            $validator->after(function ($validator) use ($request, $class) {
+                if (!empty($request->previous_class_id)) {
+                    $previousClass = AcademicClass::find($request->previous_class_id);
+                    if ($previousClass && $class->wouldCreateCycle($previousClass)) {
+                        $validator->errors()->add('previous_class_id', 'Invalid link: would create a cycle in the class chain.');
+                    }
+                }
+            });
+        }
+
+
+        $validated = $validator->validate();
+        try {
+            DB::transaction(function () use ($validated, $class) {
+                $newNextId = $class->next_class_id;
+
+                if (!empty($validated['previous_class_id'])) {
+                    $previousClass = AcademicClass::find($validated['previous_class_id']);
+                    if ($previousClass && $previousClass->id !== optional($class->previousClass)->id) {
+                        $class->previousClass()->update(['next_class_id' => null]);
+                        // AcademicClass::where('next_class_id', $class->id)->update(['next_class_id' => null]);
+                        $oldNextId = $previousClass->next_class_id;
+                        $previousClass->update(['next_class_id' => $class->id]);
+                        if ($oldNextId) {
+                            $newNextId = $oldNextId;
+                        }
+                    }
+                } else {
+                    AcademicClass::where('next_class_id', $class->id)->update(['next_class_id' => null]);
+                }
+
+                $class->update([
+                    'name' => $validated['class_name'],
+                    'level' => $validated['class_level'],
+                    'next_class_id' => $newNextId
+                ]);
+
+                $submittedArms = (collect($validated['arms']));
+
+                $class->arms()->whereNotIn('id', $submittedArms->pluck('id')->filter())->delete();
+
+                foreach ($submittedArms as $arm) {
+                    if (!empty($arm->id)) {
+                        $class->arms()->where('id', $arm['id'])->update([
+                            'name' => $arm['name'],
+                            'teacher_id' => $arm['form_teacher']
+                        ]);
+                    } else {
+                        $class->arms()->create([
+                            'name' => $arm['name'],
+                            'teacher_id' => $arm['form_teacher']
+                        ]);
+                    }
+                }
+            });
+
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Class updated successfully',
+                'redirect' => redirect()
+                    ->intended(route('classes.index'))
+                    ->with('success', 'Class updated successfully!')
+                    ->getTargetUrl(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Something went wrong: ' . $e->getMessage(),
+                ],
+                500,
+            );
+        }
     }
 
     /**
