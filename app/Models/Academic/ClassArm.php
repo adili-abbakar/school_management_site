@@ -27,4 +27,9 @@ class ClassArm extends Model
     {
         return $this->belongsTo(Teacher::class, 'teacher_id');
     }
+
+    public function getFullNameAttribute(): string
+    {
+        return $this->class->name . ' ' . $this->name;
+    }
 }

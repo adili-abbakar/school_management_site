@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Academic\ClassArmController;
 use App\Http\Controllers\Academic\ClassController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Users\UserController;
@@ -77,4 +78,5 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('guardians', GuardianController::class);
 
     Route::resource('classes', ClassController::class);
+    Route::resource('class-arms', ClassArmController::class);
 });

@@ -36,9 +36,11 @@ class ClassArmController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Arm $arm)
+    public function show(Arm $class_arm)
     {
-        //
+        return view('academic.classes.show', [
+            'arm' => $class_arm
+        ]);
     }
 
     /**

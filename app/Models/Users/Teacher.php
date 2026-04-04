@@ -21,7 +21,6 @@ class Teacher extends Model
     {
         return [
             'start_date' => 'date',
-
         ];
     }
 

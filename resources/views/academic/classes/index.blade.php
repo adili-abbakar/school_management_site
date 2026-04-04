@@ -62,9 +62,9 @@
                                                 {{ $arm->teacher->name() }}</p>
                                         </div>
                                         <div class="flex gap-2">
-                                            <a href="dashboard-show-class.html" class="text-accent hover:text-blue-700"><i
+                                            <a href="{{ route('class-arms.show', $arm) }}" class="text-accent hover:text-blue-700"><i
                                                     class="fas fa-eye"></i></a>
-                                            <a href="" class="text-blue-500 hover:text-blue-700"><i
+                                            <a href="{{ route('classes.edit', $class) }}" class="text-blue-500 hover:text-blue-700"><i
                                                     class="fas fa-edit"></i></a>
                                         </div>
                                     </div>

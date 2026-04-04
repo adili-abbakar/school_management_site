@@ -28,7 +28,7 @@
   </div>
   <div>
     <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Specialized Subject</label>
-    <input type="text" placeholder="Enter years" min="0" name="specialized_subject"
+    <input type="text" placeholder="Enter subject" min="0" name="specialized_subject"
       value="{{ old('specialized_subject', $teacher?->specialized_subject) }}"
       class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none">
     <span class="text-red-600 text-[10px] error-message" data-name="specialized_subject"></span>
