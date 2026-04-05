@@ -249,6 +249,43 @@ class ClassController extends Controller
      */
     public function destroy(AcademicClass $class)
     {
-        //
+        try {
+            DB::transaction(
+                function () use ($class) {
+                    $class->arms()->delete();
+                    $class->delete();
+                }
+            );
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Class deleted successfully',
+                'redirect' => redirect()
+                    ->intended(route('classes.index'))
+                    ->with('success', 'Class deleted successfully!')
+                    ->getTargetUrl(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Something went wrong: ' . $e->getMessage(),
+                ],
+                500,
+            );
+        }
+    }
+
+    public function delete(AcademicClass $class)
+    {
+        $title = 'class';
+        $data = $class->load('arms');
+        $route = route('classes.destroy', $class->id);
+
+        $messages = [
+            "This class will be deactivated. Its records will be hidden but can be restored later.",
+            "All associated data and records will be reversibly removed from the system. They can be restored later if needed."
+        ];
+
+        return view('academic.classes.soft-delete', compact('data', 'title', 'route', 'messages'));
     }
 }

@@ -29,13 +29,17 @@
             </p>
 
             <div class="bg-slate-100 rounded-lg p-3 mb-6">
-                <p class="text-slate-800 font-semibold text-sm">{{ $data->name }} -
-                    {{ $title === 'term' ? $data?->session?->name : 'Academic Session' }}</p>
-                @if ($title === 'term')
-                    <p class="text-slate-600 text-xs">Session: {{ $data?->session?->name }} Academic Session</p>
-                @endif
-                <p class="text-slate-600 text-xs">Start Date: {{ $data->startDate() }}</p>
-                <p class="text-slate-600 text-xs">End Date: {{ $data->endDate() }}</p>
+                <p class="text-slate-800 font-semibold text-sm">Class: {{ $title !== 'class' ?  $data->class->name : $data->name }}</p>
+                <p class="text-slate-800 text-xs">Arms: {{ $title !== 'class' ? $data->name : '' }}</p>
+                @isset($data->arms)
+                    <ul class="list-disc pl-5">
+                        @foreach ($data?->arms as $arm)
+                            <li class="text-slate-600 text-xs">
+                                {{ $arm->full_name }}
+                            </li>
+                        @endforeach
+                    </ul>
+                @endisset
             </div>
 
             <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-6">

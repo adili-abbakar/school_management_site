@@ -62,8 +62,43 @@ class ClassArmController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Arm $arm)
+    public function destroy(Arm $class_arm)
     {
-        //
+        try {
+            $class_arm->delete();
+            $class_arm->class()->touch();
+
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Class Arm deleted successfully',
+                'redirect' => redirect()
+                    ->intended(route('sessions.index'))
+                    ->with('success', 'Class Arm deleted successfully!')
+                    ->getTargetUrl(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Something went wrong: ' . $e->getMessage(),
+                ],
+                500,
+            );
+        }
     }
+
+    public function delete(Arm $class_arm)
+    {
+        $title = 'class arm';
+        $data = $class_arm->load('class');
+        $route = route('class-arms.destroy', $class_arm);
+
+        $messages = [
+            "This class arm will be deactivated. Its records will be hidden but can be restored later.",
+            "All associated data and records will be reversibly removed from the system. They can be restored later if needed."
+        ];
+        return view('academic.classes.soft-delete', compact('data', 'title', 'route', 'messages'));
+    }
+
 }

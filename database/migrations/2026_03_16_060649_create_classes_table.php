@@ -17,6 +17,8 @@ return new class extends Migration
             $table->enum('level', ['nursery', 'primary', 'jss', 'sss'])->default('nursery')->index();
             $table->foreignId('next_class_id')->nullable()->unique()->constrained('classes')->nullOnDelete();
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

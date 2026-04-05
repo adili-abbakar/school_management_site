@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Academic;
 
 use App\Http\Controllers\Controller;
+use App\Models\Academic\AcademicClass;
+use App\Models\Academic\ClassArm;
 use App\Models\Academic\Session;
 use App\Models\Academic\Term;
 use Illuminate\Http\Request;
@@ -16,7 +18,6 @@ class SessionController extends Controller
     public function index()
     {
         $sessions = Session::latest('end_date')->get();
-
         return view('academic.sessions.index', compact('sessions'));
     }
 
@@ -192,7 +193,6 @@ class SessionController extends Controller
         $title = 'session';
         $data = $session->load('terms');
         $route = route('sessions.destroy', $session->id);
-        $userType = 'Sessions';
 
         $messages = [
             "This session will be deactivated. Its records will be hidden but can be restored later.",

@@ -37,7 +37,9 @@
                             <div class="flex items-center gap-4 flex-grow">
                                 <i class="fas fa-chevron-down text-accent transition-transform duration-300"></i>
                                 <div class="flex-grow">
-                                    <h3 class="font-bold text-primary text-sm">{{ $class->name }} <small>({{$class->nextClass ? "Next: " . $class->nextClass->name : 'Final'}})</small></h3>
+                                    <h3 class="font-bold text-primary text-sm">{{ $class->name }}
+                                        <small>({{ $class->nextClass ? 'Next: ' . $class->nextClass->name : 'Final' }})</small>
+                                    </h3>
                                     <p class="text-slate-500 text-xs">{{ ucwords($class->level) }}</p>
                                 </div>
                                 <div class="flex items-center gap-4 text-xs text-slate-600">
@@ -45,7 +47,8 @@
                                     <span><i
                                             class="fas fa-chalkboard-teacher text-accent mr-1"></i>{{ $class->teachersCount() }}
                                         Teachers</span>
-                                    <span class="bg-blue-100 text-accent px-2 py-0.5 rounded">{{ count($class->arms) }} Arms</span>
+                                    <span class="bg-blue-100 text-accent px-2 py-0.5 rounded">{{ count($class->arms) }}
+                                        Arms</span>
                                 </div>
                             </div>
                         </button>
@@ -62,10 +65,12 @@
                                                 {{ $arm->teacher->name() }}</p>
                                         </div>
                                         <div class="flex gap-2">
-                                            <a href="{{ route('class-arms.show', $arm) }}" class="text-accent hover:text-blue-700"><i
-                                                    class="fas fa-eye"></i></a>
-                                            <a href="{{ route('classes.edit', $class) }}" class="text-blue-500 hover:text-blue-700"><i
-                                                    class="fas fa-edit"></i></a>
+                                            <a href="{{ route('class-arms.show', $arm) }}"
+                                                class="text-accent hover:text-blue-700"><i class="fas fa-eye"></i></a>
+                                            <a href="{{ route('classes.edit', $class) }}"
+                                                class="text-blue-500 hover:text-blue-700"><i class="fas fa-edit"></i></a>
+                                            <a href="{{ route('class-arms.delete', $arm) }}"
+                                                class="text-accent text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></a>
                                         </div>
                                     </div>
                                 @endforeach
@@ -74,7 +79,7 @@
                                 <a href="{{ route('classes.edit', $class) }}"
                                     class="flex-1 bg-blue-50 text-accent px-3 py-2 rounded hover:bg-blue-100 transition text-center font-semibold"><i
                                         class="fas fa-edit mr-1"></i>Edit Class</a>
-                                <a href="dashboard-delete-class.html"
+                                <a href="{{ route('classes.delete', $class) }}"
                                     class="flex-1 bg-red-50 text-red-500 px-3 py-2 rounded hover:bg-red-100 transition text-center font-semibold"><i
                                         class="fas fa-trash mr-1"></i>Delete</a>
                             </div>
