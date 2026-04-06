@@ -12,8 +12,8 @@
                    class="hover:text-[#6B8DD6] transition-colors {{ url()->current() === route('about') ? 'text-[#6B8DD6]' : '' }}">About</a>
 
                <a href="" class="hover:text-[#6B8DD6] transition-colors">Academics</a>
-               <a href="{{ route('admission.apply') }}"
-                   class="hover:text-[#6B8DD6] transition-colors {{ url()->current() === route('admission.apply') ? 'text-[#6B8DD6]' : '' }}">Admissions</a>
+               <a href="{{ route('applications.create') }}"
+                   class="hover:text-[#6B8DD6] transition-colors {{ url()->current() === route('applications.create') ? 'text-[#6B8DD6]' : '' }}">Admissions</a>
                <a href="{{ route('news') }}"
                    class="hover:text-[#6B8DD6] transition-colors {{ url()->current() === route('news') ? 'text-[#6B8DD6]' : '' }}">News</a>
                <a href="{{ route('contact') }}"
@@ -60,7 +60,7 @@
            <a href="{{ route('home') }}" class="hover:text-[#6B8DD6] transition-colors py-2">Home</a>
            <a href="{{ route('about') }}" class="hover:text-[#6B8DD6] transition-colors py-2">About</a>
            <a href="#" class="hover:text-[#6B8DD6] transition-colors py-2">Academics</a>
-           <a href="{{ route('admission.apply') }}" class="hover:text-[#6B8DD6] transition-colors py-2">Admissions</a>
+           <a href="{{ route('applications.create') }}" class="hover:text-[#6B8DD6] transition-colors py-2">Admissions</a>
            <a href="{{ route('news') }}" class="hover:text-[#6B8DD6] transition-colors py-2">News</a>
            <a href="{{ route('contact') }}" class="hover:text-[#6B8DD6] transition-colors py-2">Contact</a>
            @auth

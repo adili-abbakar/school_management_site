@@ -18,6 +18,7 @@ use App\Http\Controllers\Academic\TermController;
 
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\AdmissionController;
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NewsController;
 
@@ -37,6 +38,7 @@ Route::get('/about', [PublicController::class, 'about'])->name('about');
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
 Route::get('admission/apply', [AdmissionController::class, 'index'])->name('admission.apply');
 Route::get('/news', [NewsController::class, 'index'])->name('news');
+Route::resource('applications', ApplicationController::class);
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

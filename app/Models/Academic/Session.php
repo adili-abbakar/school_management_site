@@ -24,7 +24,6 @@ class Session extends Model
         return [
             'start_date' => 'date',
             'end_date' => 'date'
-
         ];
     }
 
@@ -42,5 +41,10 @@ class Session extends Model
     public function terms(): HasMany
     {
         return $this->hasMany(Term::class, 'session_id')->orderBy('start_date', 'asc');
+    }
+
+    public static function currentSession()
+    {
+        return Term::currentTerm()?->session;
     }
 }

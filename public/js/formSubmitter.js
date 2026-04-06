@@ -27,6 +27,10 @@ $(".form").on("submit", function (e) {
         success: function (data) {
             if (data.status === "success") {
                 window.location.assign(data.redirect);
+            } else if ((data.status === "field-error")) {
+                hideLoader();
+                $("#globalError span").text(data.message);
+                $("#globalError").css("max-height", "200px");
             }
         },
         error: function (xhr) {
@@ -44,4 +48,3 @@ $(".form").on("submit", function (e) {
         },
     });
 });
-

@@ -41,4 +41,9 @@ class Term extends Model
     {
         return $this->belongsTo(Session::class, 'session_id');
     }
+
+    public static function currentTerm()
+    {
+        return self::where('activity', 'active')->first();
+    }
 }

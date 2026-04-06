@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Create Class')
+@section('title', 'Update Class')
 
 @section('page-content')
     <main class="flex-grow flex flex-col min-w-0 bg-slate-50 overflow-y-auto">
