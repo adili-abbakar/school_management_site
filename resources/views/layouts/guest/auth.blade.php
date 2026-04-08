@@ -1,7 +1,7 @@
 @extends('layouts.guest.base')
 
 @section('content')
-    <body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
+    <body class="bg-slate-50 min-h-screen flex items-center justify-center p-4 overflow-y-scroll scrollbar-hide">
         @yield('page-content')
     </body>
 @endsection

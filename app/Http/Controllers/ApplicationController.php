@@ -15,6 +15,58 @@ class ApplicationController extends Controller
      */
     public function index()
     {
+        $applications = StudentApplication::latest()->get();
+
+        $coutns = StudentApplication::selectRaw("
+            SUM(CASE WHEN status = 'pending' THEN  1 ELSE 0 END) as pending,
+            SUM(CASE WHEN status = 'approved' THEN  1 ELSE 0 END) as approved,
+            SUM(CASE WHEN status = 'rejected' THEN  1 ELSE 0 END) as rejected,
+            SUM(CASE WHEN status = 'withdrawn' THEN  1 ELSE 0 END) as withdrawn
+        ")->first();
+
+        return view(
+            'application.index',
+            [
+                'applications' => $applications,
+                'pending_coutn' => $coutns->pending,
+                'approved_coutn' => $coutns->approved,
+                'rejected_coutn' => $coutns->rejected,
+                'withdrawn_coutn' => $coutns->withdrawn,
+            ]
+        );
+    }
+
+    public function approve(StudentApplication $application)
+    {
+        if ($application->status === 'approved') {
+            return back()->with('info', 'Application already approved.');
+        }
+
+        $application->update(['status' => 'approved']);
+
+        return back()->with('success', 'Application approved successfully.');
+    }
+
+    public function reject(StudentApplication $application)
+    {
+        if ($application->status === 'rejected') {
+            return back()->with('info', 'Application already rejected.');
+        }
+
+        $application->update(['status' => 'rejected']);
+
+        return back()->with('success', 'Application rejected successfully.');
+    }
+
+    public function withdraw(StudentApplication $application)
+    {
+        if ($application->status === 'withdrawn') {
+            return back()->with('info', 'Application already withdrawn.');
+        }
+
+        $application->update(['status' => 'withdrawn']);
+
+        return back()->with('success', 'Application withdrawn successfully.');
     }
 
     /**

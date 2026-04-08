@@ -13,7 +13,7 @@
                 </div>
             </div>
         </x-dashboard-header>
-        <x-loader-component />
+    
 
         <div class="p-6">
             <div class="flex justify-between items-center mb-6">

@@ -112,6 +112,22 @@
             scrollbar-width: none;
             /* Firefox */
         }
+
+        .fade-in {
+            animation: fadeIn .2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 

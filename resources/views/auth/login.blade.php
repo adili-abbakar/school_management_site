@@ -58,7 +58,7 @@
       <div class="mt-8 pt-6 border-t border-gray-100 text-center">
         <p class="text-xs text-gray-500">
           Don't have an account?
-          <a href="{{ route('admission.apply') }}" class="font-bold text-blue-600 hover:underline ml-1">Apply for
+          <a href="{{ route('applications.create') }}" class="font-bold text-blue-600 hover:underline ml-1">Apply for
             Admission</a>
         </p>
       </div>

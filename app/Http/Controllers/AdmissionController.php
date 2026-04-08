@@ -2,20 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\StudentApplication;
 use Illuminate\Http\Request;
 
 class AdmissionController extends Controller
 {
     public function index()
     {
-        return view('admissions.apply');
+      
     }
 
-    public function apply(){
-        return view('');
-    }
-
-    public function approve(){
-        return view('');
-    }
+   
 }

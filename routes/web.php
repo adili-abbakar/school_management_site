@@ -36,9 +36,10 @@ Route::middleware('guest')->group(function () {
 Route::get('/', [PublicController::class, 'index'])->name('home');
 Route::get('/about', [PublicController::class, 'about'])->name('about');
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
-Route::get('admission/apply', [AdmissionController::class, 'index'])->name('admission.apply');
 Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::resource('applications', ApplicationController::class);
+Route::put('applications/{application}/withdraw/', [ApplicationController::class, 'withdraw'])->name('applications.withdraw');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -86,4 +87,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/class-arms/{class_arm}/delete', [ClassArmController::class, 'delete'])
         ->name('class-arms.delete');
+    Route::resource('admissions', AdmissionController::class);
+    Route::prefix('applications/')->name('applications.')->group(function () {
+        Route::put('{application}/approve/', [ApplicationController::class, 'approve'])->name('approve');
+        Route::put('{application}/reject/', [ApplicationController::class, 'reject'])->name('reject');
+    });
 });

@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Academic\AcademicClass;
 use App\Models\Academic\Session;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StudentApplication extends Model
 {
-
+    use SoftDeletes;
     protected $fillable =  [
         'student_first_name',
         'student_middle_name',
@@ -48,6 +52,18 @@ class StudentApplication extends Model
         'status',
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime'
+    ];
+    public function getstudentNameAttribute()
+    {
+        return $this->student_first_name . ' ' . $this->student_middle_name . ' ' . $this?->student_last_name;
+    }
+
+    public function getguardianNameAttribute()
+    {
+        return $this->guardian_first_name . ' ' . $this->guardian_middle_name . ' ' . $this?->guardian_last_name;
+    }
 
     public static function generateApplicationNumber($sessionId)
     {
@@ -68,5 +84,15 @@ class StudentApplication extends Model
         $number = str_pad($nextNumber, 6, '0', STR_PAD_LEFT);
 
         return "APP-{$sessionName}-{$number}";
+    }
+
+    public function class(): BelongsTo
+    {
+        return $this->belongsTo(AcademicClass::class, 'class_id');
+    }
+
+    public function session(): BelongsTo
+    {
+        return $this->belongsTo(Session::class, 'session_id');
     }
 }

@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <body class="bg-slate-50 flex h-screen overflow-hidden">
+    <body class="bg-slate-50 flex h-screen overflow-hidden overflow-y-scroll scrollbar-hide">
         @if (session('success'))
             <script>
                 document.addEventListener('DOMContentLoaded', () => {

@@ -63,6 +63,8 @@ return new class extends Migration
             $table->enum('status', ['pending', 'approved', 'rejected', 'withdrawn'])->default('pending');
 
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 
