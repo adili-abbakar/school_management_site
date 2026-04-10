@@ -62,10 +62,42 @@
                                 </div>
 
                                 <div>
-                                    <h3 class="text-sm font-bold text-primary mb-0.5">
-                                        {{ $app->student_name }}
-                                    </h3>
+                                    <div class="flex items-center gap-3 mb-1">
+                                        <h3 class="text-sm font-bold text-primary mb-0.5">
+                                            {{ $app->student_name }}
+                                        </h3>
+                                        <span
+                                            @switch($app->status) 
+                                        @case('pending')
+                                         class="status-badge status-pending"
+                                         @break
+                                         @case('approved')
+                                         class="status-badge status-approved"
+                                         @break
+                                          @case('rejected')
+                                         class="status-badge status-rejected"
+                                         @break
+                                        @endswitch>
+                                            @switch($app->status)
+                                                @case('pending')
+                                                    <i class="fas fa-clock "></i>
+                                                @break
 
+                                                @case('approved')
+                                                    <i class="fas fa-check-circle"></i>
+                                                @break
+
+                                                @case('rejected')
+                                                    <i class="fas fa-times-circle"></i>
+                                                @break
+
+                                                @case('withdrawn')
+                                                    <i class="fas fa-minus-circle"></i>
+                                                @break
+                                            @endswitch
+                                            {{ ucwords($app->status) }}
+                                        </span>
+                                    </div>
                                     <div class="flex flex-wrap gap-y-1 gap-x-4 text-xs text-slate-500">
                                         <span class="flex items-center gap-1">
                                             <i class="fas fa-school text-accent"></i> {{ $app->class->name }}
@@ -84,7 +116,7 @@
                                         <span class="flex items-center gap-1">
                                             @switch($app->status)
                                                 @case('pending')
-                                                    <i class="fas fa-clock text-yellow-500"></i>
+                                                    <i class="fas fa-clock amber-400"></i>
                                                 @break
 
                                                 @case('approved')
@@ -108,11 +140,13 @@
                             </div>
 
                             <div class="flex items-center gap-2">
-                                <button
-                                    class="bg-slate-100 text-slate-600 px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-slate-200 transition-all flex items-center gap-1">
-                                    <i class="fas fa-eye"></i>
-                                    <span>View</span>
-                                </button>
+                                <a href="{{ route('applications.show', $app) }}">
+                                    <button
+                                        class="bg-slate-100 text-slate-600 px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-slate-200 transition-all flex items-center gap-1">
+                                        <i class="fas fa-eye"></i>
+                                        <span>View</span>
+                                    </button>
+                                </a>
 
                                 @if ($app->status !== 'rejected')
                                     <form method="POST" action="{{ route('applications.reject', $app) }}">

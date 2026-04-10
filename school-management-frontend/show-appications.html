@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPro | Application Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a2b4b',
+                        secondary: '#f0f4f8',
+                        accent: '#3b82f6',
+                        muted: '#6b7280',
+                        sidebar: '#0f172a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { 
+            font-family: 'Inter', sans-serif; 
+            font-size: 11px;
+        }
+        h1 { font-size: 1.5rem; }
+        h2 { font-size: 1.25rem; }
+        h3 { font-size: 1rem; }
+        h4 { font-size: 0.875rem; }
+        p { font-size: 11px; }
+        .text-xs { font-size: 9px; }
+        .text-sm { font-size: 10px; }
+        .text-base { font-size: 11px; }
+        .text-lg { font-size: 12px; }
+        .text-xl { font-size: 13px; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-approved {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-rejected {
+            background-color: #fee2e2;
+            color: #7f1d1d;
+        }
+
+        .document-preview {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+        }
+
+        .document-preview:hover {
+            border-color: #3b82f6;
+            background: #f0f4f8;
+        }
+
+        .document-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+            color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-sidebar text-slate-300 flex-shrink-0 flex flex-col hidden md:flex">
+        <div class="p-6 flex items-center gap-3 border-b border-slate-800">
+            <div class="bg-accent text-white p-1.5 rounded">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <span class="text-xl font-bold text-white tracking-tight">EduPro</span>
+        </div>
+        <nav class="flex-grow py-6 space-y-1">
+            <a href="index.html" class="flex items-center px-6 py-3 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="apply.html" class="flex items-center px-6 py-3 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-file-alt"></i>
+                <span>Apply Now</span>
+            </a>
+            <a href="my-applications.html" class="bg-slate-800 text-accent border-r-4 border-accent flex items-center px-6 py-3 transition-colors gap-3">
+                <i class="fas fa-inbox"></i>
+                <span>My Applications</span>
+            </a>
+            <a href="results.html" class="flex items-center px-6 py-3 hover:bg-slate-800 transition-colors gap-3">
+                <i class="fas fa-file-invoice"></i>
+                <span>Results</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col min-w-0 bg-slate-50 overflow-y-auto">
+        <header class="h-16 bg-white border-b px-8 flex items-center justify-between sticky top-0 z-10">
+            <h2 class="font-bold text-primary">Application Details</h2>
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-accent text-white rounded-full flex items-center justify-center font-bold">SK</div>
+            </div>
+        </header>
+
+        <div class="p-8">
+            <!-- Header with Back Button -->
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <a href="my-applications.html" class="text-accent text-sm mb-3 flex items-center gap-2 hover:underline font-medium">
+                        <i class="fas fa-arrow-left"></i> Back to My Applications
+                    </a>
+                    <h1 class="text-3xl font-extrabold text-primary tracking-tight">Samuel Kingsley</h1>
+                    <p class="text-slate-500 text-sm mt-1">Application ID: APP-2024-00156</p>
+                </div>
+                <span class="status-badge status-pending">Pending Review</span>
+            </div>
+
+            <!-- Application Details Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Personal Information -->
+                <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                    <h3 class="text-lg font-bold text-primary mb-5 flex items-center gap-2">
+                        <i class="fas fa-user text-accent"></i> Personal Information
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Full Name</label>
+                            <p class="text-sm text-slate-700">Samuel Kingsley</p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Email Address</label>
+                            <p class="text-sm text-slate-700">samuel.kingsley@email.com</p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Phone Number</label>
+                            <p class="text-sm text-slate-700">+234 (901) 234-5678</p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Date of Birth</label>
+                            <p class="text-sm text-slate-700">May 15, 2010</p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Gender</label>
+                            <p class="text-sm text-slate-700">Male</p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Religion</label>
+                            <p class="text-sm text-slate-700">Christianity</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Application Status Card -->
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                    <h3 class="text-lg font-bold text-primary mb-5 flex items-center gap-2">
+                        <i class="fas fa-clock text-amber-400"></i> Status
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-xs text-slate-500 uppercase font-bold mb-1">Application Status</p>
+                            <span class="status-badge status-pending">Pending</span>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500 uppercase font-bold mb-1">Applied Date</p>
+                            <p class="text-sm text-slate-700">April 7, 2024</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500 uppercase font-bold mb-1">Expected Decision</p>
+                            <p class="text-sm text-slate-700">Within 5 days</p>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-4">
+                            <p class="text-xs text-amber-800">Your application is being reviewed. You will receive an email notification once a decision is made.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guardian & Academic Information -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- Guardian Information -->
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                    <h3 class="text-lg font-bold text-primary mb-5 flex items-center gap-2">
+                        <i class="fas fa-shield-alt text-accent"></i> Guardian Information
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Guardian Name</label>
+                            <p class="text-sm text-slate-700">James Kingsley</p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Relationship</label>
+                            <p class="text-sm text-slate-700">Father</p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Contact Number</label>
+                            <p class="text-sm text-slate-700">+234 (901) 987-6543</p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Email Address</label>
+                            <p class="text-sm text-slate-700">james.kingsley@email.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic Information -->
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                    <h3 class="text-lg font-bold text-primary mb-5 flex items-center gap-2">
+                        <i class="fas fa-school text-accent"></i> Academic Details
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Applying For</label>
+                            <p class="text-sm text-slate-700">JSS 2</p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Academic Session</label>
+                            <p class="text-sm text-slate-700">2025/2026</p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Previous School</label>
+                            <p class="text-sm text-slate-700">Brilliant Minds Academy</p>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Last Class Attended</label>
+                            <p class="text-sm text-slate-700">JSS 1</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Uploaded Documents Section -->
+            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 mb-8">
+                <h3 class="text-lg font-bold text-primary mb-6 flex items-center gap-2">
+                    <i class="fas fa-file-upload text-accent"></i> Uploaded Documents
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Passport -->
+                    <div class="document-preview cursor-pointer hover:shadow-md">
+                        <div class="document-icon">
+                            <i class="fas fa-passport"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-700 mb-2 text-sm">Passport/ID</h4>
+                        <p class="text-xs text-slate-500 mb-3">passport_samuel_kingsley.pdf</p>
+                        <div class="flex gap-2 justify-center">
+                            <button class="text-xs bg-accent text-white px-3 py-1.5 rounded hover:bg-blue-600 flex items-center gap-1">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="text-xs bg-slate-100 text-slate-600 px-3 py-1.5 rounded hover:bg-slate-200 flex items-center gap-1">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Birth Certificate -->
+                    <div class="document-preview cursor-pointer hover:shadow-md">
+                        <div class="document-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-700 mb-2 text-sm">Birth Certificate</h4>
+                        <p class="text-xs text-slate-500 mb-3">birth_cert_kingsley.pdf</p>
+                        <div class="flex gap-2 justify-center">
+                            <button class="text-xs bg-accent text-white px-3 py-1.5 rounded hover:bg-blue-600 flex items-center gap-1">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="text-xs bg-slate-100 text-slate-600 px-3 py-1.5 rounded hover:bg-slate-200 flex items-center gap-1">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Previous School Result Sheet -->
+                    <div class="document-preview cursor-pointer hover:shadow-md">
+                        <div class="document-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-700 mb-2 text-sm">Result Sheet</h4>
+                        <p class="text-xs text-slate-500 mb-3">result_sheet_jss1_2024.pdf</p>
+                        <div class="flex gap-2 justify-center">
+                            <button class="text-xs bg-accent text-white px-3 py-1.5 rounded hover:bg-blue-600 flex items-center gap-1">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="text-xs bg-slate-100 text-slate-600 px-3 py-1.5 rounded hover:bg-slate-200 flex items-center gap-1">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Other Document -->
+                    <div class="document-preview cursor-pointer hover:shadow-md">
+                        <div class="document-icon">
+                            <i class="fas fa-file"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-700 mb-2 text-sm">Medical Report</h4>
+                        <p class="text-xs text-slate-500 mb-3">medical_report_2024.pdf</p>
+                        <div class="flex gap-2 justify-center">
+                            <button class="text-xs bg-accent text-white px-3 py-1.5 rounded hover:bg-blue-600 flex items-center gap-1">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="text-xs bg-slate-100 text-slate-600 px-3 py-1.5 rounded hover:bg-slate-200 flex items-center gap-1">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap gap-3 mb-8">
+                <button class="bg-accent text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-600 transition flex items-center gap-2">
+                    <i class="fas fa-file-download"></i> Download All Documents
+                </button>
+                <button onclick="openWithdrawModal()" class="bg-rose-50 text-rose-600 px-6 py-3 rounded-xl font-bold hover:bg-rose-100 border border-rose-100 transition flex items-center gap-2">
+                    <i class="fas fa-ban"></i> Withdraw Application
+                </button>
+                <button class="bg-slate-100 text-slate-600 px-6 py-3 rounded-xl font-bold hover:bg-slate-200 transition flex items-center gap-2">
+                    <i class="fas fa-print"></i> Print Details
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Withdraw Confirmation Modal -->
+    <div id="withdrawModal" class="modal">
+        <div class="modal-content">
+            <div class="text-center mb-4">
+                <div class="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-exclamation-triangle text-rose-600 text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800">Withdraw Application?</h3>
+            </div>
+            <p class="text-slate-600 text-center mb-6">Are you sure you want to withdraw from this admission? This action cannot be undone.</p>
+            <div class="flex gap-3">
+                <button onclick="closeWithdrawModal()" class="flex-1 px-4 py-2.5 bg-slate-100 text-slate-700 rounded-lg font-medium hover:bg-slate-200 transition">
+                    Cancel
+                </button>
+                <button onclick="confirmWithdraw()" class="flex-1 px-4 py-2.5 bg-rose-600 text-white rounded-lg font-medium hover:bg-rose-700 transition">
+                    Yes, Withdraw
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openWithdrawModal() {
+            document.getElementById('withdrawModal').classList.add('active');
+        }
+
+        function closeWithdrawModal() {
+            document.getElementById('withdrawModal').classList.remove('active');
+        }
+
+        function confirmWithdraw() {
+            alert('Your application has been withdrawn successfully.');
+            window.location.href = 'my-applications.html';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('withdrawModal').addEventListener('click', function(e) {
+            if (e.target === this) closeWithdrawModal();
+        });
+    </script>
+</body>
+</html>

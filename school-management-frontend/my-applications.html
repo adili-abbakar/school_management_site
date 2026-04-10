@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>My Applications - School Management System</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+        <style>
+            .status-pending {
+                background-color: #fef3c7;
+                color: #92400e;
+            }
+            .status-approved {
+                background-color: #d1fae5;
+                color: #065f46;
+            }
+            .status-rejected {
+                background-color: #fee2e2;
+                color: #7f1d1d;
+            }
+        </style>
+    </head>
+    <body class="bg-slate-50">
+        <div class="flex h-screen">
+            <aside
+                class="w-64 bg-slate-900 text-white p-6 flex-shrink-0 hidden md:flex flex-col"
+            >
+                <div class="flex items-center gap-2 mb-8">
+                    <i class="fas fa-graduation-cap text-blue-400 text-xl"></i
+                    ><span class="font-bold">EduPro</span>
+                </div>
+                <nav class="space-y-1 flex-grow">
+                    <a
+                        href="index.html"
+                        class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-lg hover:bg-slate-800"
+                        ><i class="fas fa-home w-5"></i>Home</a
+                    >
+                    <a
+                        href="apply.html"
+                        class="flex items-center gap-3 px-4 py-2.5 text-sm rounded-lg hover:bg-slate-800"
+                        ><i class="fas fa-file-alt w-5"></i>Apply</a
+                    >
+                    <a
+                        href="my-applications.html"
+                        class="flex items-center gap-3 px-4 py-2.5 text-sm bg-blue-600 rounded-lg"
+                        ><i class="fas fa-inbox w-5"></i>My Applications</a
+                    >
+                </nav>
+            </aside>
+            <main class="flex-1 flex flex-col">
+                <header
+                    class="bg-white border-b px-8 py-4 flex items-center justify-between"
+                >
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-900">
+                            My Applications
+                        </h1>
+                        <p class="text-xs text-slate-500">
+                            Track your admission status
+                        </p>
+                    </div>
+                    <div
+                        class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold"
+                    >
+                        SK
+                    </div>
+                </header>
+                <div class="flex-1 overflow-y-auto p-6">
+                    <div
+                        class="mb-6 flex gap-2 bg-white border border-slate-200 p-1 rounded-lg w-fit"
+                    >
+                        <button
+                            onclick="filterApplications('all', this)"
+                            class="status-btn active bg-blue-600 text-white px-4 py-1.5 rounded text-xs font-bold transition-all"
+                        >
+                            All (3)
+                        </button>
+                        <button
+                            onclick="filterApplications('pending', this)"
+                            class="status-btn text-slate-500 px-4 py-1.5 rounded text-xs font-bold hover:bg-slate-100 transition-all"
+                        >
+                            Pending (1)
+                        </button>
+                        <button
+                            onclick="filterApplications('approved', this)"
+                            class="status-btn text-slate-500 px-4 py-1.5 rounded text-xs font-bold hover:bg-slate-100 transition-all"
+                        >
+                            Approved (1)
+                        </button>
+                        <button
+                            onclick="filterApplications('rejected', this)"
+                            class="status-btn text-slate-500 px-4 py-1.5 rounded text-xs font-bold hover:bg-slate-100 transition-all"
+                        >
+                            Rejected (1)
+                        </button>
+                    </div>
+                    <div class="space-y-3">
+                        <div
+                            data-status="pending"
+                            class="admission-applications bg-white rounded-lg border border-slate-100 p-4 shadow-sm hover:shadow-md transition-all border-l-4 border-l-amber-400"
+                        >
+                            <div
+                                class="flex justify-between items-center gap-4"
+                            >
+                                <div class="flex gap-3 flex-1">
+                                    <div
+                                        class="w-10 h-10 bg-slate-100 rounded text-slate-400 text-xs font-bold flex items-center justify-center flex-shrink-0"
+                                    >
+                                        SK
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                        <div
+                                            class="flex items-center gap-2 mb-0.5"
+                                        >
+                                            <h3
+                                                class="text-sm font-bold text-slate-900"
+                                            >
+                                                Samuel Kingsley
+                                            </h3>
+                                            <span
+                                                class="status-pending text-xs font-bold px-2 py-0.5 rounded"
+                                                ><i
+                                                    class="fas fa-clock text-xs mr-1"
+                                                ></i
+                                                >Pending</span
+                                            >
+                                        </div>
+                                        <div class="text-xs text-slate-500">
+                                            JSS 2 • 2025/2026 • 2 days ago
+                                        </div>
+                                    </div>
+                                </div>
+                                <a
+                                    href="show-application.html"
+                                    class="bg-slate-100 text-slate-600 px-3 py-1.5 rounded text-xs font-semibold hover:bg-slate-200 flex items-center gap-1 flex-shrink-0"
+                                    ><i class="fas fa-eye"></i>View</a
+                                >
+                            </div>
+                        </div>
+                        <div
+                            data-status="approved"
+                            class="admission-applications bg-white rounded-lg border border-slate-100 p-4 shadow-sm hover:shadow-md transition-all border-l-4 border-l-emerald-400"
+                        >
+                            <div
+                                class="flex justify-between items-center gap-4"
+                            >
+                                <div class="flex gap-3 flex-1">
+                                    <div
+                                        class="w-10 h-10 bg-emerald-100 rounded text-emerald-600 text-xs font-bold flex items-center justify-center flex-shrink-0"
+                                    >
+                                        FA
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                        <div
+                                            class="flex items-center gap-2 mb-0.5"
+                                        >
+                                            <h3
+                                                class="text-sm font-bold text-slate-900"
+                                            >
+                                                Fatima Adeyemi
+                                            </h3>
+                                            <span
+                                                class="status-approved text-xs font-bold px-2 py-0.5 rounded"
+                                                ><i
+                                                    class="fas fa-check-circle text-xs mr-1"
+                                                ></i
+                                                >Approved</span
+                                            >
+                                        </div>
+                                        <div class="text-xs text-slate-500">
+                                            SS 1 Art • 2025/2026 • 1 day ago
+                                        </div>
+                                    </div>
+                                </div>
+                                <a
+                                    href="show-application.html"
+                                    class="bg-slate-100 text-slate-600 px-3 py-1.5 rounded text-xs font-semibold hover:bg-slate-200 flex items-center gap-1 flex-shrink-0"
+                                    ><i class="fas fa-eye"></i>View</a
+                                >
+                            </div>
+                        </div>
+                        <div
+                            data-status="rejected"
+                            class="admission-applications bg-white rounded-lg border border-slate-100 p-4 shadow-sm hover:shadow-md transition-all border-l-4 border-l-rose-400"
+                        >
+                            <div
+                                class="flex justify-between items-center gap-4"
+                            >
+                                <div class="flex gap-3 flex-1">
+                                    <div
+                                        class="w-10 h-10 bg-rose-100 rounded text-rose-600 text-xs font-bold flex items-center justify-center flex-shrink-0"
+                                    >
+                                        JC
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                        <div
+                                            class="flex items-center gap-2 mb-0.5"
+                                        >
+                                            <h3
+                                                class="text-sm font-bold text-slate-900"
+                                            >
+                                                Joshua Chukwu
+                                            </h3>
+                                            <span
+                                                class="status-rejected text-xs font-bold px-2 py-0.5 rounded"
+                                                ><i
+                                                    class="fas fa-times-circle text-xs mr-1"
+                                                ></i
+                                                >Rejected</span
+                                            >
+                                        </div>
+                                        <div class="text-xs text-slate-500">
+                                            SS 2 • 2025/2026 • 3 days ago
+                                        </div>
+                                    </div>
+                                </div>
+                                <a
+                                    href="show-application.html"
+                                    class="bg-slate-100 text-slate-600 px-3 py-1.5 rounded text-xs font-semibold hover:bg-slate-200 flex items-center gap-1 flex-shrink-0"
+                                    ><i class="fas fa-eye"></i>View</a
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <script>
+            function filterApplications(status, btn) {
+                document.querySelectorAll(".status-btn").forEach((b) => {
+                    b.classList.remove("bg-blue-600", "text-white");
+                    b.classList.add("text-slate-500", "hover:bg-slate-100");
+                });
+                btn.classList.remove("text-slate-500", "hover:bg-slate-100");
+                btn.classList.add("bg-blue-600", "text-white");
+                document
+                    .querySelectorAll(".admission-applications")
+                    .forEach((el) => {
+                        if (status === "all" || el.dataset.status === status) {
+                            el.style.display = "block";
+                        } else {
+                            el.style.display = "none";
+                        }
+                    });
+            }
+        </script>
+    </body>
+</html>

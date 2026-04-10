@@ -16,10 +16,13 @@
         </button>
         <div class="flex items-center gap-2">
             <div class="text-right hidden sm:block">
-                <div class="text-xs font-bold text-primary leading-none">{{ strtoupper(auth()->user()->name()) }}
-                </div>
-                <div class="text-[9px] text-slate-400 uppercase tracking-wider font-semibold">
-                    {{ strtoupper(auth()->user()->type) }}</div>
+                @auth
+                    <div class="text-xs font-bold text-primary leading-none">
+                        {{ strtoupper(auth()->user()->name()) }}
+                    </div>
+                    <div class="text-[9px] text-slate-400 uppercase tracking-wider font-semibold">
+                        {{ strtoupper(auth()->user()->type) }}</div>
+                @endauth
             </div>
             <div
                 class="w-8 h-8 bg-accent text-white rounded-full flex items-center justify-center font-bold text-xs shadow-md">

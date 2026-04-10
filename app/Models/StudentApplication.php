@@ -53,7 +53,10 @@ class StudentApplication extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime'
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'guardian_date_of_birth' => 'datetime',
+        'student_date_of_birth' => 'datetime'
     ];
     public function getstudentNameAttribute()
     {
@@ -94,5 +97,10 @@ class StudentApplication extends Model
     public function session(): BelongsTo
     {
         return $this->belongsTo(Session::class, 'session_id');
+    }
+
+    public function getExpectedDecisionAttribute()
+    {
+        return $this->created_at->copy()->addDays(7)->diffForHumans() . ' (' . $this->created_at->copy()->addDays(7)->format("d M, Y") .')';
     }
 }

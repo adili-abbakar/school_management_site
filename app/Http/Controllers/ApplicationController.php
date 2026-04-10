@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Users\StudentController;
 use App\Models\Academic\AcademicClass;
 use App\Models\Academic\Session;
 use App\Models\StudentApplication;
@@ -157,9 +158,11 @@ class ApplicationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(StudentApplication $application)
     {
-        //
+        return view('application.show', [
+            'app' => $application
+        ]);
     }
 
     /**
