@@ -59,6 +59,7 @@ return new class extends Migration
             $table->string('previous_school_name')->nullable();
             $table->string('last_class_attended')->nullable(); 
             $table->unsignedBigInteger('class_id')->nullable();
+            $table->enum('stream', ['arts', 'science', 'general'])->default('general');
             $table->unsignedBigInteger('session_id')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected', 'withdrawn'])->default('pending');
 

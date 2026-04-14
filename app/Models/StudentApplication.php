@@ -48,6 +48,7 @@ class StudentApplication extends Model
         'previous_school_name',
         'last_class_attended',
         'class_id',
+        'stream',
         'session_id',
         'status',
     ];

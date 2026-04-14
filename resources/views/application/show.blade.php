@@ -11,7 +11,7 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start mb-2 gap-2">
                     <div>
                         <h2 class="text-base font-bold text-slate-900">Application Status</h2>
-                        <p class="text-xs text-slate-500">Applied {{ $app->created_at->diffForHumans() }}</p>
+
                     </div>
                     @switch($app->status)
                         @case('pending')
@@ -35,8 +35,14 @@
                         @break
                     @endswitch
                 </div>
-                <p class="text-xs text-slate-600">Your application is under review. Expected decision:
-                    {{ $app->expected_decision }}</p>
+                <div class="flex flex-col gap-2">
+                    <p class="text-base font-bold text-slate-900">Application Id: {{ $app->application_number }}</p>
+                    <p class="text-xs text-slate-500">Applied {{ $app->created_at->diffForHumans() }}</p>
+
+
+                    <p class="text-xs text-slate-600">Your application is under review. Expected decision:
+                        {{ $app->expected_decision }}</p>
+                </div>
             </div>
 
             <!-- Details Grid -->
@@ -72,14 +78,14 @@
                     <div class="space-y-1.5 text-xs">
                         <div class="flex justify-between"><span class="text-slate-600">Class Applied for:</span><span
                                 class="font-semibold">{{ $app->class->name }}</span></div>
-                        <div class="flex justify-between"><span class="text-slate-600">Stream (For SS classes Only):</span><span
-                                class="font-semibold">Science</span></div>
+                        <div class="flex justify-between"><span class="text-slate-600">Stream:</span><span
+                                class="font-semibold">{{ ucwords($app->stream) }}</span></div>
                         <div class="flex justify-between"><span class="text-slate-600">Session:</span><span
-                                class="font-semibold">{{ $app->session->name  }}</span></div>
+                                class="font-semibold">{{ $app->session->name }}</span></div>
                         <div class="flex justify-between"><span class="text-slate-600">Previous:</span><span
-                                class="font-semibold">{{ $app->previous_school_name ?? "No previous school"}}</span></div>
+                                class="font-semibold">{{ $app->previous_school_name ?? 'No previous school' }}</span></div>
                         <div class="flex justify-between"><span class="text-slate-600">Last Class Attended:</span><span
-                                class="font-semibold">{{ $app->last_class_attended ?? "No previous school" }}</span></div>
+                                class="font-semibold">{{ $app->last_class_attended ?? 'No previous school' }}</span></div>
                     </div>
                 </div>
                 <div class="bg-white rounded-lg border border-slate-100 p-4">

@@ -116,8 +116,8 @@ class ApplicationController extends Controller
             'guardian_relationship' => 'required|in:father,mother,brother,sister,grandfather,grandmother,uncle,aunt,other',
             'previous_school_name' => 'nullable|string',
             'last_class_attended' => 'nullable|string',
-            'class_id' => 'required'
-
+            'class_id' => 'required',
+            'stream' => 'required'
         ], [
             'class_id.required' => 'Class to apply for is required'
         ]);

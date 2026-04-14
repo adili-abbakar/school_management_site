@@ -62,8 +62,7 @@
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
                                 </select>
-                                <span class="text-red-600 text-[10px] error-message"
-                                    data-name="student_gender"></span>
+                                <span class="text-red-600 text-[10px] error-message" data-name="student_gender"></span>
                             </div>
                             <div>
                                 <label class="form-label">Religion <span class="text-red-500">*</span></label>
@@ -122,6 +121,15 @@
                                     @endforelse
                                 </select>
                                 <span class="text-red-600 text-[10px] error-message" data-name="class_id"></span>
+                            </div>
+                            <div>
+                                <label for="form-label">Stream</label>
+                                <select name="stream" class="form-input">
+                                    <option value="general">General</option>
+                                    <option value="science">Science (SS Classes only)</option>
+                                    <option value="arts">Arts (SS Classes only)</option>
+                                </select>
+                                <span class="text-red-600 text-[10px] error-message" data-name="stream"></span>
                             </div>
                             <div>
                                 <label class="form-label">Previous School Name</label>
