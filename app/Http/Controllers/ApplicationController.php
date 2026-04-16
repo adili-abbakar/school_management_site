@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Users\StudentController;
 use App\Models\Academic\AcademicClass;
+use App\Models\Academic\ClassArm;
 use App\Models\Academic\Session;
 use App\Models\StudentApplication;
+use App\Models\Users\Guardian;
+use App\Models\Users\Student;
+use App\Models\Users\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ApplicationController extends Controller
@@ -43,9 +49,93 @@ class ApplicationController extends Controller
             return back()->with('info', 'Application already approved.');
         }
 
-        $application->update(['status' => 'approved']);
+        try {
+            DB::transaction(function () use ($application) {
 
-        return back()->with('success', 'Application approved successfully.');
+                $guardian = Guardian::where('relationship', $application->guardian_relationship)
+                    ->whereHas('user', function ($q) use ($application) {
+                        $q->where(function ($qq) use ($application) {
+                            if ($application->guardian_phone) {
+                                $qq->where('phone', $application->guardian_phone);
+                            }
+
+                            if ($application->guardian_email) {
+                                $qq->orWhere('email', $application->guardian_email);
+                            }
+
+                            $qq->orWhere(function ($q2) use ($application) {
+                                $q2->where('first_name', $application->guardian_first_name)
+                                    ->where('middle_name', $application->guardian_middle_name)
+                                    ->where('last_name', $application->guardian_last_name)
+                                    ->where('date_of_birth', $application->guardian_date_of_birth);
+                            });
+                        });
+                    })
+                    ->first();
+
+                if (!$guardian) {
+                    $guardianUser = User::create([
+                        'first_name' => $application->guardian_first_name,
+                        'middle_name' => $application->guardian_middle_name,
+                        'last_name' => $application->guardian_last_name,
+                        'email' => $application->guardian_email,
+                        'phone' => $application->guardian_phone,
+                        'date_of_birth' => $application->guardian_date_of_birth,
+                        'gender' => $application->guardian_gender,
+                        'nationality' => $application->guardian_nationality,
+                        'state' => $application->guardian_state,
+                        'local_government' => $application->guardian_local_government,
+                        'religion' => $application->guardian_religion,
+                        'tribe' => $application->guardian_tribe,
+                        'address' => $application->guardian_address,
+                        'type' => 'guardian',
+                        'password' => bcrypt(str()->random(12)),
+                    ]);
+
+                    $guardian = Guardian::create([
+                        'user_id' => $guardianUser->id,
+                        'occupation' => $application->guardian_occupation,
+                        'relationship' => $application->guardian_relationship,
+                    ]);
+                }
+
+                $studentUser = User::create([
+                    'first_name' => $application->student_first_name,
+                    'middle_name' => $application->student_middle_name,
+                    'last_name' => $application->student_last_name,
+                    'date_of_birth' => $application->student_date_of_birth,
+                    'gender' => $application->student_gender,
+                    'nationality' => $application->student_nationality,
+                    'state' => $application->student_state,
+                    'local_government' => $application->student_local_government,
+                    'religion' => $application->student_religion,
+                    'tribe' => $application->student_tribe,
+                    'address' => $application->student_address,
+                    'type' => 'student',
+                    'password' => bcrypt(str()->random(12)),
+                ]);
+
+                $classArm = ClassArm::resolveClassArmForApplication($application);
+
+                Student::create([
+                    'user_id' => $studentUser->id,
+                    'admission_number' => Student::generateAdmissionNumber(),
+                    'current_class_arm_id' => $classArm?->id,
+                    'guardian_id' => $guardian->user_id,
+                    'current_status' => 'active',
+                    'admission_date' => now()->toDateString(),
+                ]);
+
+                $application->status = 'approved';
+                $application->save();
+            });
+
+            return back()->with('success', 'Application approved successfully.');
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->with('failure', 'Application approval failed: ' . $e->getMessage());
+        }
     }
 
     public function reject(StudentApplication $application)

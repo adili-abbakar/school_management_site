@@ -15,6 +15,17 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->primary();
             $table->string('occupation', 100)->nullable();
             $table->string('place_of_work', 100)->nullable();
+            $table->enum('relationship', [
+                'father',
+                'mother',
+                'brother',
+                'sister',
+                'grandfather',
+                'grandmother',
+                'uncle',
+                'aunt',
+                'other'
+            ])->default('father');
             $table->timestamps();
             $table->softDeletes();
 

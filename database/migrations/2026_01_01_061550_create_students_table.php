@@ -14,11 +14,32 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id')->primary();
             $table->string('admission_number', 50)->unique();
-            $table->string('class_grade', 50)->nullable();
+
+            $table->foreignId('current_class_arm_id')
+                ->nullable()
+                ->constrained('class_arms')
+                ->nullOnDelete();
+
+            $table->enum('current_status', ['active', 'graduated', 'withdrawn', 'suspended'])
+                ->default('active');
+
+            $table->date('admission_date');
+            $table->date('graduation_date')->nullable();
+
+            $table->unsignedBigInteger('guardian_id')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
+
+            $table->foreign('guardian_id')
+                ->references('user_id')
+                ->on('guardians')
+                ->nullOnDelete();
         });
     }
 

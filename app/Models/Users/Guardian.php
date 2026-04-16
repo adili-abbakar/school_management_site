@@ -15,8 +15,9 @@ class Guardian extends Model
         'user_id',
         'occupation',
         'place_of_work',
+        'relationship',
     ];
-
+    
     public function user()
     {
         return $this->belongsTo(User::class);
