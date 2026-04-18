@@ -60,17 +60,34 @@ class ApplicationController extends Controller
             'guardian_email' => ['required', 'email'],
         ]);
 
-        $application = StudentApplication::where('application_number', $validated['application_number'])
-            ->where('guardian_email', $validated['guardian_email'])
-            ->first();
+        try {
+            $application = StudentApplication::where('application_number', $validated['application_number'])
+                ->where('guardian_email', $validated['guardian_email'])
+                ->first();
 
-        if (!$application) {
-            return back()
-                ->withInput()
-                ->with('failure', 'No application was found with the provided application number and email address.');
+            if (!$application) {
+                return response()->json(
+                    [
+                        'status' => 'field-error',
+                        'message' => 'No application was found with the provided application number and email address.'
+                    ]
+                );
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Application tracked successfully',
+                'redirect' => redirect()
+                    ->intended(route('applications.track.show', $application))
+                    ->with('success', 'Application tracked successfully!')
+                    ->getTargetUrl(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong: ' . $e->getMessage()
+            ]);
         }
-
-        return redirect()->route('applications.track.show', $application);
     }
 
     public function approve(StudentApplication $application)

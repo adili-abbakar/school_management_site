@@ -4,6 +4,8 @@
 
 @section('page-content')
     <main class="flex-grow">
+        <x-loader-component />
+
         <header class="bg-navy-900 text-white py-12 mb-10">
             <div class="container mx-auto px-4 text-center" data-aos="fade-up">
                 <h1 class="text-3xl font-extrabold mb-3 tracking-tight">
@@ -18,44 +20,17 @@
         <main class="container mx-auto px-4 pb-20">
             <div class="max-w-3xl mx-auto">
 
-                @if (session('success'))
-                    <div class="mb-6 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-xl px-4 py-3 text-sm"
-                        data-aos="fade-up">
-                        <div class="flex items-start gap-2">
-                            <i class="fas fa-circle-check mt-0.5"></i>
-                            <span>{{ session('success') }}</span>
-                        </div>
+                <div id="globalError" class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out mb-4">
+                    <div class="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                        <i class="fas fa-exclamation-circle text-red-600"></i>
+                        <span class="text-sm font-medium"></span>
                     </div>
-                @endif
-
-                @if (session('failure'))
-                    <div class="mb-6 bg-rose-50 border border-rose-100 text-rose-700 rounded-xl px-4 py-3 text-sm"
-                        data-aos="fade-up">
-                        <div class="flex items-start gap-2">
-                            <i class="fas fa-circle-exclamation mt-0.5"></i>
-                            <span>{{ session('failure') }}</span>
-                        </div>
-                    </div>
-                @endif
-
-                @if ($errors->any())
-                    <div class="mb-6 bg-rose-50 border border-rose-100 text-rose-700 rounded-xl px-4 py-3 text-sm"
-                        data-aos="fade-up">
-                        <div class="flex items-start gap-2">
-                            <i class="fas fa-circle-exclamation mt-0.5"></i>
-                            <div>
-                                @foreach ($errors->all() as $error)
-                                    <p>{{ $error }}</p>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                @endif
+                </div>
 
                 <div class="bg-white p-8 md:p-10 rounded-xl border border-gray-200 shadow-sm" data-aos="fade-up">
                     <h2 class="section-title">Application Lookup</h2>
 
-                    <form method="POST" action="{{ route('applications.track.search') }}" class="space-y-6">
+                    <form method="POST" action="{{ route('applications.track.search') }}" class="form space-y-6">
                         @csrf
 
                         <div>
@@ -64,7 +39,9 @@
                             </label>
                             <input type="text" id="application_number" name="application_number"
                                 value="{{ old('application_number') }}" class="form-input"
-                                placeholder="e.g. APP-2025-2026-000001" required>
+                                placeholder="e.g. APP-2025-2026-000001">
+                            <span class="text-red-600 text-[10px] error-message" data-name="application_number"></span>
+
                         </div>
 
                         <div>
@@ -73,7 +50,9 @@
                             </label>
                             <input type="email" id="guardian_email" name="guardian_email"
                                 value="{{ old('guardian_email') }}" class="form-input"
-                                placeholder="Enter the email used during application" required>
+                                placeholder="Enter the email used during application">
+                            <span class="text-red-600 text-[10px] error-message" data-name="guardian_email"></span>
+
                         </div>
 
                         <div class="pt-2 flex flex-col sm:flex-row gap-3">
@@ -116,4 +95,5 @@
             </div>
         </main>
     </main>
+    <script src="{{ asset('/js/formSubmitter.js') }}"></script>
 @endsection
