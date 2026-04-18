@@ -18,7 +18,7 @@
             <div class="text-right hidden sm:block">
                 @auth
                     <div class="text-xs font-bold text-primary leading-none">
-                        {{ strtoupper(auth()->user()->name()) }}
+                        {{ strtoupper(auth()->user()->full_name) }}
                     </div>
                     <div class="text-[9px] text-slate-400 uppercase tracking-wider font-semibold">
                         {{ strtoupper(auth()->user()->type) }}</div>

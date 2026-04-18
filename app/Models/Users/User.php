@@ -42,8 +42,8 @@ class User extends Authenticatable
             'date_of_birth' => 'date'
         ];
     }
-    
-    public function name()
+
+    public function getFullNameAttribute()
     {
         return trim(
             collect([$this->first_name, $this->middle_name, $this->last_name])

@@ -20,7 +20,7 @@ class ClassArm extends Model
         'class_id'
     ];
 
-    public function academicClass(): BelongsTo
+    public function class(): BelongsTo
     {
         return $this->belongsTo(AcademicClass::class, 'class_id');
     }
@@ -37,7 +37,7 @@ class ClassArm extends Model
 
     public function getFullNameAttribute(): string
     {
-        return $this->academicClass->name . ' ' . $this->name;
+        return $this->class->name . ' ' . $this->name;
     }
 
     public static function resolveTargetClass($application): ?AcademicClass

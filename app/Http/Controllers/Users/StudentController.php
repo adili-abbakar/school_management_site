@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
+use App\Models\Users\Student;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -12,7 +13,8 @@ class StudentController extends Controller
      */
     public function index()
     {
-        return view('users.students.index');
+        $students = Student::get();
+        return view('users.students.index', compact('students'));
     }
 
     /**

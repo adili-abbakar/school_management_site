@@ -12,8 +12,39 @@
                    class="hover:text-[#6B8DD6] transition-colors {{ url()->current() === route('about') ? 'text-[#6B8DD6]' : '' }}">About</a>
 
                <a href="" class="hover:text-[#6B8DD6] transition-colors">Academics</a>
-               <a href="{{ route('applications.create') }}"
-                   class="hover:text-[#6B8DD6] transition-colors {{ url()->current() === route('applications.create') ? 'text-[#6B8DD6]' : '' }}">Admissions</a>
+               <div class="relative group">
+                   <button
+                       class="flex items-center gap-2 hover:text-[#6B8DD6] transition-colors
+        {{ request()->routeIs('applications.create') || request()->routeIs('applications.track.*') || request()->routeIs('applications.mine') ? 'text-[#6B8DD6]' : '' }}">
+                       <span>Admissions</span>
+                       <i
+                           class="fas fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
+                   </button>
+
+                   <div class="absolute left-0 top-full pt-3 hidden group-hover:block z-50">
+                       <div class="w-60 bg-white text-slate-700 rounded-xl shadow-xl border border-slate-100 py-2">
+                           <a href="{{ route('applications.create') }}"
+                               class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-slate-50 hover:text-[#6B8DD6] transition-colors">
+                               <i class="fas fa-file-signature text-xs text-slate-400"></i>
+                               <span>Apply for Admission</span>
+                           </a>
+
+                           <a href="{{ route('applications.track.search.form') }}"
+                               class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-slate-50 hover:text-[#6B8DD6] transition-colors">
+                               <i class="fas fa-magnifying-glass text-xs text-slate-400"></i>
+                               <span>Track Admission Application</span>
+                           </a>
+
+                           @auth
+                               <a href="{{ route('applications.mine') }}"
+                                   class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-slate-50 hover:text-[#6B8DD6] transition-colors">
+                                   <i class="fas fa-folder-open text-xs text-slate-400"></i>
+                                   <span>My Applications</span>
+                               </a>
+                           @endauth
+                       </div>
+                   </div>
+               </div>
                <a href="{{ route('news') }}"
                    class="hover:text-[#6B8DD6] transition-colors {{ url()->current() === route('news') ? 'text-[#6B8DD6]' : '' }}">News</a>
                <a href="{{ route('contact') }}"
@@ -60,7 +91,34 @@
            <a href="{{ route('home') }}" class="hover:text-[#6B8DD6] transition-colors py-2">Home</a>
            <a href="{{ route('about') }}" class="hover:text-[#6B8DD6] transition-colors py-2">About</a>
            <a href="#" class="hover:text-[#6B8DD6] transition-colors py-2">Academics</a>
-           <a href="{{ route('applications.create') }}" class="hover:text-[#6B8DD6] transition-colors py-2">Admissions</a>
+           <div class="py-1">
+               <button type="button" onclick="toggleAdmissionsMenu()"
+                   class="w-full flex items-center justify-between hover:text-[#6B8DD6] transition-colors py-2 text-left
+        {{ request()->routeIs('applications.create') || request()->routeIs('applications.track.*') || request()->routeIs('applications.mine') ? 'text-[#6B8DD6]' : '' }}">
+                   <span>Admissions</span>
+                   <i id="admissionsChevron"
+                       class="fas fa-chevron-down text-[10px] transition-transform duration-200"></i>
+               </button>
+
+               <div id="admissionsSubmenu" class="hidden pl-4 mt-2 space-y-2 border-l border-gray-700">
+                   <a href="{{ route('applications.create') }}"
+                       class="block py-2 text-xs hover:text-[#6B8DD6] transition-colors">
+                       Apply for Admission
+                   </a>
+
+                   <a href="{{ route('applications.track.search.form') }}"
+                       class="block py-2 text-xs hover:text-[#6B8DD6] transition-colors">
+                       Track Admission Application
+                   </a>
+
+                   @auth
+                       <a href="{{ route('applications.mine') }}"
+                           class="block py-2 text-xs hover:text-[#6B8DD6] transition-colors">
+                           My Applications
+                       </a>
+                   @endauth
+               </div>
+           </div>
            <a href="{{ route('news') }}" class="hover:text-[#6B8DD6] transition-colors py-2">News</a>
            <a href="{{ route('contact') }}" class="hover:text-[#6B8DD6] transition-colors py-2">Contact</a>
            @auth

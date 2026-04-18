@@ -43,6 +43,36 @@ class ApplicationController extends Controller
         );
     }
 
+    public function trackShow(StudentApplication $application)
+    {
+        return view('application.track-show', compact('application'));
+    }
+
+    public function trackSearchForm()
+    {
+        return view('application.track-search');
+    }
+
+    public function trackSearch(Request $request)
+    {
+        $validated = $request->validate([
+            'application_number' => ['required', 'string'],
+            'guardian_email' => ['required', 'email'],
+        ]);
+
+        $application = StudentApplication::where('application_number', $validated['application_number'])
+            ->where('guardian_email', $validated['guardian_email'])
+            ->first();
+
+        if (!$application) {
+            return back()
+                ->withInput()
+                ->with('failure', 'No application was found with the provided application number and email address.');
+        }
+
+        return redirect()->route('applications.track.show', $application);
+    }
+
     public function approve(StudentApplication $application)
     {
         if ($application->status === 'approved') {
@@ -227,13 +257,13 @@ class ApplicationController extends Controller
             $validated['session_id'] = $session->id;
             $validated['application_number']  = StudentApplication::generateApplicationNumber($session->id);
 
-            StudentApplication::create($validated);
+            $app = StudentApplication::create($validated);
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Application submitted successfully',
                 'redirect' => redirect()
-                    ->intended(route('home'))
+                    ->intended(route('applications.track.show', $app->id))
                     ->with('success', 'Application submitted successfully!')
                     ->getTargetUrl(),
             ]);

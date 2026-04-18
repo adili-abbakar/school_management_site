@@ -53,7 +53,22 @@
             <div class="grid grid-cols-1 gap-4">
                 @forelse ($applications as $app)
                     <div data-status="{{ $app->status }}"
-                        class="admission-applications bg-white rounded-lg border border-slate-100 p-4 shadow-sm hover:shadow-md transition-all border-l-4 border-l-amber-400">
+                        class="admission-applications bg-white rounded-lg border border-slate-100 p-4 shadow-sm hover:shadow-md transition-all border-l-4
+                         @switch($app->status)
+                                @case('pending')
+                                    {{ 'border-l-amber-400' }}
+                                @break
+                                @case('approved')
+                                    {{ 'border-l-green-400' }}
+                                @break
+                                @case('withdrwan')
+                                    {{ 'border-l-gray-400' }}
+                                @break
+                                @case('rejected')
+                                    {{ 'border-l-red-400' }}
+                                @break                                                  
+                        @endswitch
+                        ">
                         <div class="flex flex-col lg:flex-row justify-between gap-4">
                             <div class="flex gap-3">
                                 <div
@@ -148,25 +163,34 @@
                                     </button>
                                 </a>
 
-                                @if ($app->status !== 'rejected')
+                                @if ($app->status === 'pending')
                                     <form method="POST" action="{{ route('applications.reject', $app) }}">
                                         @csrf
                                         @method('PUT')
                                         <x-loader-component />
                                         <button onclick="showLoader()" type="submit"
-                                            class="bg-rose-50 text-rose-600 px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-rose-100 transition-all border border-rose-100">
+                                            class="bg-rose-50 text-rose-600 px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-rose-100 transition-all border border-rose-100 flex items-center gap-1">
+                                            <i class="fas fa-times"></i>
                                             Reject
                                         </button>
                                     </form>
                                 @endif
-                                @if ($app->status !== 'approved')
+
+                                @if ($app->status === 'pending' || $app->status === 'rejected')
                                     <form method="POST" action="{{ route('applications.approve', $app) }}">
                                         @csrf
                                         @method('PUT')
                                         <x-loader-component />
+
                                         <button onclick="showLoader()" type="submit"
-                                            class="bg-emerald-500 text-white px-4 py-1.5 rounded-lg text-xs font-semibold shadow hover:bg-emerald-600 transition-all">
-                                            Approve
+                                            class="px-4 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 border
+            {{ $app->status === 'rejected'
+                ? 'bg-amber-50 text-amber-600 border-amber-100 hover:bg-amber-100'
+                : 'bg-emerald-50 text-emerald-600  hover:bg-emerald-100' }}">
+
+                                            <i class="fas {{ $app->status === 'rejected' ? 'fa-redo' : 'fa-check' }}"></i>
+
+                                            {{ $app->status === 'rejected' ? 'Reconsider & Approve' : 'Approve' }}
                                         </button>
                                     </form>
                                 @endif
