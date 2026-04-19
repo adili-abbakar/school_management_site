@@ -11,10 +11,8 @@
         <!-- Header with Back Button -->
         <div class="flex items-center justify-between mb-6">
           <div>
-            <a href="{{ route('admins.index') }}" class="text-accent text-xs mb-2 flex items-center gap-1 hover:underline">
-              <i class="fas fa-arrow-left text-xs"></i> Back to Admins
-            </a>
-            <h1 class="text-xl font-bold text-slate-800">{{ $admin->user->name() }}</h1>
+          <x-buttons.blue-back-link>Admins</x-buttons.blue-back-link>
+            <h1 class="text-xl font-bold text-slate-800">{{ $admin->user->full_name }}</h1>
             <p class="text-xs text-slate-500">Admin ID: {{ $admin->staff_number }}</p>
           </div>
           <div class="flex gap-2">

@@ -92,6 +92,9 @@
                                           @case('rejected')
                                          class="status-badge status-rejected"
                                          @break
+                                         @case('withdrawn')
+                                         class="status-badge status-withdrawn"
+                                         @break
                                         @endswitch>
                                             @switch($app->status)
                                                 @case('pending')

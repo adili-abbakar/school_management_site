@@ -9,7 +9,7 @@
             <div class="space-y-3">
               <div>
                 <label class="text-xs font-medium text-slate-600">Full Name</label>
-                <p class="text-sm text-slate-800 mt-1">{{ $user->name() }}</p>
+                <p class="text-sm text-slate-800 mt-1">{{ $user->full_name }}</p>
               </div>
               <div>
                 <label class="text-xs font-medium text-slate-600">Email</label>

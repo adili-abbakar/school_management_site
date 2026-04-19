@@ -3,7 +3,7 @@
 @section('title', 'System Administrators')
 
 @section('page-content')
-  <main class="flex-grow flex flex-col min-w-0 bg-slate-50 overflow-y-auto">
+  <main class="flex-grow flex flex-col min-w-0 bg-slate-50 overflow-y-auto hide-scrollbar">
     <x-dashboard-header>
       <div class="flex items-center gap-4 flex-grow max-w-xl">
         <div class="relative w-full">
@@ -45,7 +45,7 @@
               @forelse ($admins as $admin)
                 <tr class="hover:bg-slate-50 transition-colors">
                   <td class="px-6 py-4 font-bold text-slate-400 uppercase">{{ $admin->staff_number }}</td>
-                  <td class="px-6 py-4 font-semibold text-primary">{{ $admin->user->name() }}</td>
+                  <td class="px-6 py-4 font-semibold text-primary">{{ $admin->user->full_name }}</td>
                   <td class="px-6 py-4">
                     @php
                       $roleColors = [

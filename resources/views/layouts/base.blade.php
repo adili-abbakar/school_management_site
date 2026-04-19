@@ -177,6 +177,11 @@
             color: #7f1d1d;
         }
 
+        .status-withdrawn {
+            background-color: #f1f5f9;
+            color: #475569;
+        }
+
         .document-preview {
             border: 2px solid #e2e8f0;
             border-radius: 8px;
@@ -195,6 +200,18 @@
             font-size: 2.5rem;
             margin-bottom: 8px;
             color: #3b82f6;
+        }
+
+        /* Hide scrollbar but allow scrolling */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            /* IE & Edge */
+            scrollbar-width: none;
+            /* Firefox */
         }
     </style>
 </head>
