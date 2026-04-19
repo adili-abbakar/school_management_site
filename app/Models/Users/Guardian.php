@@ -17,9 +17,14 @@ class Guardian extends Model
         'place_of_work',
         'relationship',
     ];
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function  children()
+    {
+        return $this->hasMany(Student::class, 'guardian_id');
     }
 }

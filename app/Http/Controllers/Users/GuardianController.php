@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
+use App\Models\Users\Guardian;
 use Illuminate\Http\Request;
 
 class GuardianController extends Controller
@@ -12,7 +13,8 @@ class GuardianController extends Controller
      */
     public function index()
     {
-        return view('users.guardians.index');
+        $guardians = Guardian::latest()->paginate(10);
+        return view('users.guardians.index', compact('guardians'));
     }
 
     /**
@@ -26,7 +28,7 @@ class GuardianController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request,)
     {
         //
     }
@@ -34,7 +36,7 @@ class GuardianController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Guardian $guardian)
     {
         //
     }
@@ -42,7 +44,7 @@ class GuardianController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Guardian $guardian)
     {
         //
     }
@@ -50,7 +52,7 @@ class GuardianController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Guardian $guardian)
     {
         //
     }
@@ -58,7 +60,7 @@ class GuardianController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Guardian $guardian)
     {
         //
     }

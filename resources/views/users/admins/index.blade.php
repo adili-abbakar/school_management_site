@@ -3,96 +3,59 @@
 @section('title', 'System Administrators')
 
 @section('page-content')
-  <main class="flex-grow flex flex-col min-w-0 bg-slate-50 overflow-y-auto hide-scrollbar">
-    <x-dashboard-header>
-      <div class="flex items-center gap-4 flex-grow max-w-xl">
-        <div class="relative w-full">
-          <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-          <input type="text" placeholder="Search admins..."
-            class="w-full bg-slate-100 border-none rounded-lg py-1.5 pl-9 pr-4 text-xs focus:ring-2 focus:ring-accent outline-none">
-        </div>
-      </div>
-    </x-dashboard-header>
-
-    <div class="p-6">
-      <div class="flex justify-between items-center mb-6">
-        <div>
-          <h1 class="text-xl font-extrabold text-primary">System Administrators</h1>
-          <p class="text-slate-500 text-xs">Manage administrative roles and permissions.</p>
-        </div>
-        <a href="{{ route('admins.create') }}">
-          <button
-            class="bg-accent text-white px-4 py-2 rounded-lg text-xs font-semibold shadow hover:bg-blue-600 transition-all flex items-center gap-2">
-            <i class="fas fa-plus"></i>
-            <span>Create New Admin</span>
-          </button>
-        </a>
-      </div>
-
-      <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider">
-              <tr>
-                <th class="px-6 py-4">Admin ID</th>
-                <th class="px-6 py-4">Name</th>
-                <th class="px-6 py-4">Role</th>
-                <th class="px-6 py-4">Last Login</th>
-                <th class="px-6 py-4 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y">
-              @forelse ($admins as $admin)
-                <tr class="hover:bg-slate-50 transition-colors">
-                  <td class="px-6 py-4 font-bold text-slate-400 uppercase">{{ $admin->staff_number }}</td>
-                  <td class="px-6 py-4 font-semibold text-primary">{{ $admin->user->full_name }}</td>
-                  <td class="px-6 py-4">
-                    @php
-                      $roleColors = [
-                          'super_admin' => 'bg-blue-100 text-blue-700',
-                          'exam_officer' => 'bg-green-100 text-green-700',
-                          'admission_officer' => 'bg-purple-100 text-purple-700',
-                      ];
-                    @endphp
-
-                    <span
-                      class="{{ $roleColors[$admin->role_type] }} px-2 py-0.5 rounded text-[10px] font-bold uppercase">
-                      {{ str_replace('_', ' ', strtoupper($admin->role_type)) }}
-                    </span>
-
-                  </td>
-                  <td class="px-6 py-4 text-slate-500">
-                    {{ $admin->user->last_login_at ? $admin->user->last_login_at->diffForHumans() : 'Never logged in' }}
-                  </td>
-                  <td class="px-6 py-4 text-center">
-                    <div class="flex justify-center gap-2">
-                      <a href="{{ route('admins.edit', $admin) }}">
-                        <button class="text-blue-500" title="Edit"><i class="fas fa-edit"></i></button>
-                      </a>
-                      <a href="{{ route('user.edit-password', $admin) }}">
-                        <button class="text-blue-500" title="Edit Password"><i class="fas fa-key"></i></button>
-                      </a>
-                      <a href="{{ route('admins.show', $admin) }}">
-                        <button class="text-green-500" title="View Details"><i class="fas fa-eye"></i></button>
-                      </a>
-
-                      <a href="{{ route('admins.delete', $admin) }}">
-                        <button class="text-red-500" title="Delete"><i class="fas fa-trash"></i></button>
-                      </a>
+    <main class="flex-grow flex flex-col min-w-0 bg-slate-50 overflow-y-auto hide-scrollbar">
+        <div data-live-search data-search-url="{{ route('admins.index') }}" data-search-delay="300">
+            <x-dashboard-header>
+                <div class="flex items-center gap-4 flex-grow max-w-xl">
+                    <div class="relative w-full">
+                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input data-search-input type="text" placeholder="Search admins..."
+                            class="w-full bg-slate-100 border-none rounded-lg py-1.5 pl-9 pr-4 text-xs focus:ring-2 focus:ring-accent outline-none">
                     </div>
-                  </td>
-                </tr>
-              @empty
-                <tr>
-                  <td colspan="5" class="text-center text-gray-500 p-4">
-                    No admins found.
-                  </td>
-                </tr>
-              @endforelse
-            </tbody>
-          </table>
+                </div>
+            </x-dashboard-header>
+
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h1 class="text-xl font-extrabold text-primary">System Administrators</h1>
+                        <p class="text-slate-500 text-xs">Manage administrative roles and permissions.</p>
+                    </div>
+                    <a href="{{ route('admins.create') }}">
+                        <button
+                            class="bg-accent text-white px-4 py-2 rounded-lg text-xs font-semibold shadow hover:bg-blue-600 transition-all flex items-center gap-2">
+                            <i class="fas fa-plus"></i>
+                            <span>Create New Admin</span>
+                        </button>
+                    </a>
+                </div>
+
+                <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider">
+                                <tr>
+                                    <th class="px-6 py-4">Admin ID</th>
+                                    <th class="px-6 py-4">Name</th>
+                                    <th class="px-6 py-4">Role</th>
+                                    <th class="px-6 py-4">Last Login</th>
+                                    <th class="px-6 py-4 text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y" data-search-results>
+                                @include('users.admins.partials.rows', ['admins' => $admins])
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+                <div class="flex justify-center mt-4" data-search-pagination>
+                    @include('users.admins.partials.pagination', ['admins' => $admins])
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </main>
+    </main>
+
+    <script src="{{ asset('js/live-search.js') }}"></script>
 @endsection

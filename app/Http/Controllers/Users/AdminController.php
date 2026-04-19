@@ -14,13 +14,36 @@ class AdminController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $admins = Admin::with('user')->latest('updated_at')->get();
+        $search = trim($request->get('search', ''));
+
+        $admins = Admin::with('user')
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('staff_number', 'like', "%{$search}%")
+                        ->orWhere('role_type', 'like', "%{$search}%")
+                        ->orWhereHas('user', function ($userQuery) use ($search) {
+                            $userQuery->where('first_name', 'like', "%{$search}%")
+                                ->orWhere('middle_name', 'like', "%{$search}%")
+                                ->orWhere('last_name', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->latest('updated_at')
+            ->paginate(15)
+            ->withQueryString();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('users.admins.partials.rows', compact('admins'))->render(),
+                'pagination' => view('users.admins.partials.pagination', compact('admins'))->render()
+            ]);
+        }
 
         return view('users.admins.index', ['admins' => $admins]);
     }
-
     /**
      * Show the form for creating a new resource.
      */
