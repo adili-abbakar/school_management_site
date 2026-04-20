@@ -11,9 +11,50 @@ class GuardianController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $guardians = Guardian::latest()->paginate(10);
+        $search = trim($request->get('search', ''));
+
+        $guardians = Guardian::with('user')
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('occupation', 'like', "%{$search}%")
+                        ->orWhere("relationship")
+                        ->orWhereHas('user', function ($userQuery) use ($search) {
+                            $userQuery->where('first_name', 'like', "%{$search}%")
+                                ->orWhere('middle_name',  'like', "%{$search}%")
+                                ->orWhere('last_name', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%")
+                                ->orWhere('phone', 'like', "%{$search}%")
+                                ->orWhereRaw(
+                                    "CONCAT(first_name, ' ', middle_name, ' ', last_name) LIKE ?",
+                                    ["%{$search}%"]
+                                )
+                                ->orWhereRaw(
+                                    "CONCAT(first_name, ' ', last_name) LIKE ?",
+                                    ["%{$search}%"]
+                                )
+                                ->orWhereRaw(
+                                    "CONCAT(last_name, ' ', middle_name, ' ', first_name) LIKE ?",
+                                    ["%{$search}%"]
+                                )
+                                ->orWhereRaw(
+                                    "CONCAT(last_name, ' ', first_name) LIKE ?",
+                                    ["%{$search}%"]
+                                );
+                        });
+                });
+            })
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('users.guardians.partials.rows', compact('guardians'))->render(),
+                'pagination' => view('users.guardians.partials.pagination', compact('guardians'))->render(),
+            ]);
+        }
         return view('users.guardians.index', compact('guardians'));
     }
 

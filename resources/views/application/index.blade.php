@@ -61,7 +61,7 @@
                                 @case('approved')
                                     {{ 'border-l-green-400' }}
                                 @break
-                                @case('withdrwan')
+                                @case('withdrawn')
                                     {{ 'border-l-gray-400' }}
                                 @break
                                 @case('rejected')

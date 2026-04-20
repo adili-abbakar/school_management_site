@@ -28,6 +28,7 @@ class AdminController extends Controller
                                 ->orWhere('middle_name', 'like', "%{$search}%")
                                 ->orWhere('last_name', 'like', "%{$search}%")
                                 ->orWhere('email', 'like', "%{$search}%")
+                                ->orWhere('phone', 'like', "%{$search}%")
                                 ->orWhereRaw(
                                     "CONCAT(first_name, ' ', middle_name, ' ', last_name) LIKE ?",
                                     ["%{$search}%"]
@@ -48,7 +49,7 @@ class AdminController extends Controller
                 });
             })
             ->latest('updated_at')
-            ->paginate(15)
+            ->paginate(30)
             ->withQueryString();
 
         if ($request->ajax()) {
