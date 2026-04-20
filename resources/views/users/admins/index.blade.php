@@ -4,6 +4,8 @@
 
 @section('page-content')
     <main class="flex-grow flex flex-col min-w-0 bg-slate-50 overflow-y-auto hide-scrollbar">
+        <x-loader-component />
+
         <div data-live-search data-search-url="{{ route('admins.index') }}" data-search-delay="300">
             <x-dashboard-header>
                 <div class="flex items-center gap-4 flex-grow max-w-xl">

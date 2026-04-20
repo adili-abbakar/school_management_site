@@ -27,7 +27,23 @@ class AdminController extends Controller
                             $userQuery->where('first_name', 'like', "%{$search}%")
                                 ->orWhere('middle_name', 'like', "%{$search}%")
                                 ->orWhere('last_name', 'like', "%{$search}%")
-                                ->orWhere('email', 'like', "%{$search}%");
+                                ->orWhere('email', 'like', "%{$search}%")
+                                ->orWhereRaw(
+                                    "CONCAT(first_name, ' ', middle_name, ' ', last_name) LIKE ?",
+                                    ["%{$search}%"]
+                                )
+                                ->orWhereRaw(
+                                    "CONCAT(first_name, ' ', last_name) LIKE ?",
+                                    ["%{$search}%"]
+                                )
+                                ->orWhereRaw(
+                                    "CONCAT(last_name, ' ', middle_name, ' ', first_name) LIKE ?",
+                                    ["%{$search}%"]
+                                )
+                                ->orWhereRaw(
+                                    "CONCAT(last_name, ' ', first_name) LIKE ?",
+                                    ["%{$search}%"]
+                                );
                         });
                 });
             })

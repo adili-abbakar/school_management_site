@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
 
         let debounceTimer;
+        let controller = null;
+        let loaderTimer = null;
 
         input.addEventListener("input", function () {
             clearTimeout(debounceTimer);
@@ -33,44 +35,62 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault();
             fetchSearchResults(container, link.href, input.value);
         });
+
+        function fetchSearchResults(container, url, search = "") {
+            const resultsContainer = container.querySelector(
+                "[data-search-results]"
+            );
+            const paginationContainer = container.querySelector(
+                "[data-search-pagination]"
+            );
+
+            if (controller) {
+                controller.abort();
+            }
+
+            controller = new AbortController();
+
+            const parsedUrl = new URL(url, window.location.origin);
+            parsedUrl.searchParams.set("search", search);
+
+            clearTimeout(loaderTimer);
+            loaderTimer = setTimeout(() => {
+                showLoader();
+            }, 200);
+
+            fetch(parsedUrl.toString(), {
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    Accept: "application/json",
+                },
+                signal: controller.signal,
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(
+                            `HTTP error! Status: ${response.status}`
+                        );
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    if (data.html !== undefined) {
+                        resultsContainer.innerHTML = data.html;
+                    }
+
+                    if (data.pagination !== undefined) {
+                        paginationContainer.innerHTML = data.pagination;
+                    }
+                })
+                .catch((error) => {
+                    if (error.name !== "AbortError") {
+                        console.error("Live search error:", error);
+                    }
+                })
+                .finally(() => {
+                    clearTimeout(loaderTimer);
+                    hideLoader();
+                });
+        }
     });
-
-    function fetchSearchResults(container, url, search = "") {
-        const resultsContainer = container.querySelector(
-            "[data-search-results]"
-        );
-        const paginationContainer = container.querySelector(
-            "[data-search-pagination]"
-        );
-
-        const separator = url.includes("?") ? "&" : "?";
-        const requestUrl = url.includes("search=")
-            ? url
-            : `${url}${separator}search=${encodeURIComponent(search)}`;
-
-        container.classList.add("opacity-75", "pointer-events-none");
-
-        fetch(requestUrl, {
-            headers: {
-                "X-Requested-With": "XMLHttpRequest",
-                Accept: "application/json",
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.html !== undefined) {
-                    resultsContainer.innerHTML = data.html;
-                }
-
-                if (data.pagination !== undefined) {
-                    paginationContainer.innerHTML = data.pagination;
-                }
-            })
-            .catch((error) => {
-                console.error("Live search error:", error);
-            })
-            .finally(() => {
-                container.classList.remove("opacity-75", "pointer-events-none");
-            });
-    }
 });

@@ -15,9 +15,52 @@ class TeacherController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $teachers = Teacher::with('user')->latest('updated_at')->get();
+        $search = trim($request->get('search', ''));
+
+        $teachers = Teacher::with('user')
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('staff_number', 'like', "%{$search}%")
+                        ->orWhere('employment_type', 'like', "%{$search}%")
+                        ->orWhere('employment_type', 'like', "%{$search}%")
+                        ->orWhere('specialized_subject', 'like', "%{$search}%")
+                        ->orWhere('highest_qualification', 'like', "%{$search}%")
+                        ->orWhereHas('user', function ($userQuery) use ($search) {
+                            $userQuery->where('first_name', 'like', "%{$search}%")
+                                ->orWhere('middle_name', 'like', "%{$search}%")
+                                ->orWhere('last_name', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%")
+                                ->orWhereRaw(
+                                    "CONCAT(first_name, ' ', middle_name, ' ', last_name) LIKE ?",
+                                    ["%{$search}%"]
+                                )
+                                ->orWhereRaw(
+                                    "CONCAT(first_name, ' ', last_name) LIKE ?",
+                                    ["%{$search}%"]
+                                )
+                                ->orWhereRaw(
+                                    "CONCAT(last_name, ' ', middle_name, ' ', first_name) LIKE ?",
+                                    ["%{$search}%"]
+                                )
+                                ->orWhereRaw(
+                                    "CONCAT(last_name, ' ', first_name) LIKE ?",
+                                    ["%{$search}%"]
+                                );
+                        });
+                });
+            })
+            ->latest('updated_at')
+            ->paginate(5)
+            ->withQueryString();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('users.teachers.partials.rows', compact('teachers'))->render(),
+                'pagination' => view('users.teachers.partials.pagination', compact('teachers'))->render()
+            ]);
+        }
         return view('users.teachers.index', compact('teachers'));
     }
 
@@ -49,7 +92,7 @@ class TeacherController extends Controller
             'tribe' => 'required|string|max:100',
             'address' => 'required|string|max:255',
 
-            'staff_number' => 'required|string|max:50|unique:admins,staff_number',
+            'staff_number' => 'required|string|max:50|unique:teachers,staff_number',
             'specialized_subject' => 'nullable|string|max:255',
             'highest_qualification' => 'nullable|string|max:255',
             'years_of_experience' => 'nullable|integer|min:0',
@@ -140,7 +183,7 @@ class TeacherController extends Controller
             'tribe' => 'required|string|max:100',
             'address' => 'required|string|max:255',
             'specialized_subject' => 'nullable|string|max:255',
-            'staff_number' => 'required|string|max:50|unique:admins,staff_number,' . $teacher->user_id . ',user_id',
+            'staff_number' => 'required|string|max:50|unique:teachers,staff_number,' . $teacher->user_id . ',user_id',
 
             'highest_qualification' => 'nullable|string|max:255',
             'years_of_experience' => 'nullable|integer|min:0',
@@ -202,7 +245,6 @@ class TeacherController extends Controller
             DB::transaction(function () use ($teacher) {
                 $teacher->user->delete();
                 $teacher->delete();
-
             });
 
             return response()->json([
