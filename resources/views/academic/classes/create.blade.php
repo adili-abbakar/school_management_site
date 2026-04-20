@@ -10,7 +10,7 @@
 
         <div class="p-6">
             <div class="mb-6">
-                <x-buttons.blue-back-to-list />
+                <x-buttons.blue-back-link>To classes</x-buttons.blue-back-link>
                 <h1 class="text-xl font-extrabold text-primary">Create New Class</h1>
                 <p class="text-slate-500 text-xs">Add a new class with multiple arms to the system</p>
             </div>

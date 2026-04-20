@@ -35,22 +35,53 @@
                 </div>
 
                 <!-- Filter Bar -->
-                <div class="bg-white p-3 rounded-xl border border-slate-100 shadow-sm flex flex-wrap gap-3 mb-6">
-                    <select class="bg-slate-100 border-none rounded-lg py-1.5 px-3 text-xs outline-none">
-                        <option>Select Class</option>
-                        <option>JSS 1</option>
-                        <option>SS 3</option>
-                    </select>
-                    <select class="bg-slate-100 border-none rounded-lg py-1.5 px-3 text-xs outline-none">
-                        <option>Select Status</option>
-                        <option>Active</option>
-                        <option>Inactive</option>
-                    </select>
-                    <button
-                        class="bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-slate-300 transition-all">Filter
-                        Results</button>
-                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-end gap-4 mb-6">
 
+                    <!-- Class Filter -->
+                    <div class="flex flex-col min-w-[160px]">
+                        <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-1">
+                            Class
+                        </label>
+                        <select name="class_arm_id" data-search-filter
+                            class="bg-slate-100 border border-slate-200 rounded-lg py-2 px-3 text-xs outline-none focus:ring-2 focus:ring-accent focus:bg-white transition">
+                            <option value="">All Classes</option>
+                            @forelse ($classes as $class)
+                                @foreach ($class->arms as $arm)
+                                    <option value="{{ $arm->id }}">
+                                        {{ $class->name }} {{ $arm->name }}
+                                    </option>
+                                @endforeach
+                            @empty
+                                <option value="">No Classes found</option>
+                            @endforelse
+                        </select>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div class="flex flex-col min-w-[140px]">
+                        <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-1">
+                            Status
+                        </label>
+                        <select name="status" data-search-filter
+                            class="bg-slate-100 border border-slate-200 rounded-lg py-2 px-3 text-xs outline-none focus:ring-2 focus:ring-accent focus:bg-white transition">
+                            <option value="">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="graduated">Graduated</option>
+                            <option value="withdrawn">Withdrawn</option>
+                            <option value="suspended">Suspended</option>
+                        </select>
+                    </div>
+
+                    <!-- Filter Button -->
+                    <div class="flex items-end">
+                        <button type="button" data-search-filter-button
+                            class="bg-accent text-white px-4 py-2 rounded-lg text-xs font-semibold shadow-sm hover:bg-blue-600 transition flex items-center gap-1.5">
+                            <i class="fas fa-filter text-[10px]"></i>
+                            <span>Apply</span>
+                        </button>
+                    </div>
+
+                </div>
                 <!-- Table -->
                 <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
                     <div class="overflow-x-auto">

@@ -9,7 +9,7 @@
 
         <div class="p-6">
             <div class="mb-6">
-                <x-buttons.blue-back-to-list />
+                <x-buttons.blue-back-link>To classes</x-buttons.blue-back-link>
                 <h1 class="text-xl font-extrabold text-primary">Edit Class - {{ $class->name }}</h1>
                 <p class="text-slate-500 text-xs">Update class information and manage arms</p>
             </div>

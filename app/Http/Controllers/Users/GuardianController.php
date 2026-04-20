@@ -19,7 +19,7 @@ class GuardianController extends Controller
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('occupation', 'like', "%{$search}%")
-                        ->orWhere("relationship")
+                        ->orWhere("relationship", 'like', "%{$search}%")
                         ->orWhereHas('user', function ($userQuery) use ($search) {
                             $userQuery->where('first_name', 'like', "%{$search}%")
                                 ->orWhere('middle_name',  'like', "%{$search}%")

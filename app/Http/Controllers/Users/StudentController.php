@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
+use App\Models\Academic\AcademicClass;
 use App\Models\Users\Student;
 use Illuminate\Http\Request;
 
@@ -14,12 +15,17 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         $search = trim($request->get('search', ''));
-        $students = Student::with('user')
-            ->when($search, function ($query) use ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where("admission_number", 'like', "%{$search}%")
+        $searchNoSpace = str_replace(' ', '', $search);
+        $classArmId = $request->get('class_arm_id');
+        $status = $request->get('status');
+
+        $classes = AcademicClass::orderdChain()->flatten();
+
+        $students = Student::with(['user', 'currentClassArm.class'])
+            ->when($search, function ($query) use ($search, $searchNoSpace) {
+                $query->where(function ($q) use ($search, $searchNoSpace) {
+                    $q->where('admission_number', 'like', "%{$search}%")
                         ->orWhere('current_status', 'like', "%{$search}%")
-                        ->orwhere('current_class_arm_id', 'like', "%{$search}%")
                         ->orWhereHas('user', function ($userQuery) use ($search) {
                             $userQuery->where('first_name', 'like', "%{$search}%")
                                 ->orWhere('middle_name', 'like', "%{$search}%")
@@ -27,7 +33,7 @@ class StudentController extends Controller
                                 ->orWhere('email', 'like', "%{$search}%")
                                 ->orWhere('phone', 'like', "%{$search}%")
                                 ->orWhereRaw(
-                                    "CONCAT(first_name, ' ', middle_name, ' ', last_name) LIKE ?",
+                                    "CONCAT(first_name, ' ', COALESCE(middle_name, ''), ' ', last_name) LIKE ?",
                                     ["%{$search}%"]
                                 )
                                 ->orWhereRaw(
@@ -35,20 +41,40 @@ class StudentController extends Controller
                                     ["%{$search}%"]
                                 )
                                 ->orWhereRaw(
-                                    "CONCAT(last_name, ' ', middle_name, ' ', first_name) LIKE ?",
+                                    "CONCAT(last_name, ' ', COALESCE(middle_name, ''), ' ', first_name) LIKE ?",
                                     ["%{$search}%"]
                                 )
                                 ->orWhereRaw(
                                     "CONCAT(last_name, ' ', first_name) LIKE ?",
                                     ["%{$search}%"]
                                 );
+                        })
+                        ->orWhereHas('currentClassArm', function ($classArmQuery) use ($search, $searchNoSpace) {
+                            $classArmQuery->join('classes', 'classes.id', '=', 'class_arms.class_id')
+                                ->where(function ($classQuery) use ($search, $searchNoSpace) {
+                                    $classQuery->where('class_arms.name', 'like', "%{$search}%")
+                                        ->orWhere('classes.name', 'like', "%{$search}%")
+                                        ->orWhereRaw(
+                                            "CONCAT(classes.name, ' ', class_arms.name) LIKE ?",
+                                            ["%{$search}%"]
+                                        )
+                                        ->orWhereRaw(
+                                            "REPLACE(CONCAT(classes.name, ' ', class_arms.name), ' ', '') LIKE ?",
+                                            ["%{$searchNoSpace}%"]
+                                        );
+                                });
                         });
                 });
+            })
+            ->when($classArmId, function ($query) use ($classArmId) {
+                $query->where('current_class_arm_id', $classArmId);
+            })
+            ->when($status, function ($query) use ($status) {
+                $query->where('current_status', $status);
             })
             ->latest()
             ->paginate(30)
             ->withQueryString();
-
 
         if ($request->ajax()) {
             return response()->json([
@@ -56,7 +82,8 @@ class StudentController extends Controller
                 'pagination' => view('users.students.partials.pagination', compact('students'))->render()
             ]);
         }
-        return view('users.students.index', compact('students'));
+
+        return view('users.students.index', compact('students', 'classes'));
     }
 
     /**

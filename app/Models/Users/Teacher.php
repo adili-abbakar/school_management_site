@@ -43,8 +43,8 @@ class Teacher extends Model
     public function name()
     {
         if ($this->user && $this->user->gender === 'male') {
-            return "Mr. " . $this->user->name();
+            return "Mr. " . $this->user->full_name;
         }
-        return "Mrs. " . $this->user?->name();
+        return "Mrs. " . $this->user?->full_name;
     }
 }

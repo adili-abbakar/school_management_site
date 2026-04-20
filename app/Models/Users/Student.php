@@ -53,6 +53,6 @@ class Student extends Model
             $number = (int) substr($last, -4) + 1;
         }
 
-        return 'ADM/' . $year . '/' . str_pad($number, 4, '0', STR_PAD_LEFT);
+        return 'ADM/' . $year . '/' . str_pad($number, 3, '0', STR_PAD_LEFT);
     }
 }

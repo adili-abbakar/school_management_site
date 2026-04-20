@@ -13,19 +13,36 @@ document.addEventListener("DOMContentLoaded", function () {
         const searchUrl = container.dataset.searchUrl;
         const searchDelay = parseInt(container.dataset.searchDelay || 300);
 
-        if (!input || !resultsContainer || !paginationContainer || !searchUrl)
-            return;
+        if (!resultsContainer || !paginationContainer || !searchUrl) return;
+
+        const filterInputs = container.querySelectorAll("[data-search-filter]");
+        const filterButton = container.querySelector(
+            "[data-search-filter-button]"
+        );
 
         let debounceTimer;
         let controller = null;
         let loaderTimer = null;
 
-        input.addEventListener("input", function () {
-            clearTimeout(debounceTimer);
+        if (input) {
+            input.addEventListener("input", function () {
+                clearTimeout(debounceTimer);
 
-            debounceTimer = setTimeout(() => {
-                fetchSearchResults(container, searchUrl, input.value);
-            }, searchDelay);
+                debounceTimer = setTimeout(() => {
+                    fetchSearchResults(searchUrl);
+                }, searchDelay);
+            });
+        }
+
+        if (filterButton) {
+            filterButton.addEventListener("click", function () {
+                fetchSearchResults(searchUrl);
+            });
+        }
+        filterInputs.forEach((filter) => {
+            filter.addEventListener("change", function () {
+                fetchSearchResults(searchUrl);
+            });
         });
 
         container.addEventListener("click", function (e) {
@@ -33,17 +50,10 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!link) return;
 
             e.preventDefault();
-            fetchSearchResults(container, link.href, input.value);
+            fetchSearchResults(link.href);
         });
 
-        function fetchSearchResults(container, url, search = "") {
-            const resultsContainer = container.querySelector(
-                "[data-search-results]"
-            );
-            const paginationContainer = container.querySelector(
-                "[data-search-pagination]"
-            );
-
+        function fetchSearchResults(url) {
             if (controller) {
                 controller.abort();
             }
@@ -51,7 +61,20 @@ document.addEventListener("DOMContentLoaded", function () {
             controller = new AbortController();
 
             const parsedUrl = new URL(url, window.location.origin);
-            parsedUrl.searchParams.set("search", search);
+
+            if (input) {
+                parsedUrl.searchParams.set("search", input.value || "");
+            }
+
+            filterInputs.forEach((filter) => {
+                if (!filter.name) return;
+
+                if (filter.value !== "") {
+                    parsedUrl.searchParams.set(filter.name, filter.value);
+                } else {
+                    parsedUrl.searchParams.delete(filter.name);
+                }
+            });
 
             clearTimeout(loaderTimer);
             loaderTimer = setTimeout(() => {
