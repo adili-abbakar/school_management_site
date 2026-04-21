@@ -7,6 +7,7 @@ use App\Models\Academic\AcademicClass;
 use App\Models\Academic\ClassArm;
 use App\Models\Users\Teacher;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -16,12 +17,68 @@ class ClassController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $classes = AcademicClass::orderdChain()->flatten();
+        $search = trim($request->get('search', ''));
+
+        $classes = AcademicClass::orderdChain()
+            ->flatten(1);
+
+        $classes->each(function ($class) {
+            $class->loadMissing('arms.teacher.user');
+        });
+
+        $classes = $classes
+            ->filter(function ($class) use ($search) {
+                if ($search === '') return true;
+                $normalizedSearch = strtolower(str_replace(' ', '', $search));
+                $classText = strtolower(str_replace(
+                    ' ',
+                    '',
+                    ($class->name ?? '') . ($class->level ?? '')
+                ));
+
+                $teacherMatch = $class->arms->contains(function ($arm) use ($normalizedSearch) {
+                    $user = $arm->teacher?->user;
+                    $teacherText = strtolower(str_replace(
+                        ' ',
+                        '',
+                        ($user?->first_name ?? '') .
+                            ($user?->middle_name ?? '') .
+                            ($user?->last_name ?? '')
+                    ));
+
+                    return str_contains($teacherText, $normalizedSearch);
+                });
+
+                return str_contains($classText, $normalizedSearch) || $teacherMatch;
+            })
+            ->values();
+
+        $perPage = 10;
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = $classes->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $classes = new LengthAwarePaginator(
+            $currentItems,
+            $classes->count(),
+            $perPage,
+            $currentPage,
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]
+        );
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('academic.classes.partials.rows', compact('classes'))->render(),
+                'pagination' => view('academic.classes.partials.pagination', compact('classes'))->render(),
+            ]);
+        }
+
         return view('academic.classes.index', compact('classes'));
     }
-
     /**
      * Show the form for creating a new resource.
      */
