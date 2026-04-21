@@ -15,9 +15,28 @@ class SessionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sessions = Session::latest('end_date')->get();
+        $search = $request->get("search", '');
+
+        $sessions = Session::when($search, function ($query) use ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like',  "%{$search}%")
+                    ->orWhere('start_date', 'like', "%{$search}%")
+                    ->orWhere('end_date', 'like', "%{$search}%");
+            });
+        })
+            ->latest('end_date')
+            ->paginate(10)
+            ->withQueryString();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('academic.sessions.partials.rows', compact('sessions'))->render(),
+                'pagination' => view('academic.sessions.partials.pagination', compact('sessions'))->render()
+            ]);
+        }
+
         return view('academic.sessions.index', compact('sessions'));
     }
 
