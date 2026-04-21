@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <!-- Personal Information -->
-                <x-users.personal-details :user="$teacher->user" />
+                @include('users.partials.personal-details', ['user' => $teacher?->user])
 
                 <!-- Teacher Details Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-6">

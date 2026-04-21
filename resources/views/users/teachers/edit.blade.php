@@ -24,7 +24,8 @@
                 @csrf
                 @method('PUT')
 
-                <x-users.teachers.form-fields :teacher="$teacher" />
+                @include('users.teachers.partials.form-fields', ['teacher' => $teacher ?? null])
+
 
                 <div class="flex flex-wrap gap-3 pt-6 border-t border-slate-100">
                     <button type="submit"

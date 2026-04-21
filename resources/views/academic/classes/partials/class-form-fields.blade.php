@@ -1,6 +1,7 @@
-@props(['class' => null, 'classes' => []])
-
-
+@php
+    $class = $class ?? null;
+    $classes = $classes ?? null;
+@endphp
 <!-- Class Information Section -->
 <div>
     <h3 class="text-sm font-bold text-primary mb-4">Class Information</h3>

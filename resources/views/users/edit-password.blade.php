@@ -26,7 +26,7 @@
                 @csrf
                 @method('PUT')
 
-                <x-users.password-fields />
+                @include('users.partials.password-fields')
 
                 <div class="flex flex-wrap gap-3 pt-6 border-t border-slate-100">
                     <button type="submit"

@@ -25,12 +25,12 @@
                         <h2 class="text-primary font-semibold">Update Academic Session</h2>
                     </div>
 
-                    <form  class="form space-y-6" action="{{ route('sessions.update', $session->id) }}"
-                        method="POST">
+                    <form class="form space-y-6" action="{{ route('sessions.update', $session->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 
-                        <x-sessions.form-fields :session="$session" />
+                        @include('academic.sessions.partials.form-fields', ['session' => $session])
+
 
                         <!-- Form Actions -->
                         <div class="flex gap-3 justify-end">

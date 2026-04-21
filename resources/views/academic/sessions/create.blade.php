@@ -24,11 +24,11 @@
                         <h2 class="text-primary font-semibold">New Academic Session</h2>
                     </div>
 
-                    <form  class="form space-y-6" action="{{ route('sessions.store') }}" method="POST">
+                    <form class="form space-y-6" action="{{ route('sessions.store') }}" method="POST">
                         @csrf
 
                         <!-- Session Basic Information -->
-                        <x-sessions.form-fields />
+                        @include('academic.sessions.partials.form-fields')
 
                         <!-- Divider -->
                         <div class="border-t border-slate-200 pt-4"></div>

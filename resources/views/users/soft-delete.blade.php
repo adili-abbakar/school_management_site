@@ -28,7 +28,7 @@
             </p>
 
             <div class="bg-slate-100 rounded-lg p-3 mb-6">
-                <p class="text-slate-800 font-semibold text-sm">{{ $user->user?->name() }}</p>
+                <p class="text-slate-800 font-semibold text-sm">{{ $user->user?->full_name }}</p>
                 <p class="text-slate-600 text-xs mt-1">{{ $user->user?->type !== 'student' ? 'Staff' : 'Admission' }} Number
                     : {{ $user->user?->type !== 'student' ? $user->staff_number : $user->admission_number }}</p>
                 <p class="text-slate-600 text-xs">Email: {{ $user->user?->email }}</p>
@@ -54,7 +54,7 @@
 
             <!-- Action Buttons -->
             <div class="flex gap-3">
-                <button onclick="window.history.back()"
+                <button onclick="window.history.back()" type="button"
                     class="flex-1 px-4 py-2 bg-slate-300 text-slate-800 text-sm rounded-lg font-medium hover:bg-slate-400 transition text-center">
                     Cancel
                 </button>

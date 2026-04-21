@@ -15,8 +15,8 @@
                     <h1 class="text-xl font-extrabold text-primary">Create New Teacher</h1>
                     <p class="text-slate-500 text-xs">Add a new teaching staff member to the system.</p>
                 </div>
-                
-                 <x-buttons.gray-back-to-list />
+
+                <x-buttons.gray-back-to-list />
             </div>
 
             <!-- Responsive 2-3 column form grid for teacher creation -->
@@ -24,7 +24,7 @@
                 class="form bg-white rounded-xl border border-slate-100 shadow-sm p-4 md:p-6">
                 @csrf
 
-                <x-users.teachers.form-fields />
+                @include('users.teachers.partials.form-fields')
 
                 <div class="flex flex-wrap gap-3 pt-6 border-t border-slate-100">
                     <button type="submit"

@@ -31,7 +31,10 @@
                         @method('PUT')
                         <input type="hidden" name="session_start_date" value="{{ $session->start_date }}">
                         <input type="hidden" name="session_end_date" value="{{ $session->end_date }}">
-                        <x-terms.form-fields :term="$term" :session="$session" />
+                        @include('academic.terms.partials.form-fields', [
+                            'session' => $session,
+                            'term' => $term,
+                        ])
                     </form>
                 </div>
             </div>

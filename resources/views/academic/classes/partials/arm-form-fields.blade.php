@@ -1,5 +1,8 @@
-@props(['term' => null, 'teachers' => [], 'arms' => []])
-
+@php
+    $term = $term ?? [];
+    $teachers = $teachers ?? [];
+    $arms = $arms ?? [];
+@endphp
 <!-- Arms Section -->
 <div class="border-t pt-6">
     <div class="flex justify-between items-center mb-4">
@@ -35,7 +38,7 @@
                             @forelse ($teachers as $teacher)
                                 <option value="{{ $teacher->user_id }}"
                                     {{ $arm->teacher_id === $teacher->user_id ? 'selected' : '' }}>
-                                    {{ $teacher->user->name() }}</option>
+                                    {{ $teacher->user->full_name }}</option>
                             @empty
                                 <option value="{{ null }}">No teachers yet — create one first</option>
                             @endforelse
@@ -67,7 +70,7 @@
                             class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none">
                             <option value="{{ null }}">Select teacher</option>
                             @forelse ($teachers as $teacher)
-                                <option value="{{ $teacher->user_id }}">{{ $teacher->user->name() }}</option>
+                                <option value="{{ $teacher->user_id }}">{{ $teacher->user->full_name }}</option>
                             @empty
                                 <option value="{{ null }}">No teachers yet — create one first</option>
                             @endforelse

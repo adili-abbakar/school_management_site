@@ -22,7 +22,7 @@
                 @csrf
                 @method('PUT')
 
-                <x-users.admins.form-fields :admin="$admin" />
+                @include('users.admins.partials.form-fields', ['admin' => $admin ?? null])
 
 
                 <div class="flex flex-wrap gap-3 pt-6 border-t border-slate-100">

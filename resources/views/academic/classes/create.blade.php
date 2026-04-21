@@ -19,8 +19,13 @@
                 <form class="form space-y-6" action="{{ route('classes.store') }}" method="POST">
                     @csrf
 
-                    <x-classes.class-form-fields :classes="$classes" />
-                    <x-classes.arm-form-fields :teachers="$teachers" />
+
+                    @include('academic.classes.partials.class-form-fields', [
+                        'classes' => $classes ?? null,
+                    ])
+                    @include('academic.classes.partials.arm-form-fields', [
+                        'teachers' => $teachers ?? null,
+                    ])
 
                     <!-- Form Actions -->
                     <div class="flex gap-4 pt-6 border-t">
@@ -36,6 +41,6 @@
         </div>
     </main>
 
-        <script src="{{ asset('js/class-overider.js') }}"></script>
-        <script src="{{ asset('/js/formSubmitter.js') }}"></script>
+    <script src="{{ asset('js/class-overider.js') }}"></script>
+    <script src="{{ asset('/js/formSubmitter.js') }}"></script>
 @endsection

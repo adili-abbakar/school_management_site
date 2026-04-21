@@ -13,11 +13,7 @@
                     <p class="text-slate-500 text-xs">Complete student enrollment form.</p>
                 </div>
 
-                <a href="{{ url()->previous() }}"
-                    class="bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-md hover:bg-slate-300 transition-all flex items-center gap-1.5">
-                    <i class="fas fa-arrow-left"></i>
-                    <span>Back to List</span>
-                </a>
+                <x-buttons.gray-back-to-list />
             </div>
 
             <!-- Full student enrollment form with responsive 2-3 column grid -->
