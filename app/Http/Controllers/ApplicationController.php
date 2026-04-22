@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Users\StudentController;
 use App\Models\Academic\AcademicClass;
 use App\Models\Academic\ClassArm;
 use App\Models\Academic\Session;
@@ -10,19 +9,69 @@ use App\Models\StudentApplication;
 use App\Models\Users\Guardian;
 use App\Models\Users\Student;
 use App\Models\Users\User;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 class ApplicationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $applications = StudentApplication::latest()->get();
+        $search = trim($request->get('search', ''));
+        $searchNoSpace = str_replace(' ', '', $search);
+        $applications = StudentApplication::when($search, function ($query) use ($search, $searchNoSpace) {
+            $query->where(function ($q) use ($search, $searchNoSpace) {
+
+                $q->where('student_first_name', 'like', "%{$search}%")
+                    ->orWhere('student_middle_name', 'like', "%{$search}%")
+                    ->orWhere('student_last_name', 'like', "%{$search}%")
+                    ->orWhere('guardian_first_name', 'like', "%{$search}%")
+                    ->orWhere('guardian_middle_name', 'like', "%{$search}%")
+                    ->orWhere('guardian_last_name', 'like', "%{$search}%")
+                    ->orWhere('guardian_phone', 'like', "%{$search}%")
+                    ->orWhere('guardian_email', 'like', "%{$search}%");
+
+                $q->orWhereRaw(
+                    "CONCAT(student_first_name, ' ', COALESCE(student_middle_name,''), ' ', student_last_name) LIKE ?",
+                    ["%{$search}%"]
+                );
+
+                $q->orWhereRaw(
+                    "REPLACE(CONCAT(student_first_name, COALESCE(student_middle_name,''), student_last_name), ' ', '') LIKE ?",
+                    ["%{$searchNoSpace}%"]
+                );
+
+                $q->orWhereRaw(
+                    "CONCAT(guardian_first_name, ' ', COALESCE(guardian_middle_name,''), ' ', guardian_last_name) LIKE ?",
+                    ["%{$search}%"]
+                );
+
+                $q->orWhereRaw(
+                    "REPLACE(CONCAT(guardian_first_name, COALESCE(guardian_middle_name,''), guardian_last_name), ' ', '') LIKE ?",
+                    ["%{$searchNoSpace}%"]
+                );
+
+                $q->orWhereHas('class', function ($classQuery) use ($search, $searchNoSpace) {
+                    $classQuery->where('name', 'like', "%{$search}%")
+                        ->orWhereRaw(
+                            "REPLACE(name, ' ', '') LIKE ?",
+                            ["%{$searchNoSpace}%"]
+                        );
+                });
+            });
+        })
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('application.partials.rows', compact('applications'))->render(),
+                'pagination' => view('application.partials.pagination', compact('applications'))->render(),
+            ]);
+        }
 
         $coutns = StudentApplication::selectRaw("
             SUM(CASE WHEN status = 'pending' THEN  1 ELSE 0 END) as pending,
