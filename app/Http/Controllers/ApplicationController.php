@@ -112,9 +112,14 @@ class ApplicationController extends Controller
         ]);
 
         try {
+
             $application = StudentApplication::where('application_number', $validated['application_number'])
-                ->where('guardian_email', $validated['guardian_email'])
-                ->first();
+                ->where(function ($query) use ($validated) {
+                    $query->where('guardian_email',     $validated['guardian_email'])
+                        ->orWhereHas('submittedBy', function ($q) use ($validated) {
+                            $q->where('email', $validated['guardian_email']);
+                        });
+                })->first();
 
             if (!$application) {
                 return response()->json(

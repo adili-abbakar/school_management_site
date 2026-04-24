@@ -93,43 +93,118 @@
                             class="fas fa-users text-blue-600 mr-2"></i>Guardian</h3>
                     <div class="space-y-1.5 text-xs">
                         <div class="flex justify-between"><span class="text-slate-600">Name:</span><span
-                                class="font-semibold">{{ $app->guardian_name }}</span></div>
+                                class="font-semibold">
+                                @if ($app->submittedBy)
+                                    {{ $app->submittedBy->full_name ?: '—' }}
+                                @else
+                                    {{ $app->guardian_name ?: '—' }}
+                                @endif
+                            </span>
+                        </div>
                         <div class="flex justify-between"><span class="text-slate-600">Relation:</span><span
                                 class="font-semibold">{{ ucwords($app->guardian_relationship) }}</span></div>
                         <div class="flex justify-between"><span class="text-slate-600">DOB:</span><span
-                                class="font-semibold">{{ $app->guardian_date_of_birth->format('d M, Y') }}</span></div>
+                                class="font-semibold">
+                                @if ($app->submittedBy)
+                                    {{ $app->submittedBy->date_of_birth?->format('d M, Y') ?? '—' }}
+                                    @else{{ $app->guardian_date_of_birth?->format('d M, Y') ?? '—' }}
+                                @endif
+                            </span>
+                        </div>
                         <div class="flex justify-between"><span class="text-slate-600">Gender:</span><span
-                                class="font-semibold">{{ ucwords($app->guardian_gender) }}</span></div>
+                                class="font-semibold capitalize">
+                                @if ($app->submittedBy)
+                                    {{ $app->submittedBy->gender ?: '—' }}
+                                @else
+                                    {{ $app->guardian_gender ?: '—' }}
+                                @endif
+                            </span></div>
                         <div class="flex justify-between"><span class="text-slate-600">Phone:</span><span
-                                class="font-semibold">{{ $app->guardian_phone }}</span></div>
+                                class="font-semibold">
+                                @if ($app->submittedBy)
+                                    {{ $app->submittedBy->phone ?: '—' }}
+                                @else
+                                    {{ $app->guardian_phone ?: '—' }}
+                                @endif
+                            </span></div>
                         <div class="flex justify-between"><span class="text-slate-600">Email:</span><span
-                                class="font-semibold">{{ $app->guardian_email }}</span></div>
+                                class="font-semibold">
+                                @if ($app->submittedBy)
+                                    {{ $app->submittedBy->email ?: '—' }}
+                                @else
+                                    {{ $app->guardian_email ?: '—' }}
+                                @endif
+                            </span></div>
                         <div class="flex justify-between"><span class="text-slate-600">Job:</span><span
-                                class="font-semibold">{{ $app->guardian_occupation }}</span></div>
+                                class="font-semibold">
+                                @if ($app->submittedBy)
+                                    @if ($app->submittedBy->isStaff())
+                                        Work as
+                                        @forelse ($app->submittedBy->roles as $role)
+                                            {{ $role . ', ' }}
+                                        @empty
+                                            staff
+                                        @endforelse
+                                        for the school
+                                    @else
+                                        {{ $app->guardian?->occupation ?: '—' }}
+                                    @endif
+                                @else
+                                    {{ $app->guardian_occupation ?: '—' }}
+                                @endif
+                            </span>
+                        </div>
                         <div class="flex justify-between"><span class="text-slate-600">Religion:</span><span
-                                class="font-semibold">{{ ucwords($app->guardian_religion) }}</span></div>
+                                class="font-semibold">
+                                @if ($app->submittedBy)
+                                    {{ $app->submittedBy->religion ?: '—' }}
+                                @else
+                                    {{ $app->guardian_religion ?: '—' }}
+                                @endif
+                            </span></div>
                         <div class="flex justify-between"><span class="text-slate-600">Tribe:</span><span
-                                class="font-semibold">{{ ucwords($app->guardian_tribe) }}</span></div>
+                                class="font-semibold">
+                                @if ($app->submittedBy)
+                                    {{ $app->submittedBy->tribe ?: '—' }}
+                                @else
+                                    {{ $app->guardian_tribe ?: '—' }}
+                                @endif
+                            </span></div>
                         <div class="flex justify-between"><span class="text-slate-600">Nationality:</span><span
-                                class="font-semibold">{{ ucwords($app->guardian_nationality) }}</span></div>
+                                class="font-semibold">
+                                @if ($app->submittedBy)
+                                    {{ $app->submittedBy->nationality ?: '—' }}
+                                @else
+                                    {{ $app->guardian_nationality ?: '—' }}
+                                @endif
+                            </span>
+                        </div>
                         <div class="flex justify-between"><span class="text-slate-600">State Of Origin:</span><span
-                                class="font-semibold">{{ ucwords($app->guardian_state) }}</span></div>
+                                class="font-semibold">
+                                @if ($app->submittedBy)
+                                    {{ $app->submittedBy->state ?: '—' }}
+                                @else
+                                    {{ $app->guardian_state ?: '—' }}
+                                @endif
+                            </span>
+                        </div>
                         <div class="flex justify-between"><span class="text-slate-600">LGA of Origin:</span><span
-                                class="font-semibold">{{ ucwords($app->guardian_local_government) }}</span></div>
+                                class="font-semibold">
+                                @if ($app->submittedBy)
+                                    {{ $app->submittedBy->local_government ?: '—' }}
+                                @else
+                                    {{ $app->guardian_local_government ?: '—' }}
+                                @endif
+                            </span></div>
                         <div class="flex justify-between"><span class="text-slate-600">Address:</span><span
-                                class="font-semibold">{{ ucwords($app->guardian_address) }}</span></div>
+                                class="font-semibold">
+                                @if ($app->submittedBy)
+                                    {{ $app->submittedBy->address ?: '—' }}
+                                @else
+                                    {{ $app->guardian_address ?: '—' }}
+                                @endif
+                            </span></div>
                     </div>
-
-
-                    {{-- 'guardian_date_of_birth',
-                    'guardian_gender',
-                    'guardian_nationality',
-                    'guardian_state',
-                    'guardian_local_government',
-                    'guardian_religion',
-                    'guardian_tribe',
-                    'guardian_address',
-                    '', --}}
                 </div>
             </div>
 
