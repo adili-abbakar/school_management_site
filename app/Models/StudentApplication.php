@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\Academic\AcademicClass;
 use App\Models\Academic\Session;
-use Carbon\Carbon;
+use App\Models\Users\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -51,6 +51,7 @@ class StudentApplication extends Model
         'stream',
         'session_id',
         'status',
+        'submitted_by_user_id'
     ];
 
     protected $casts = [
@@ -59,14 +60,22 @@ class StudentApplication extends Model
         'guardian_date_of_birth' => 'datetime',
         'student_date_of_birth' => 'datetime'
     ];
-    public function getstudentNameAttribute()
+    public function getStudentNameAttribute(): string
     {
-        return $this->student_first_name . ' ' . $this->student_middle_name . ' ' . $this?->student_last_name;
+        return trim(implode(' ', array_filter([
+            $this->student_first_name,
+            $this->student_middle_name,
+            $this->student_last_name,
+        ])));
     }
 
-    public function getguardianNameAttribute()
+    public function getGuardianNameAttribute(): string
     {
-        return $this->guardian_first_name . ' ' . $this->guardian_middle_name . ' ' . $this?->guardian_last_name;
+        return trim(implode(' ', array_filter([
+            $this->guardian_first_name,
+            $this->guardian_middle_name,
+            $this->guardian_last_name,
+        ])));
     }
 
     public static function generateApplicationNumber($sessionId)
@@ -102,6 +111,24 @@ class StudentApplication extends Model
 
     public function getExpectedDecisionAttribute()
     {
-        return $this->created_at->copy()->addDays(7)->diffForHumans() . ' (' . $this->created_at->copy()->addDays(7)->format("d M, Y") .')';
+        return $this->created_at->copy()->addDays(7)->diffForHumans() . ' (' . $this->created_at->copy()->addDays(7)->format("d M, Y") . ')';
+    }
+
+    public function submittedBy()
+    {
+        return $this->belongsTo(User::class, 'submitted_by_user_id');
+    }
+
+    public function getApplicantCategoryAttribute(): string
+    {
+        if (!$this->submitted_by_user_id) {
+            return 'new_applicant';
+        }
+
+        if ($this->submittedBy && $this->submittedBy->isStaff()) {
+            return 'staff';
+        }
+
+        return 'Existing_guardian';
     }
 }

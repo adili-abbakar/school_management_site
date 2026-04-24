@@ -10,7 +10,9 @@ use App\Models\Users\Guardian;
 use App\Models\Users\Student;
 use App\Models\Users\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ApplicationController extends Controller
 {
@@ -256,6 +258,82 @@ class ApplicationController extends Controller
         return back()->with('success', 'Application withdrawn successfully.');
     }
 
+    // Auth user applications
+    public function mine(Request $request)
+    {
+        $auth = Auth::user();
+        $search = trim($request->get('search', ''));
+        $searchNoSpace = str_replace(' ', '', $search);
+        $applications = StudentApplication::when($search, function ($query) use ($search, $searchNoSpace) {
+            $query->where(function ($q) use ($search, $searchNoSpace) {
+                $q->where('student_first_name', 'like', "%{$search}%")
+                    ->orWhere('student_middle_name', 'like', "%{$search}%")
+                    ->orWhere('student_last_name', 'like', "%{$search}%")
+                    ->orWhere('guardian_first_name', 'like', "%{$search}%")
+                    ->orWhere('guardian_middle_name', 'like', "%{$search}%")
+                    ->orWhere('guardian_last_name', 'like', "%{$search}%")
+                    ->orWhere('guardian_phone', 'like', "%{$search}%")
+                    ->orWhere('guardian_email', 'like', "%{$search}%");
+
+                $q->orWhereRaw(
+                    "CONCAT(student_first_name, ' ', COALESCE(student_middle_name,''), ' ', student_last_name) LIKE ?",
+                    ["%{$search}%"]
+                );
+
+                $q->orWhereRaw(
+                    "REPLACE(CONCAT(student_first_name, COALESCE(student_middle_name,''), student_last_name), ' ', '') LIKE ?",
+                    ["%{$searchNoSpace}%"]
+                );
+
+                $q->orWhereRaw(
+                    "CONCAT(guardian_first_name, ' ', COALESCE(guardian_middle_name,''), ' ', guardian_last_name) LIKE ?",
+                    ["%{$search}%"]
+                );
+
+                $q->orWhereRaw(
+                    "REPLACE(CONCAT(guardian_first_name, COALESCE(guardian_middle_name,''), guardian_last_name), ' ', '') LIKE ?",
+                    ["%{$searchNoSpace}%"]
+                );
+
+                $q->orWhereHas('class', function ($classQuery) use ($search, $searchNoSpace) {
+                    $classQuery->where('name', 'like', "%{$search}%")
+                        ->orWhereRaw(
+                            "REPLACE(name, ' ', '') LIKE ?",
+                            ["%{$searchNoSpace}%"]
+                        );
+                });
+            });
+        })
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('application.partials.rows', compact('applications'))->render(),
+                'pagination' => view('application.partials.pagination', compact('applications'))->render(),
+            ]);
+        }
+
+        $coutns = StudentApplication::selectRaw("
+            SUM(CASE WHEN status = 'pending' THEN  1 ELSE 0 END) as pending,
+            SUM(CASE WHEN status = 'approved' THEN  1 ELSE 0 END) as approved,
+            SUM(CASE WHEN status = 'rejected' THEN  1 ELSE 0 END) as rejected,
+            SUM(CASE WHEN status = 'withdrawn' THEN  1 ELSE 0 END) as withdrawn
+        ")->first();
+
+        return view(
+            'application.index',
+            [
+                'applications' => $applications,
+                'pending_coutn' => $coutns->pending,
+                'approved_coutn' => $coutns->approved,
+                'rejected_coutn' => $coutns->rejected,
+                'withdrawn_coutn' => $coutns->withdrawn,
+            ]
+        );
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -270,7 +348,7 @@ class ApplicationController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $rules =  [
             // STUDENT DATA
             'student_first_name' => 'required|string|max:255',
             'student_middle_name' => 'required|string|max:255',
@@ -284,31 +362,63 @@ class ApplicationController extends Controller
             'student_tribe' => 'required|string|max:100',
             'student_address' => 'required|string|max:2055',
 
-            // GUARDIAN DATA
-            'guardian_first_name' => 'required|string|max:255',
-            'guardian_middle_name' => 'required|string|max:255',
-            'guardian_last_name' => 'nullable|string|max:255',
-            'guardian_phone' => 'required|string|max:20',
-            'guardian_email' => 'required|email|unique:users,email',
-            'guardian_date_of_birth' => 'required|date',
-            'guardian_gender' => 'required|in:male,female',
-            'guardian_nationality' => 'required|string|max:100',
-            'guardian_state' => 'required|string|max:100',
-            'guardian_local_government' => 'required|string|max:100',
-            'guardian_religion' => 'required|string|max:100',
-            'guardian_tribe' => 'required|string|max:100',
-            'guardian_address' => 'required|string|max:2055',
-            'guardian_occupation' =>  'required|string|max:100',
-            'guardian_relationship' => 'required|in:father,mother,brother,sister,grandfather,grandmother,uncle,aunt,other',
+
             'previous_school_name' => 'nullable|string',
             'last_class_attended' => 'nullable|string',
-            'class_id' => 'required',
-            'stream' => 'required'
-        ], [
-            'class_id.required' => 'Class to apply for is required'
-        ]);
+            'class_id' => 'required|exists:classes,id',
 
 
+            'guardian_relationship' => 'required|in:father,mother,brother,sister,grandfather,grandmother,uncle,aunt,other',
+        ];
+
+
+        $messages = [
+            'class_id.required' => 'Class to apply for is required',
+        ];
+        $class = AcademicClass::find($request->class_id);
+        if ($class) {
+            $class_rules = [];
+            $class_message = [];
+            if ($class->level === 'sss') {
+                $class_rules = [
+                    'stream' => 'required|in:science,arts'
+                ];
+                $class_message = [
+                    'stream.in' => 'Only Science or Arts is allowed for SS classes.'
+                ];
+            } else {
+                $class_rules = [
+                    'stream' => 'required|in:general'
+                ];
+                $class_message = [
+                    'stream.in' => 'Only General stream is allowed for Nursery, Primary and JSS classes.',
+                ];
+            }
+            $rules = array_merge($rules, $class_rules);
+            $messages = array_merge($messages, $class_message);
+        }
+        if (!auth()->check()) {
+            $rules =  array_merge($rules, [
+                // GUARDIAN DATA
+                'guardian_first_name' => 'required|string|max:255',
+                'guardian_middle_name' => 'required|string|max:255',
+                'guardian_last_name' => 'nullable|string|max:255',
+                'guardian_phone' => 'required|string|max:20',
+                'guardian_email' => 'required|email|unique:users,email',
+                'guardian_date_of_birth' => 'date',
+                'guardian_gender' => 'required|in:male,female',
+                'guardian_nationality' => 'required|string|max:100',
+                'guardian_state' => 'required|string|max:100',
+                'guardian_local_government' => 'required|string|max:100',
+                'guardian_religion' => 'required|string|max:100',
+                'guardian_tribe' => 'required|string|max:100',
+                'guardian_address' => 'required|string|max:2055',
+                'guardian_occupation' =>  'required|string|max:100',
+            ],);
+        }
+
+
+        $validated = Validator::make($request->all(), $rules, $messages)->validate();
 
         $session = Session::currentSession();
         if (!$session) {
@@ -322,6 +432,9 @@ class ApplicationController extends Controller
         try {
             $validated['session_id'] = $session->id;
             $validated['application_number']  = StudentApplication::generateApplicationNumber($session->id);
+            if (auth()->check()) {
+                $validated['submitted_by_user_id'] = auth()->user()->id;
+            }
 
             $app = StudentApplication::create($validated);
 

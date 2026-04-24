@@ -37,7 +37,6 @@ class UserFactory extends Factory
             'nationality' => $this->faker->country,
             'state' => $this->faker->state,
             'local_government' => $this->faker->city,
-            'type' => $this->faker->randomElement(['admin', 'teacher', 'student', 'guardian']),
             'address' => $this->faker->address,
             'religion' => $this->faker->word,
             'tribe' => $this->faker->word,

@@ -28,12 +28,10 @@ return new class extends Migration
             $table->string('religion');
             $table->string('tribe');
             $table->string('address');
-            $table->enum('type', ['admin', 'teacher', 'student', 'guardian']);
             $table->rememberToken();
             $table->timestamps();
             $table->dateTime('last_login_at')->nullable();
             $table->softDeletes();
-
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

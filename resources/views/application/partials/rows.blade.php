@@ -24,12 +24,12 @@
 
                         <span
                             class="status-badge w-fit
-                                    @switch($app->status)
-                                        @case('pending') status-pending @break
-                                        @case('approved') status-approved @break
-                                        @case('rejected') status-rejected @break
-                                        @case('withdrawn') status-withdrawn @break
-                                    @endswitch">
+                @switch($app->status)
+                    @case('pending') status-pending @break
+                    @case('approved') status-approved @break
+                    @case('rejected') status-rejected @break
+                    @case('withdrawn') status-withdrawn @break
+                @endswitch">
                             @switch($app->status)
                                 @case('pending')
                                     <i class="fas fa-clock"></i>
@@ -68,24 +68,10 @@
                         </span>
 
                         <span class="flex items-center gap-1 min-w-0">
-                            @switch($app->status)
-                                @case('pending')
-                                    <i class="fas fa-clock text-amber-400 shrink-0"></i>
-                                @break
-
-                                @case('approved')
-                                    <i class="fas fa-check-circle text-green-600 shrink-0"></i>
-                                @break
-
-                                @case('rejected')
-                                    <i class="fas fa-times-circle text-red-600 shrink-0"></i>
-                                @break
-
-                                @case('withdrawn')
-                                    <i class="fas fa-minus-circle text-gray-500 shrink-0"></i>
-                                @break
-                            @endswitch
-                            <span class="truncate">{{ ucwords($app->status) }}</span>
+                            <i class="fas fa-user-tag text-accent shrink-0"></i>
+                            <span class="truncate">
+                                Applicant: {{ ucwords(str_replace('_', ' ', $app->applicant_category)) }}
+                            </span>
                         </span>
                     </div>
                 </div>

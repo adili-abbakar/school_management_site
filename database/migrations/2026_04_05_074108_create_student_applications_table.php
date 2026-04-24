@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('student_address');
 
             // GUARDIAN DATA
-            $table->string('guardian_first_name');
+            $table->string('guardian_first_name')->nullable();
             $table->string('guardian_middle_name')->nullable();
             $table->string('guardian_last_name')->nullable();
             $table->string('guardian_phone', 20)->nullable();
@@ -40,8 +40,8 @@ return new class extends Migration
             $table->string('guardian_local_government', 100)->nullable();
             $table->string('guardian_religion')->nullable();
             $table->string('guardian_tribe')->nullable();
-            $table->string('guardian_address');
-            $table->string('guardian_occupation');
+            $table->string('guardian_address')->nullable();
+            $table->string('guardian_occupation')->nullable();
             $table->enum('guardian_relationship', [
                 'father',
                 'mother',
@@ -57,15 +57,20 @@ return new class extends Migration
             // APPLICATION META
             $table->string('application_number')->unique();
             $table->string('previous_school_name')->nullable();
-            $table->string('last_class_attended')->nullable(); 
+            $table->string('last_class_attended')->nullable();
             $table->unsignedBigInteger('class_id')->nullable();
             $table->enum('stream', ['arts', 'science', 'general'])->default('general');
             $table->unsignedBigInteger('session_id')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected', 'withdrawn'])->default('pending');
 
+            $table->unsignedBigInteger('submitted_by_user_id')->nullable();
+            $table->foreign('submitted_by_user_id')
+                ->references('id')
+                ->on('users')
+                ->nullOnDelete();
+
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 

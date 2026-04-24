@@ -19,7 +19,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = ['first_name', 'middle_name', 'last_name', 'email', 'password', 'phone', 'date_of_birth', 'gender', 'nationality', 'state', 'local_government', 'type', 'address', 'religion', 'tribe', 'last_login_at'];
+    protected $fillable = ['first_name', 'middle_name', 'last_name', 'email', 'password', 'phone', 'date_of_birth', 'gender', 'nationality', 'state', 'local_government', 'address', 'religion', 'tribe', 'last_login_at'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -57,20 +57,51 @@ class User extends Authenticatable
         return $this->last_login_at ? $this->last_login_at->diffForHumans() : 'Never logged in';
     }
 
-    public function student()
-    {
-        return $this->hasOne(Student::class);
-    }
-    public function teacher()
-    {
-        return $this->hasOne(Teacher::class);
-    }
-    public function guardian()
-    {
-        return $this->hasOne(Guardian::class);
-    }
     public function admin()
     {
-        return $this->hasOne(Admin::class);
+        return $this->hasOne(Admin::class, 'user_id');
+    }
+
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class, 'user_id');
+    }
+
+    public function guardian()
+    {
+        return $this->hasOne(Guardian::class, 'user_id');
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class, 'user_id');
+    }
+
+    public function getRolesAttribute(): array
+    {
+        $roles = [];
+
+        if ($this->relationLoaded('admin') ? $this->admin : $this->admin()->exists()) {
+            $roles[] = 'admin';
+        }
+
+        if ($this->relationLoaded('teacher') ? $this->teacher : $this->teacher()->exists()) {
+            $roles[] = 'teacher';
+        }
+
+        if ($this->relationLoaded('guardian') ? $this->guardian : $this->guardian()->exists()) {
+            $roles[] = 'guardian';
+        }
+
+        if ($this->relationLoaded('student') ? $this->student : $this->student()->exists()) {
+            $roles[] = 'student';
+        }
+
+        return $roles;
+    }
+
+    public function isStaff(): bool
+    {
+        return in_array('admin', $this->roles) || in_array('teacher', $this->roles);
     }
 }

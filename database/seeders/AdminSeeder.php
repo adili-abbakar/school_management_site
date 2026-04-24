@@ -24,7 +24,6 @@ class AdminSeeder extends Seeder
             'nationality' => 'Nigeria',
             'state' => 'Lagos',
             'local_government' => 'Ikeja',
-            'type' => 'admin',
             'address' => '123 Admin Street, Lagos',
             'religion' => 'Islam',
             'tribe' => 'Hausa',

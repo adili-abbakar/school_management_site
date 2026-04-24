@@ -214,17 +214,35 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         <div class="info-card">
                             <p class="detail-label">First Name</p>
-                            <p class="detail-value">{{ $application->guardian_first_name ?: '—' }}</p>
+                            <p class="detail-value">
+                                @if ($application->submittedBy)
+                                    {{ $application->submittedBy->first_name ?: '—' }}
+                                @else
+                                    {{ $application->guardian_first_name ?: '—' }}
+                                @endif
+                            </p>
                         </div>
 
                         <div class="info-card">
                             <p class="detail-label">Middle Name</p>
-                            <p class="detail-value">{{ $application->guardian_middle_name ?: '—' }}</p>
+                            <p class="detail-value">
+                                @if ($application->submittedBy)
+                                    {{ $application->submittedBy->middle_name ?: '—' }}
+                                @else
+                                    {{ $application->guardian_middle_name ?: '—' }}
+                                @endif
+                            </p>
                         </div>
 
                         <div class="info-card">
                             <p class="detail-label">Last Name</p>
-                            <p class="detail-value">{{ $application->guardian_last_name ?: '—' }}</p>
+                            <p class="detail-value">
+                                @if ($application->submittedBy)
+                                    {{ $application->submittedBy->last_name ?: '—' }}
+                                @else
+                                    {{ $application->guardian_last_name ?: '—' }}
+                                @endif
+                            </p>
                         </div>
 
                         <div class="info-card">
@@ -234,58 +252,132 @@
 
                         <div class="info-card">
                             <p class="detail-label">Phone</p>
-                            <p class="detail-value">{{ $application->guardian_phone ?: '—' }}</p>
+                            <p class="detail-value">
+                                @if ($application->submittedBy)
+                                    {{ $application->submittedBy->phone ?: '—' }}
+                                @else
+                                    {{ $application->guardian_phone ?: '—' }}
+                                @endif
+                            </p>
                         </div>
 
                         <div class="info-card">
                             <p class="detail-label">Email</p>
-                            <p class="detail-value">{{ $application->guardian_email ?: '—' }}</p>
+                            <p class="detail-value">
+                                @if ($application->submittedBy)
+                                    {{ $application->submittedBy->email ?: '—' }}
+                                @else
+                                    {{ $application->guardian_email ?: '—' }}
+                                @endif
+                            </p>
                         </div>
 
                         <div class="info-card">
                             <p class="detail-label">Date of Birth</p>
-                            <p class="detail-value">{{ $application->guardian_date_of_birth?->format('d M, Y') ?? '—' }}
+                            <p class="detail-value">
+                                @if ($application->submittedBy)
+                                    {{ $application->submittedBy->date_of_birth?->format('d M, Y') ?? '—' }}
+                                    @else{{ $application->guardian_date_of_birth?->format('d M, Y') ?? '—' }}
+                                @endif
                             </p>
                         </div>
 
                         <div class="info-card">
                             <p class="detail-label">Gender</p>
-                            <p class="detail-value capitalize">{{ $application->guardian_gender ?: '—' }}</p>
+                            <p class="detail-value capitalize">
+                                @if ($application->submittedBy)
+                                    {{ $application->submittedBy->gender ?: '—' }}
+                                @else
+                                    {{ $application->guardian_gender ?: '—' }}
+                                @endif
+                            </p>
                         </div>
 
                         <div class="info-card">
                             <p class="detail-label">Occupation</p>
-                            <p class="detail-value">{{ $application->guardian_occupation ?: '—' }}</p>
+                            <p class="detail-value">
+                                @if ($application->submittedBy)
+                                    @if ($application->submittedBy->isStaff())
+                                        Work as
+                                        @forelse ($application->submittedBy->roles as $role)
+                                            {{ $role . ', ' }}
+                                        @empty
+                                            staff
+                                        @endforelse
+                                        for the school
+                                    @else
+                                        {{ $application->guardian?->occupation ?: '—' }}
+                                    @endif
+                                @else
+                                    {{ $application->guardian_occupation ?: '—' }}
+                                @endif
+                            </p>
                         </div>
 
                         <div class="info-card">
                             <p class="detail-label">Nationality</p>
-                            <p class="detail-value">{{ $application->guardian_nationality ?: '—' }}</p>
+                            <p class="detail-value">
+                                @if ($application->submittedBy)
+                                    {{ $application->submittedBy->nationality ?: '—' }}
+                                @else
+                                    {{ $application->guardian_nationality ?: '—' }}
+                                @endif
+                            </p>
                         </div>
 
                         <div class="info-card">
                             <p class="detail-label">State</p>
-                            <p class="detail-value">{{ $application->guardian_state ?: '—' }}</p>
+                            <p class="detail-value">
+                                @if ($application->submittedBy)
+                                    {{ $application->submittedBy->state ?: '—' }}
+                                @else
+                                    {{ $application->guardian_state ?: '—' }}
+                                @endif
+                            </p>
                         </div>
 
                         <div class="info-card">
                             <p class="detail-label">Local Government</p>
-                            <p class="detail-value">{{ $application->guardian_local_government ?: '—' }}</p>
+                            <p class="detail-value">
+                                @if ($application->submittedBy)
+                                    {{ $application->submittedBy->local_government ?: '—' }}
+                                @else
+                                    {{ $application->guardian_local_government ?: '—' }}
+                                @endif
+                            </p>
                         </div>
 
                         <div class="info-card">
                             <p class="detail-label">Religion</p>
-                            <p class="detail-value">{{ $application->guardian_religion ?: '—' }}</p>
+                            <p class="detail-value">
+                                @if ($application->submittedBy)
+                                    {{ $application->submittedBy->religion ?: '—' }}
+                                @else
+                                    {{ $application->guardian_religion ?: '—' }}
+                                @endif
+                            </p>
                         </div>
 
                         <div class="info-card">
                             <p class="detail-label">Tribe</p>
-                            <p class="detail-value">{{ $application->guardian_tribe ?: '—' }}</p>
+                            <p class="detail-value">
+                                @if ($application->submittedBy)
+                                    {{ $application->submittedBy->tribe ?: '—' }}
+                                @else
+                                    {{ $application->guardian_tribe ?: '—' }}
+                                @endif
+                            </p>
                         </div>
 
                         <div class="info-card md:col-span-2 lg:col-span-2">
                             <p class="detail-label">Residential Address</p>
-                            <p class="detail-value">{{ $application->guardian_address ?: '—' }}</p>
+                            <p class="detail-value">
+                                @if ($application->submittedBy)
+                                    {{ $application->submittedBy->address ?: '—' }}
+                                @else
+                                    {{ $application->guardian_address ?: '—' }}
+                                @endif
+                            </p>
                         </div>
                     </div>
                 </section>

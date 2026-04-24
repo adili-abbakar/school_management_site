@@ -24,7 +24,6 @@ class TeacherSeeder extends Seeder
             'nationality' => 'Nigeria',
             'state' => 'Kano',
             'local_government' => 'Nassarawa',
-            'type' => 'teacher',
             'address' => '456 Teacher Avenue, Kano',
             'religion' => 'Christianity',
             'tribe' => 'Yoruba',

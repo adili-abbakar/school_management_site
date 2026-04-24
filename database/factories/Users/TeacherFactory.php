@@ -10,9 +10,7 @@ class TeacherFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory()->state([
-                'type' => 'teacher',
-            ]),
+            'user_id' => User::factory(),
             'staff_number' => strtoupper($this->faker->unique()->bothify('TCH###')),
             'specialized_subject' => $this->faker->randomElement(['Mathematics', 'English', 'Physics', 'Biology']),
             'highest_qualification' => $this->faker->randomElement(['B.Sc', 'M.Sc', 'PhD']),

@@ -22,7 +22,7 @@ class AdminFactory extends Factory
     {
 
          return [
-            'user_id' => User::factory()->state([ 'type' => 'admin', ]), 
+            'user_id' => User::factory(), 
             'staff_number' => strtoupper($this->faker->unique()->bothify('ADM###')),
             'role_type' => $this->faker->randomElement(['super_admin', 'exam_officer', 'admission_officer']),
             'highest_qualification' => $this->faker->randomElement(['B.Sc', 'M.Sc', 'PhD']),
