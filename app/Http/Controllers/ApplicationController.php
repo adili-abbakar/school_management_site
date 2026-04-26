@@ -158,48 +158,71 @@ class ApplicationController extends Controller
                 $guardian = Guardian::where('relationship', $application->guardian_relationship)
                     ->whereHas('user', function ($q) use ($application) {
                         $q->where(function ($qq) use ($application) {
-                            if ($application->guardian_phone) {
-                                $qq->where('phone', $application->guardian_phone);
-                            }
+                            if ($application->submittedBy) {
+                                $qq->whereHas('submittedBy', function ($qqq) use ($application) {
+                                    if ($application->submittedBy->phone) {
+                                        $qqq->where('phone', $application->submittedBy->phone);
+                                    }
 
-                            if ($application->guardian_email) {
-                                $qq->orWhere('email', $application->guardian_email);
-                            }
+                                    if ($application->submittedBy->phone) {
+                                        $qqq->where('email', $application->submittedBy->phone);
+                                    }
 
-                            $qq->orWhere(function ($q2) use ($application) {
-                                $q2->where('first_name', $application->guardian_first_name)
-                                    ->where('middle_name', $application->guardian_middle_name)
-                                    ->where('last_name', $application->guardian_last_name)
-                                    ->where('date_of_birth', $application->guardian_date_of_birth);
-                            });
+                                    $qqq->orWhere(function ($qq2) use ($application) {
+                                        $qq2->where('first_name', $application->submittedBy->first_name)
+                                            ->where('middle_name', $application->submittedBy->middle_name)
+                                            ->where('last_name', $application->submittedBy->last_name)
+                                            ->where('date_of_birth', $application->submittedBy->date_of_birth);
+                                    });
+                                });
+                            } else {
+                                if ($application->guardian_phone) {
+                                    $qq->where('phone', $application->guardian_phone);
+                                }
+                                if ($application->guardian_email) {
+                                    $qq->orWhere('email', $application->guardian_email);
+                                }
+                                $qq->orWhere(function ($q2) use ($application) {
+                                    $q2->where('first_name', $application->guardian_first_name)
+                                        ->where('middle_name', $application->guardian_middle_name)
+                                        ->where('last_name', $application->guardian_last_name)
+                                        ->where('date_of_birth', $application->guardian_date_of_birth);
+                                });
+                            }
                         });
                     })
                     ->first();
 
                 if (!$guardian) {
-                    $guardianUser = User::create([
-                        'first_name' => $application->guardian_first_name,
-                        'middle_name' => $application->guardian_middle_name,
-                        'last_name' => $application->guardian_last_name,
-                        'email' => $application->guardian_email,
-                        'phone' => $application->guardian_phone,
-                        'date_of_birth' => $application->guardian_date_of_birth,
-                        'gender' => $application->guardian_gender,
-                        'nationality' => $application->guardian_nationality,
-                        'state' => $application->guardian_state,
-                        'local_government' => $application->guardian_local_government,
-                        'religion' => $application->guardian_religion,
-                        'tribe' => $application->guardian_tribe,
-                        'address' => $application->guardian_address,
-                        'type' => 'guardian',
-                        'password' => bcrypt(str()->random(12)),
-                    ]);
+                    if ($application->submittedBy) {
+                        $guardianUser = auth()->user();
+                    } else {
+                        $guardianUser = User::create([
+                            'first_name' => $application->guardian_first_name,
+                            'middle_name' => $application->guardian_middle_name,
+                            'last_name' => $application->guardian_last_name,
+                            'email' => $application->guardian_email,
+                            'phone' => $application->guardian_phone,
+                            'date_of_birth' => $application->guardian_date_of_birth,
+                            'gender' => $application->guardian_gender,
+                            'nationality' => $application->guardian_nationality,
+                            'state' => $application->guardian_state,
+                            'local_government' => $application->guardian_local_government,
+                            'religion' => $application->guardian_religion,
+                            'tribe' => $application->guardian_tribe,
+                            'address' => $application->guardian_address,
+                            'type' => 'guardian',
+                            'password' => bcrypt(str()->random(12)),
+                        ]);
+                    }
 
-                    $guardian = Guardian::create([
-                        'user_id' => $guardianUser->id,
-                        'occupation' => $application->guardian_occupation,
-                        'relationship' => $application->guardian_relationship,
-                    ]);
+                    if (!$guardianUser->guardian) {
+                        $guardian = Guardian::create([
+                            'user_id' => $guardianUser->id,
+                            'occupation' => $application->guardian_occupation,
+                            'relationship' => $application->guardian_relationship,
+                        ]);
+                    }
                 }
 
                 $studentUser = User::create([

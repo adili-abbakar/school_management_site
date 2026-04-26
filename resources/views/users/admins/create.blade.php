@@ -3,7 +3,7 @@
 @section('title', 'Create Admin')
 
 @section('page-content')
-    <main class="flex-grow flex flex-col min-w-0 bg-slate-50 overflow-y-auto">
+    <main class="flex-grow flex flex-col min-w-0  overflow-y-auto">
         <x-dashboard-header />
 
 

@@ -31,7 +31,7 @@
         </section>
 
         <!-- Why Choose Us -->
-        <section class="py-16 bg-white">
+        <section class="py-16">
             <div class="container mx-auto px-4">
                 <div class="text-center mb-12" data-aos="fade-up">
                     <h2 class="text-2xl font-bold text-[#19214D] mb-3">Why Choose EduPro?</h2>
@@ -76,14 +76,14 @@
         </section>
 
         <!-- Latest News Preview -->
-        <section class="py-16 bg-gray-50">
+        <section class="py-16 bg-white-10/20 backdrop-blur-sm">
             <div class="container mx-auto px-4">
                 <div class="flex justify-between items-end mb-10" data-aos="fade-up">
                     <div>
                         <h2 class="text-2xl font-bold text-[#19214D] mb-2">School News & Updates</h2>
                         <div class="w-20 h-1.5 bg-[#6B8DD6]"></div>
                     </div>
-                    <a href="#" class="text-[#6B8DD6] font-bold hover:underline text-sm">View All News →</a>
+                    <a href="#" class="text-gray-700 font-bold hover:underline text-sm">View All News →</a>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 group"

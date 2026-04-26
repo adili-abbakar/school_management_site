@@ -14,8 +14,7 @@ class Guardian extends Model
     protected $fillable = [
         'user_id',
         'occupation',
-        'place_of_work',
-        'relationship',
+        'place_of_work'
     ];
 
     public function user()

@@ -3,7 +3,7 @@
 @section('title', 'Create Term')
 
 @section('page-content')
-    <main class="flex-grow flex flex-col min-w-0 bg-slate-50 overflow-y-auto">
+    <main class="flex-grow flex flex-col min-w-0  overflow-y-auto">
         <x-dashboard-header />
         <div class="flex-1 overflow-y-auto">
             <div class="p-4 md:p-8">

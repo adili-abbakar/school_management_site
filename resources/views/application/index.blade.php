@@ -3,7 +3,7 @@
 @section('title', 'Admission Applications')
 
 @section('page-content')
-    <main class="flex-grow flex flex-col min-w-0 bg-slate-50 overflow-y-auto">
+    <main class="flex-grow flex flex-col min-w-0  overflow-y-auto">
         <x-loader-component />
         <div data-live-search data-search-url="{{ route('applications.index') }}" data-search-delay="300">
             <x-dashboard-header>

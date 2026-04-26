@@ -13,7 +13,7 @@
         <i class="fas fa-graduation-cap text-3xl"></i>
       </div>
       <h1 class="text-2xl font-bold text-blue-900 tracking-tight">Welcome Back</h1>
-      <p class="text-gray-500 mt-1">Sign in to your school management portal</p>
+      <p class="text-gray-600 mt-1">Sign in to your school management portal</p>
     </div>
 
     <div class="bg-white p-8 rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100">
@@ -65,11 +65,11 @@
     </div>
 
     <div class="mt-8 text-center flex items-center justify-center gap-4">
-      <a href="index.html" class="text-xs text-gray-400 hover:text-blue-900 font-medium transition-colors">
+      <a href="{{ route('home') }}" class="font-bold text-xs text-gray-600 hover:text-blue-900 font-medium transition-colors">
         <i class="fas fa-arrow-left mr-1"></i> Back to Website
       </a>
-      <span class="text-gray-200">|</span>
-      <a href="#" class="text-xs text-gray-400 hover:text-blue-900 font-medium transition-colors">Support</a>
+      <span class="text-gray-400">|</span>
+      <a href="#" class="font-bold text-xs text-gray-600 hover:text-blue-900 font-medium transition-colors">Support</a>
     </div>
   </div>
 

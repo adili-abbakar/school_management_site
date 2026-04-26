@@ -4,9 +4,9 @@
 
 @section('page-content')
     <!-- Delete Warning Modal -->
-    <div class="bg-white rounded-lg shadow-2xl max-w-md w-full border-2 border-red-200">
+    <div class="bg-white-50/80 rounded-lg shadow-2xl max-w-md w-full border-2 border-red-200">
         <!-- Header -->
-        <div class="bg-gradient-to-r from-red-500 to-red-600 px-6 py-4 rounded-t-lg">
+        <div class="bg-gradient-to-r from-red-500 to-red-800 px-6 py-4 rounded-t-lg">
             <div class="flex items-center gap-3">
                 <i class="fas fa-exclamation-triangle text-white text-2xl"></i>
                 <h1 class="text-white text-lg font-bold">Archive {{ ucwords($user->user?->type) }} Account</h1>
@@ -14,7 +14,7 @@
         </div>
 
         <!-- Content -->
-        <form method="POST"  action="{{ $route }}" class="form p-6">
+        <form method="POST" action="{{ $route }}" class="form p-6">
             <x-loader-component />
             @csrf
             @method('DELETE')

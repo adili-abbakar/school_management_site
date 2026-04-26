@@ -5,10 +5,10 @@
 @section('page-content')
     <!-- Main Content -->
     <main class="py-16 container mx-auto px-4">
-        <header class="bg-primary py-16 text-white text-center" data-aos="fade-down">
+        <header class="py-16 text-gray-700 text-center" data-aos="fade-down">
             <div class="container mx-auto px-4">
                 <h1 class="font-bold">About EduPro Academy</h1>
-                <p class="mt-3 text-white/70 text-sm">Excellence in Education since 1995</p>
+                <p class="mt-3 text-gray-500 text-sm">Excellence in Education since 1995</p>
             </div>
         </header>
 

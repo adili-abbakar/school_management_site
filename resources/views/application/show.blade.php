@@ -278,45 +278,53 @@
 
             <!-- Actions -->
             <div class="flex gap-2">
-                <button class="bg-slate-100 text-slate-600 px-4 py-2 rounded text-xs font-semibold hover:bg-slate-200"><i
-                        class="fas fa-download mr-1"></i>Download All</button>
-                <button onclick="openWithdrawModal()"
-                    class="bg-rose-50 text-rose-600 px-4 py-2 rounded text-xs font-semibold border border-rose-200 hover:bg-rose-100"><i
-                        class="fas fa-times mr-1"></i>Withdraw</button>
+                <button class="bg-slate-100 text-slate-600 px-4 py-2 rounded text-xs font-semibold hover:bg-slate-200">
+                    <i class="fas fa-download mr-1"></i>
+                    Download All
+                </button>
+
+                @if ($app->status === 'pending')
+                    <form method="POST" action="{{ route('applications.reject', $app) }}">
+                        @csrf
+                        @method('PUT')
+
+                        <button onclick="showLoader()" type="submit"
+                            class="bg-rose-50 text-rose-600 px-4 py-2 rounded text-xs font-semibold border border-rose-200 hover:bg-rose-100 flex items-center gap-1">
+                            <i class="fas fa-times"></i>
+                            Reject
+                        </button>
+                    </form>
+                @endif
+
+
+                @if ($app->status === 'pending')
+                    <form method="POST" action="{{ route('applications.approve', $app) }}">
+                        @csrf
+                        @method('PUT')
+
+                        <button onclick="showLoader()" type="submit"
+                            class="bg-emerald-50 text-emerald-600 px-4 py-2 rounded text-xs font-semibold border border-emerald-200 hover:bg-emerald-100 flex items-center gap-1">
+                            <i class="fas fa-check"></i>
+                            Approve
+                        </button>
+                    </form>
+                @endif
+
+
+                @if ($app->status === 'rejected')
+                    <form method="POST" action="{{ route('applications.approve', $app) }}">
+                        @csrf
+                        @method('PUT')
+
+                        <button onclick="showLoader()" type="submit"
+                            class="bg-amber-50 text-amber-600 px-4 py-2 rounded text-xs font-semibold border border-amber-200 hover:bg-amber-100 flex items-center gap-1">
+                            <i class="fas fa-redo"></i>
+                            Reconsider & Approve
+                        </button>
+                    </form>
+                @endif
             </div>
         </div>
     </main>
     </div>
-
-    <div id="withdrawModal" class="modal">
-        <div class="modal-content">
-            <div class="mb-4"><i class="fas fa-exclamation-triangle text-rose-600 text-3xl block text-center mb-3"></i>
-                <h3 class="text-base font-bold text-slate-800 text-center">Withdraw Application?</h3>
-            </div>
-            <p class="text-xs text-slate-600 text-center mb-6">Are you sure? This action cannot be undone.</p>
-            <div class="flex gap-2">
-                <button onclick="closeWithdrawModal()"
-                    class="flex-1 px-4 py-2 bg-slate-100 text-slate-700 rounded text-xs font-semibold hover:bg-slate-200">Cancel</button>
-                <button onclick="confirmWithdraw()"
-                    class="flex-1 px-4 py-2 bg-rose-600 text-white rounded text-xs font-semibold hover:bg-rose-700">Withdraw</button>
-            </div>
-        </div>
-    </div>
-    <script>
-        function openWithdrawModal() {
-            document.getElementById('withdrawModal').classList.add('active');
-        }
-
-        function closeWithdrawModal() {
-            document.getElementById('withdrawModal').classList.remove('active');
-        }
-
-        function confirmWithdraw() {
-            alert('Application withdrawn successfully.');
-            window.location.href = 'my-applications.html';
-        }
-        document.getElementById('withdrawModal').addEventListener('click', function(e) {
-            if (e.target === this) closeWithdrawModal();
-        });
-    </script>
 @endsection

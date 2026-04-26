@@ -3,7 +3,7 @@
 @section('title', 'Guardians')
 
 @section('page-content')
-    <main class="flex-grow flex flex-col min-w-0 bg-slate-50 overflow-y-auto hide-scrollbar">
+    <main class="flex-grow flex flex-col min-w-0  overflow-y-auto hide-scrollbar">
         <x-loader-component />
 
         <div data-live-search data-search-url="{{ route('guardians.index') }}" data-search-delay="300">

@@ -26,7 +26,20 @@ return new class extends Migration
             $table->date('admission_date');
             $table->date('graduation_date')->nullable();
 
-            $table->unsignedBigInteger('guardian_id')->nullable();
+            $table->unsignedBigInteger('guardian_user_id')->nullable();
+
+
+            $table->enum('guardian_relationship', [
+                'father',
+                'mother',
+                'brother',
+                'sister',
+                'grandfather',
+                'grandmother',
+                'uncle',
+                'aunt',
+                'other'
+            ])->default('father');
 
             $table->timestamps();
             $table->softDeletes();
@@ -36,7 +49,7 @@ return new class extends Migration
                 ->on('users')
                 ->onDelete('cascade');
 
-            $table->foreign('guardian_id')
+            $table->foreign('guardian_user_id')
                 ->references('user_id')
                 ->on('guardians')
                 ->nullOnDelete();

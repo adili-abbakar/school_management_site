@@ -22,6 +22,7 @@ class Student extends Model
         'admission_date',
         'graduation_date',
         'guardian_id',
+        'guardian_relationship'
     ];
 
     public function user()
