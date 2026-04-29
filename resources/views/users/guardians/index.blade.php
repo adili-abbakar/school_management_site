@@ -39,7 +39,7 @@
                             <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider">
                                 <tr>
                                     <th class="px-6 py-4">Name</th>
-                                    <th class="px-6 py-4">Relationship</th>
+                                    {{-- <th class="px-6 py-4">Relationship</th> --}}
                                     <th class="px-6 py-4">Phone</th>
                                     <th class="px-6 py-4">Children</th>
                                     <th class="px-6 py-4 text-center">Actions</th>

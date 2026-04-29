@@ -43,7 +43,7 @@ class ClassArm extends Model
     public static function resolveTargetClass($application): ?AcademicClass
     {
         if (!empty($application->class_id)) {
-            return AcademicClass::find($application->class_id);
+        return AcademicClass::find($application->class_id);
         }
 
         if (!empty($application->class_name)) {

@@ -24,6 +24,6 @@ class Guardian extends Model
 
     public function  children()
     {
-        return $this->hasMany(Student::class, 'guardian_id');
+        return $this->hasMany(Student::class, 'guardian_user_id', 'user_id');
     }
 }

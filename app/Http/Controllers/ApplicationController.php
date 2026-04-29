@@ -154,49 +154,20 @@ class ApplicationController extends Controller
 
         try {
             DB::transaction(function () use ($application) {
+                $guardian = null;
 
-                $guardian = Guardian::where('relationship', $application->guardian_relationship)
-                    ->whereHas('user', function ($q) use ($application) {
-                        $q->where(function ($qq) use ($application) {
-                            if ($application->submittedBy) {
-                                $qq->whereHas('submittedBy', function ($qqq) use ($application) {
-                                    if ($application->submittedBy->phone) {
-                                        $qqq->where('phone', $application->submittedBy->phone);
-                                    }
+                if ($application->submitted_by_user_id) {
+                    $guardian = Guardian::firstOrCreate(
+                        ['user_id' => $application->submitted_by_user_id],
+                        ['occupation' => $application->guardian_occupation ?? null]
+                    );
+                } else {
+                    $guardian = Guardian::whereHas('user', function ($query) use ($application) {
+                        $query->where('email', $application->guardian_email);
+                    })->first();
 
-                                    if ($application->submittedBy->phone) {
-                                        $qqq->where('email', $application->submittedBy->phone);
-                                    }
 
-                                    $qqq->orWhere(function ($qq2) use ($application) {
-                                        $qq2->where('first_name', $application->submittedBy->first_name)
-                                            ->where('middle_name', $application->submittedBy->middle_name)
-                                            ->where('last_name', $application->submittedBy->last_name)
-                                            ->where('date_of_birth', $application->submittedBy->date_of_birth);
-                                    });
-                                });
-                            } else {
-                                if ($application->guardian_phone) {
-                                    $qq->where('phone', $application->guardian_phone);
-                                }
-                                if ($application->guardian_email) {
-                                    $qq->orWhere('email', $application->guardian_email);
-                                }
-                                $qq->orWhere(function ($q2) use ($application) {
-                                    $q2->where('first_name', $application->guardian_first_name)
-                                        ->where('middle_name', $application->guardian_middle_name)
-                                        ->where('last_name', $application->guardian_last_name)
-                                        ->where('date_of_birth', $application->guardian_date_of_birth);
-                                });
-                            }
-                        });
-                    })
-                    ->first();
-
-                if (!$guardian) {
-                    if ($application->submittedBy) {
-                        $guardianUser = auth()->user();
-                    } else {
+                    if (!$guardian) {
                         $guardianUser = User::create([
                             'first_name' => $application->guardian_first_name,
                             'middle_name' => $application->guardian_middle_name,
@@ -211,19 +182,17 @@ class ApplicationController extends Controller
                             'religion' => $application->guardian_religion,
                             'tribe' => $application->guardian_tribe,
                             'address' => $application->guardian_address,
-                            'type' => 'guardian',
                             'password' => bcrypt(str()->random(12)),
                         ]);
-                    }
 
-                    if (!$guardianUser->guardian) {
                         $guardian = Guardian::create([
                             'user_id' => $guardianUser->id,
                             'occupation' => $application->guardian_occupation,
-                            'relationship' => $application->guardian_relationship,
                         ]);
                     }
                 }
+
+
 
                 $studentUser = User::create([
                     'first_name' => $application->student_first_name,
@@ -237,29 +206,26 @@ class ApplicationController extends Controller
                     'religion' => $application->student_religion,
                     'tribe' => $application->student_tribe,
                     'address' => $application->student_address,
-                    'type' => 'student',
                     'password' => bcrypt(str()->random(12)),
+
                 ]);
 
-                $classArm = ClassArm::resolveClassArmForApplication($application);
 
-                Student::create([
+                $classArm = ClassArm::resolveClassArmForApplication($application);
+                $student = Student::create([
                     'user_id' => $studentUser->id,
                     'admission_number' => Student::generateAdmissionNumber(),
                     'current_class_arm_id' => $classArm?->id,
-                    'guardian_id' => $guardian->user_id,
-                    'current_status' => 'active',
-                    'admission_date' => now()->toDateString(),
+                    'guardian_user_id' => $guardian->user_id,
+                    'guardian_relationship' => $application->guardian_relationship,
                 ]);
-
-                $application->status = 'approved';
-                $application->save();
+                $studentUser->update(['password' => bcrypt($student->admission_number)]);
+                $application->update(['status' => 'approved']);
             });
 
             return back()->with('success', 'Application approved successfully.');
         } catch (\Throwable $e) {
             report($e);
-
             return back()->with('failure', 'Application approval failed: ' . $e->getMessage());
         }
     }

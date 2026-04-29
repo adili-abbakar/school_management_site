@@ -47,7 +47,7 @@
                         </div>
                         <span class="text-emerald-500 text-[9px] font-bold bg-emerald-50 px-1.5 py-0.5 rounded">+12%</span>
                     </div>
-                    <div class="text-2xl font-extrabold text-primary">1,248</div>
+                    <div class="text-2xl font-extrabold text-primary">{{  $studentsCount  }}</div>
                     <div class="text-slate-400 text-[9px] font-semibold uppercase tracking-wider mt-1">Total Students</div>
                 </div>
                 <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
@@ -57,7 +57,7 @@
                         </div>
                         <span class="text-slate-400 text-[9px] font-bold bg-slate-100 px-1.5 py-0.5 rounded">Stable</span>
                     </div>
-                    <div class="text-2xl font-extrabold text-primary">84</div>
+                    <div class="text-2xl font-extrabold text-primary">{{ $teachersCount }}</div>
                     <div class="text-slate-400 text-[9px] font-semibold uppercase tracking-wider mt-1">Total Teachers</div>
                 </div>
                 <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
@@ -67,7 +67,7 @@
                         </div>
                         <span class="text-amber-500 text-[9px] font-bold bg-amber-50 px-1.5 py-0.5 rounded">Pending</span>
                     </div>
-                    <div class="text-2xl font-extrabold text-primary">24</div>
+                    <div class="text-2xl font-extrabold text-primary">{{ $recentApplications }}</div>
                     <div class="text-slate-400 text-[9px] font-semibold uppercase tracking-wider mt-1">New Admissions</div>
                 </div>
                 <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
@@ -101,58 +101,27 @@
                                     <th class="px-4 py-3 text-center">Status</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y">
-                                <tr class="hover:bg-slate-50 transition-colors">
-                                    <td class="px-4 py-3">
-                                        <div class="flex items-center gap-2">
-                                            <div
-                                                class="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500 text-[9px]">
-                                                JD</div>
-                                            <span class="font-semibold text-primary">John Doe</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 text-slate-600 font-medium">JSS 1</td>
-                                    <td class="px-4 py-3 text-slate-500">Oct 12</td>
-                                    <td class="px-4 py-3 text-center">
-                                        <span
-                                            class="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase">Approved</span>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-slate-50 transition-colors">
-                                    <td class="px-4 py-3">
-                                        <div class="flex items-center gap-2">
-                                            <div
-                                                class="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500 text-[9px]">
-                                                AS</div>
-                                            <span class="font-semibold text-primary">Alice Smith</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 text-slate-600 font-medium">SS 2</td>
-                                    <td class="px-4 py-3 text-slate-500">Oct 11</td>
-                                    <td class="px-4 py-3 text-center">
-                                        <span
-                                            class="bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase">Pending</span>
-                                    </td>
-                                </tr>
-                                @for ($i = 0; $i <= 5; $i++)
+                            <tbody class="divide-y">                             
+                                @foreach ($students as $student)
                                     <tr class="hover:bg-slate-50 transition-colors">
                                         <td class="px-4 py-3">
                                             <div class="flex items-center gap-2">
                                                 <div
                                                     class="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500 text-[9px]">
                                                     MB</div>
-                                                <span class="font-semibold text-primary">Mark Brown</span>
+                                                <span class="font-semibold text-primary">{{ $student->user->full_name }}</span>
                                             </div>
                                         </td>
-                                        <td class="px-4 py-3 text-slate-600 font-medium">JSS 3</td>
-                                        <td class="px-4 py-3 text-slate-500">Oct 10</td>
+                                        <td class="px-4 py-3 text-slate-600 font-medium">{{ $student->class }}</td>
+                                        <td class="px-4 py-3 text-slate-500">{{ $student->admission_date->format('d M') }}
+</td>
                                         <td class="px-4 py-3 text-center">
                                             <span
-                                                class="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase">Approved</span>
+                                                class="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase">{{ $student->current_status }}</span>
                                         </td>
 
                                     </tr>
-                                @endfor
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

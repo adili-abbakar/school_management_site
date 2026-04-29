@@ -21,10 +21,16 @@ class Student extends Model
         'current_status',
         'admission_date',
         'graduation_date',
-        'guardian_id',
+        'guardian_user_id',
         'guardian_relationship'
     ];
 
+    protected $casts = [
+        'admission_date' => 'datetime',
+        'graduation_date' => 'datetime'
+    ];
+
+    
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
@@ -37,9 +43,13 @@ class Student extends Model
 
     public function guardian()
     {
-        return $this->belongsTo(Guardian::class, 'guardian_id', 'user_id');
+        return $this->belongsTo(Guardian::class, 'guardian_user_id', 'user_id');
     }
 
+    public function getclassAttribute(): string
+    {
+        return $this->currentClassArm->class->name . ' ' . $this->currentClassArm->name;
+    }
     public static function generateAdmissionNumber()
     {
         $year = now()->year;
@@ -51,7 +61,7 @@ class Student extends Model
         if (!$last) {
             $number = 1;
         } else {
-            $number = (int) substr($last, -4) + 1;
+            $number = (int) substr($last, -3) + 1;
         }
 
         return 'ADM/' . $year . '/' . str_pad($number, 3, '0', STR_PAD_LEFT);

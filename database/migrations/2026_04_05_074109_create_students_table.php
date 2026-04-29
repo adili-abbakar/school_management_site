@@ -23,7 +23,7 @@ return new class extends Migration
             $table->enum('current_status', ['active', 'graduated', 'withdrawn', 'suspended'])
                 ->default('active');
 
-            $table->date('admission_date');
+            $table->date('admission_date')->useCurrent();
             $table->date('graduation_date')->nullable();
 
             $table->unsignedBigInteger('guardian_user_id')->nullable();

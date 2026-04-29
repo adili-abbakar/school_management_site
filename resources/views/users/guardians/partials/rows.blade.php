@@ -11,11 +11,11 @@
                      </div>
                  </td>
 
-                 <td class="px-6 py-4">
+                 {{-- <td class="px-6 py-4">
                      <span class="bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase">
                          {{ $guardian->relationship ? str_replace('_', ' ', $guardian->relationship) : 'Not set' }}
                      </span>
-                 </td>
+                 </td> --}}
 
                  <td class="px-6 py-4 text-slate-500">
                      {{ $guardian->user->phone ?? 'No phone number' }}
