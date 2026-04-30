@@ -1,6 +1,6 @@
   @forelse($teachers as  $teacher)
       <tr class="hover:bg-slate-50 transition-colors">
-          <td class="px-6 py-4 font-bold text-slate-400 uppercase">{{ $teacher->staff_number }}</td>
+          <td class="px-6 py-4 font-bold text-slate-400 uppercase">{{ $teacher->staff->staff_number }}</td>
           <td class="px-6 py-4 font-semibold text-primary">{{ $teacher->user->full_name }}</td>
           <td class="px-6 py-4 text-slate-600">{{ $teacher->specialized_subject }}</td>
           <td class="px-6 py-4 text-slate-500">{{ $teacher->user->email }}</td>

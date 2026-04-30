@@ -12,7 +12,6 @@ return new class extends Migration {
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id')->primary();
-            $table->string('staff_number', 50)->unique();
 
             $table->string('specialized_subject', 255)->nullable();
 
@@ -23,6 +22,10 @@ return new class extends Migration {
 
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreignId('staff_id')
+            ->constrained('staff')
+            ->cascadeOnDelete();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

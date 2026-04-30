@@ -13,7 +13,7 @@
                     <div>
                         <x-buttons.blue-back-link>Admins</x-buttons.blue-back-link>
                         <h1 class="text-xl font-bold text-slate-800">{{ $admin->user->full_name }}</h1>
-                        <p class="text-xs text-slate-500">Admin ID: {{ $admin->staff_number }}</p>
+                        <p class="text-xs text-slate-500">Admin ID: {{ $admin->staff->staff_number }}</p>
                     </div>
                     <div class="flex gap-2">
                         <a href="{{ route('admins.edit', $admin) }}"
@@ -39,7 +39,7 @@
 
                         <div>
                             <label class="text-xs font-medium text-slate-600">Staff Number</label>
-                            <p class="text-sm text-slate-800 mt-1">{{ $admin->staff_number }}</p>
+                            <p class="text-sm text-slate-800 mt-1">{{ $admin->staff->staff_number }}</p>
                         </div>
                         <div>
                             <label class="text-xs font-medium text-slate-600">Years of Experience</label>

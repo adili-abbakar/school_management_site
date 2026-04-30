@@ -155,7 +155,6 @@ class ApplicationController extends Controller
         try {
             DB::transaction(function () use ($application) {
                 $guardian = null;
-
                 if ($application->submitted_by_user_id) {
                     $guardian = Guardian::firstOrCreate(
                         ['user_id' => $application->submitted_by_user_id],

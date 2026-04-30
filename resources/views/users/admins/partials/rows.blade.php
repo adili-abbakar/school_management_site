@@ -1,7 +1,7 @@
 @forelse ($admins as $admin)
     <tr class="hover:bg-slate-50 transition-colors">
         <td class="px-6 py-4 font-bold text-slate-400 uppercase">
-            {{ $admin->staff_number }}
+            {{ $admin->staff->staff_number }}
         </td>
 
         <td class="px-6 py-4 font-semibold text-primary">

@@ -63,7 +63,7 @@
             </a>
             <a href="dashboard-promotions.html"
                 class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
-                <i class="fas fa-arrow-up-right-dots text-xs"></i>
+                <i class="fas fa-level-up-alt text-xs"></i>
                 <span>Promotions</span>
             </a>
 
@@ -78,6 +78,16 @@
                 class="sidebar-link flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
                 <i class="fas fa-file-invoice text-xs"></i>
                 <span>Results</span>
+            </a>
+
+            <div class="px-4 mt-4 mb-2 text-[9px] font-semibold text-slate-500 uppercase tracking-wider">
+                Settings
+            </div>
+
+            <a href="{{ route('numbering-settings.index') }}"
+                class="sidebar-link {{ request()->is('numbering-settings*') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+                <i class="fas fa-hashtag text-xs"></i>
+                <span>Numbering Settings</span>
             </a>
 
             <div class="px-4 mt-4 mb-2 text-[9px] font-semibold text-slate-500 uppercase tracking-wider">My Account

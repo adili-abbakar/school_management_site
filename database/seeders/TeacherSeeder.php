@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Users\Staff;
 use Illuminate\Database\Seeder;
 use App\Models\Users\Teacher;
 use App\Models\Users\User;
@@ -29,15 +30,23 @@ class TeacherSeeder extends Seeder
             'tribe' => 'Yoruba',
         ]);
 
+        $staff = Staff::create([
+            'user_id' => $user->id,
+            'staff_number' =>  Staff::generateStaffNumber(),
+            'staff_type' => 'teacher',
+            'employment_date' => now(),
+        ]);
+
         Teacher::create([
             'user_id' => $user->id,
-            'staff_number' => 'TCH001',
+            'staff_id' => $staff->id,
             'specialized_subject' => 'Mathematics',
             'highest_qualification' => 'M.Sc',
             'years_of_experience' => 8,
             'start_date' => now(),
             'employment_type' => 'full_time',
         ]);
+        $user->update(['password' => $staff->staff_number]);
 
         // Seed random teachers with factories
         Teacher::factory()->count(10)->create();

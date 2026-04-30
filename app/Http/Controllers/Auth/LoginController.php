@@ -37,7 +37,7 @@ class LoginController extends Controller
         }
 
         $user = User::where('email', $request->email)
-            ->orWhereHas('admin', function ($query) use ($request) {
+            ->orWhereHas('staff', function ($query) use ($request) {
                 $query->where('staff_number', $request->email);
             })
             ->first();

@@ -14,7 +14,7 @@
                         <x-buttons.blue-back-link>Teachers</x-buttons.blue-back-link>
 
                         <h1 class="text-xl font-bold text-slate-800">{{ $teacher->user->full_name }}</h1>
-                        <p class="text-xs text-slate-500">Teacher ID: {{ $teacher->staff_number }}</p>
+                        <p class="text-xs text-slate-500">Teacher ID: {{ $teacher->staff->staff_number }}</p>
                     </div>
                     <div class="flex gap-2">
                         <a href="{{ route('teachers.edit', $teacher) }}"
@@ -45,7 +45,7 @@
 
                             <div>
                                 <label class="text-xs font-medium text-slate-600">Staff Number</label>
-                                <p class="text-sm text-slate-800 mt-1">{{ $teacher->staff_number }}</p>
+                                <p class="text-sm text-slate-800 mt-1">{{ $teacher->staff->staff_number }}</p>
                             </div>
                             <div>
                                 <label class="text-xs font-medium text-slate-600">Years of Experience</label>

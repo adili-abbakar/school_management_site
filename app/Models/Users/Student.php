@@ -3,6 +3,7 @@
 namespace App\Models\Users;
 
 use App\Models\Academic\ClassArm;
+use App\Models\NumberingSetting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -30,7 +31,7 @@ class Student extends Model
         'graduation_date' => 'datetime'
     ];
 
-    
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
@@ -50,20 +51,26 @@ class Student extends Model
     {
         return $this->currentClassArm->class->name . ' ' . $this->currentClassArm->name;
     }
+
     public static function generateAdmissionNumber()
     {
-        $year = now()->year;
+        try {
+            return NumberingSetting::generateUnique(
+                'admission_number',
+                Student::class,
+                'admission_number'
+            );
+        } catch (\Throwable $e) {
+            // fallback old method
+            $year = now()->year;
 
-        $last = self::whereYear('created_at', $year)
-            ->orderByDesc('admission_number')
-            ->value('admission_number');
+            $last = self::whereYear('created_at', $year)
+                ->orderByDesc('admission_number')
+                ->value('admission_number');
 
-        if (!$last) {
-            $number = 1;
-        } else {
-            $number = (int) substr($last, -3) + 1;
+            $number = $last ? ((int) substr($last, -3) + 1) : 1;
+
+            return 'ADM/' . $year . '/' . str_pad($number, 3, '0', STR_PAD_LEFT);
         }
-
-        return 'ADM/' . $year . '/' . str_pad($number, 3, '0', STR_PAD_LEFT);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use App\Models\Users\User;
 use App\Models\Users\Admin;
+use App\Models\Users\Staff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -21,8 +22,7 @@ class AdminController extends Controller
         $admins = Admin::with('user')
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
-                    $q->where('staff_number', 'like', "%{$search}%")
-                        ->orWhere('role_type', 'like', "%{$search}%")
+                    $q->orWhere('role_type', 'like', "%{$search}%")
                         ->orWhereHas('user', function ($userQuery) use ($search) {
                             $userQuery->where('first_name', 'like', "%{$search}%")
                                 ->orWhere('middle_name', 'like', "%{$search}%")
@@ -44,7 +44,9 @@ class AdminController extends Controller
                                 ->orWhereRaw(
                                     "CONCAT(last_name, ' ', first_name) LIKE ?",
                                     ["%{$search}%"]
-                                );
+                                )->orWhereHas('staff', function ($staffQuery) use ($search) {
+                                    $staffQuery->where('staff_number', 'like', "%{$search}%");
+                                });
                         });
                 });
             })
@@ -75,13 +77,13 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        // Validate all user + admin fields
+        $autoGenerateStaffId = $request->boolean('auto_generate_staff_id');
+
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'middle_name' => 'required|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
             'phone' => 'required|string|max:20',
             'date_of_birth' => 'required|date',
             'gender' => 'required|in:male,female',
@@ -92,7 +94,15 @@ class AdminController extends Controller
             'tribe' => 'required|string|max:100',
             'address' => 'required|string|max:255',
 
-            'staff_number' => 'required|string|max:50|unique:admins,staff_number',
+            'auto_generate_staff_id' => 'nullable|boolean',
+
+            'staff_number' => [
+                $autoGenerateStaffId ? 'nullable' : 'required',
+                'string',
+                'max:50',
+                'unique:staff,staff_number',
+            ],
+
             'role_type' => 'required|in:super_admin,exam_officer,admission_officer',
             'highest_qualification' => 'nullable|string|max:255',
             'years_of_experience' => 'nullable|integer|min:0',
@@ -101,13 +111,18 @@ class AdminController extends Controller
         ]);
 
         try {
-            DB::transaction(function () use ($validated) {
+            DB::transaction(function () use ($validated, $autoGenerateStaffId) {
+                $staffNumber = $autoGenerateStaffId
+                    ? Staff::generateStaffNumber()
+                    : $validated['staff_number'];
+
+
                 $user = User::create([
                     'first_name' => $validated['first_name'],
                     'middle_name' => $validated['middle_name'],
                     'last_name' => $validated['last_name'] ?? null,
                     'email' => $validated['email'],
-                    'password' => Hash::make($validated['password']),
+                    'password' => Hash::make($staffNumber),
                     'phone' => $validated['phone'],
                     'date_of_birth' => $validated['date_of_birth'],
                     'gender' => $validated['gender'],
@@ -117,12 +132,18 @@ class AdminController extends Controller
                     'religion' => $validated['religion'],
                     'tribe' => $validated['tribe'],
                     'address' => $validated['address'],
-                    'type' => 'admin',
+                ]);
+
+                $staff = Staff::create([
+                    'user_id' => $user->id,
+                    'staff_number' => $staffNumber,
+                    'staff_type' => 'admin',
+                    'employment_date' => $validated['start_date'] ?? now()->toDateString(),
                 ]);
 
                 Admin::create([
                     'user_id' => $user->id,
-                    'staff_number' => $validated['staff_number'],
+                    'staff_id' => $staff->id,
                     'role_type' => $validated['role_type'],
                     'highest_qualification' => $validated['highest_qualification'] ?? null,
                     'years_of_experience' => $validated['years_of_experience'] ?? 0,
@@ -133,10 +154,10 @@ class AdminController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Admin updated successfully',
+                'message' => 'Admin created successfully',
                 'redirect' => redirect()
                     ->intended(route('admins.index'))
-                    ->with('success', 'Admin updated successfully!')
+                    ->with('success', 'Admin created successfully!')
                     ->getTargetUrl(),
             ]);
         } catch (\Exception $e) {
@@ -190,7 +211,7 @@ class AdminController extends Controller
             'tribe' => 'required|string|max:100',
             'address' => 'required|string|max:255',
 
-            'staff_number' => 'required|string|max:50|unique:admins,staff_number,' . $admin->user_id . ',user_id',
+            'staff_number' => 'required|string|max:50|unique:staff,staff_number,' . $admin->staff_id,
             'role_type' => 'required|in:super_admin,exam_officer,admission_officer',
             'highest_qualification' => 'nullable|string|max:255',
             'years_of_experience' => 'nullable|integer|min:0',
@@ -216,8 +237,12 @@ class AdminController extends Controller
                     'address' => $validated['address'],
                 ]);
 
-                $admin->update([
+                $admin->staff->update([
                     'staff_number' => $validated['staff_number'],
+                    'employment_date' => $validated['start_date'] ?? now()->toDateString(),
+                ]);
+
+                $admin->update([
                     'role_type' => $validated['role_type'],
                     'highest_qualification' => $validated['highest_qualification'] ?? null,
                     'years_of_experience' => $validated['years_of_experience'] ?? 0,

@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id')->primary();
-            $table->string('staff_number', 50)->unique();
             $table->enum('role_type', ['super_admin', 'exam_officer', 'admission_officer']);
             $table->string('highest_qualification')->nullable();
             $table->integer('years_of_experience')->default(0);
@@ -21,6 +20,9 @@ return new class extends Migration
             $table->enum('employment_type', ['full_time', 'part_time', 'contract'])->default('full_time');
             $table->timestamps();
             $table->softDeletes();
+            $table->foreignId('staff_id')
+                ->constrained('staff')
+                ->cascadeOnDelete();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

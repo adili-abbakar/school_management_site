@@ -43,7 +43,7 @@ class ClassArm extends Model
     public static function resolveTargetClass($application): ?AcademicClass
     {
         if (!empty($application->class_id)) {
-        return AcademicClass::find($application->class_id);
+            return AcademicClass::find($application->class_id);
         }
 
         if (!empty($application->class_name)) {
@@ -73,11 +73,11 @@ class ClassArm extends Model
             return null;
         }
 
-        $stream = trim((string) ($application->stream ?? ''));
+        $stream = strtolower(trim((string) ($application->stream ?? 'general')));
 
-        if ($stream !== '') {
+        if (in_array($stream, ['science', 'arts'])) {
             $matchedArm = $arms->first(function ($arm) use ($stream) {
-                return strcasecmp(trim($arm->name), trim($stream)) === 0;
+                return str_contains(strtolower($arm->name), $stream);
             });
 
             if ($matchedArm) {

@@ -5,13 +5,14 @@ namespace App\Models\Users;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Teacher extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id', 'staff_number', 'specialized_subject', 'highest_qualification', 'years_of_experience', 'start_date', 'employment_type'];
+    protected $fillable = ['user_id', 'staff_id', 'specialized_subject', 'highest_qualification', 'years_of_experience', 'start_date', 'employment_type'];
 
     protected $primaryKey = 'user_id';
     public $incrementing = false;
@@ -46,5 +47,11 @@ class Teacher extends Model
             return "Mr. " . $this->user->full_name;
         }
         return "Mrs. " . $this->user?->full_name;
+    }
+
+
+    public function staff(): BelongsTo
+    {
+        return $this->belongsTo(Staff::class, 'staff_id');
     }
 }

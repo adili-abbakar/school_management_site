@@ -15,7 +15,9 @@
                     </div>
                 </div>
             </x-dashboard-header>
-
+            @if (session('failure'))
+                {{ session('failure') }}
+            @endif
             <div class="p-6">
                 <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>

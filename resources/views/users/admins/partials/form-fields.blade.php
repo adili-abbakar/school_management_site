@@ -6,7 +6,7 @@
 
 
 
-<div class="mb-6">s
+<div class="mb-6">
     <h3 class="text-base font-bold text-primary mb-1 flex items-center gap-2">
         <i class="fas fa-graduation-cap text-accent text-xs"></i>
         Professional Information
@@ -15,12 +15,28 @@
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
     <div>
-        <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Staff ID Number *</label>
-        <input type="text" placeholder="e.g., TCH001" name="staff_number"
+        <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">
+            Staff ID Number *
+        </label>
+
+        <input type="text" placeholder="e.g., STF/2026/001" name="staff_number" id="staffNumberInput"
             class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none"
-            value="{{ old('staff_number', $admin?->staff_number) }}">
+            value="{{ old('staff_number', $admin?->staff?->staff_number) }}">
+
         <span class="text-red-600 text-[10px] error-message" data-name="staff_number"></span>
     </div>
+
+    @if ($admin === null)
+        <div class="flex items-center gap-2 mt-6">
+            <input type="checkbox" name="auto_generate_staff_id" value="1" id="autoGenerateStaffId"
+                class="w-4 h-4 text-accent border-slate-300 rounded focus:ring-accent"
+                {{ old('auto_generate_staff_id', true) ? 'checked' : '' }}>
+
+            <label for="autoGenerateStaffId" class="text-xs text-slate-600 font-semibold">
+                Auto-generate Staff ID
+            </label>
+        </div>
+    @endif
     <div>
         <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Highest Qualification
             *</label>
@@ -93,3 +109,4 @@
 
 
 @include('users.partials.address-field', ['user' => $admin?->user])
+<script src="{{ asset('js/auto-generate-staff-id.js') }}"></script>

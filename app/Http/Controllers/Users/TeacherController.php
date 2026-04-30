@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
+use App\Models\Users\Staff;
 use App\Models\Users\Teacher;
 use App\Models\Users\User;
 use Exception;
@@ -22,8 +23,7 @@ class TeacherController extends Controller
         $teachers = Teacher::with('user')
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
-                    $q->where('staff_number', 'like', "%{$search}%")
-                        ->orWhere('employment_type', 'like', "%{$search}%")
+                    $q->Where('employment_type', 'like', "%{$search}%")
                         ->orWhere('employment_type', 'like', "%{$search}%")
                         ->orWhere('specialized_subject', 'like', "%{$search}%")
                         ->orWhere('highest_qualification', 'like', "%{$search}%")
@@ -48,7 +48,10 @@ class TeacherController extends Controller
                                 ->orWhereRaw(
                                     "CONCAT(last_name, ' ', first_name) LIKE ?",
                                     ["%{$search}%"]
-                                );
+                                )
+                                ->orWhereHas('staff', function ($staffQuery) use ($search) {
+                                    $staffQuery->where('staff_number',  'like', "%{$search}%");
+                                });
                         });
                 });
             })
@@ -78,6 +81,8 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
+        $autoGenerateStaffId = $request->boolean('auto_generate_staff_id');
+
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'middle_name' => 'required|string|max:255',
@@ -93,7 +98,13 @@ class TeacherController extends Controller
             'tribe' => 'required|string|max:100',
             'address' => 'required|string|max:255',
 
-            'staff_number' => 'required|string|max:50|unique:teachers,staff_number',
+            'staff_number' => [
+                $autoGenerateStaffId ? 'nullable' : 'required',
+                'string',
+                'max:50',
+                'unique:staff,staff_number',
+            ],
+
             'specialized_subject' => 'nullable|string|max:255',
             'highest_qualification' => 'nullable|string|max:255',
             'years_of_experience' => 'nullable|integer|min:0',
@@ -102,13 +113,16 @@ class TeacherController extends Controller
         ]);
 
         try {
-            DB::transaction(function () use ($validated) {
+            DB::transaction(function () use ($validated, $autoGenerateStaffId) {
+                $staffNumber = $autoGenerateStaffId
+                    ? Staff::generateStaffNumber()
+                    : $validated['staff_number'];
                 $user = User::create([
                     'first_name' => $validated['first_name'],
                     'middle_name' => $validated['middle_name'],
                     'last_name' => $validated['last_name'] ?? null,
                     'email' => $validated['email'],
-                    'password' => Hash::make($validated['staff_number']),
+                    'password' => Hash::make($staffNumber),
                     'phone' => $validated['phone'],
                     'date_of_birth' => $validated['date_of_birth'],
                     'gender' => $validated['gender'],
@@ -118,12 +132,18 @@ class TeacherController extends Controller
                     'religion' => $validated['religion'],
                     'tribe' => $validated['tribe'],
                     'address' => $validated['address'],
-                    'type' => 'teacher',
+                ]);
+
+                $staff = Staff::create([
+                    'user_id' => $user->id,
+                    'staff_number' =>  $staffNumber,
+                    'staff_type' => 'teacher',
+                    'employment_date' => $validated['start_date'] ?? now()->toDateString(),
                 ]);
 
                 Teacher::create([
                     'user_id' => $user->id,
-                    'staff_number' => $validated['staff_number'],
+                    'staff_id' => $staff->id,
                     'specialized_subject' => $validated['specialized_subject'],
                     'highest_qualification' => $validated['highest_qualification'] ?? null,
                     'years_of_experience' => $validated['years_of_experience'] ?? 0,
@@ -132,9 +152,14 @@ class TeacherController extends Controller
                 ]);
             });
 
-            return redirect()->back()
-                ->with('success', 'Teacher created successfully!')
-                ->getTargetUrl();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Teacher Created successfully',
+                'redirect' => redirect()
+                    ->intended(route('teachers.index'))
+                    ->with('success', 'Teacher Created successfully!')
+                    ->getTargetUrl(),
+            ], 201);
         } catch (\Exception $e) {
             return response()->json(
                 [
@@ -184,7 +209,8 @@ class TeacherController extends Controller
             'tribe' => 'required|string|max:100',
             'address' => 'required|string|max:255',
             'specialized_subject' => 'nullable|string|max:255',
-            'staff_number' => 'required|string|max:50|unique:teachers,staff_number,' . $teacher->user_id . ',user_id',
+            'staff_number' => 'required|string|max:50|unique:staff,staff_number,' . $teacher->staff_id,
+
 
             'highest_qualification' => 'nullable|string|max:255',
             'years_of_experience' => 'nullable|integer|min:0',
@@ -210,8 +236,12 @@ class TeacherController extends Controller
                     'address' => $validated['address'],
                 ]);
 
-                $teacher->update([
+                $teacher->staff->update([
                     'staff_number' => $validated['staff_number'],
+                    'employment_date' => $validated['start_date'] ?? now()->toDateString(),
+                ]);
+
+                $teacher->update([
                     'specialized_subject' => $validated['specialized_subject'],
                     'highest_qualification' => $validated['highest_qualification'] ?? null,
                     'years_of_experience' => $validated['years_of_experience'] ?? 0,

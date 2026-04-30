@@ -17,7 +17,7 @@
         @if (session('failure'))
             <script>
                 document.addEventListener('DOMContentLoaded', () => {
-                    showfailure("{{ session('failure') }}");
+                    showFailure("{{ session('failure') }}");
                 });
             </script>
             @php
@@ -34,7 +34,6 @@
                 session()->forget('info');
             @endphp
         @endif
-
         <x-dashboard-sidebar />
         @yield('page-content')
         <script src="{{ asset('/js/dashboardSidebar.js') }}"></script>

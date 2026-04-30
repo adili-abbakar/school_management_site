@@ -3,7 +3,7 @@
 @section('title', 'Academic Staffs')
 
 @section('page-content')
-    <main class="flex-grow flex flex-col min-w-0  overflow-y-auto">
+    <main class="flex-grow flex flex-col min-w-0  overflow-y-auto  hide-scrollbar">
         <x-loader-component />
 
         <div data-live-search data-search-url="{{ route('teachers.index') }}" data-search-delay="300">
