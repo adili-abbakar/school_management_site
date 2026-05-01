@@ -6,6 +6,7 @@ use App\Models\Users\User;
 use App\models\Users\Admin;
 use App\Models\Users\Staff;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -21,15 +22,16 @@ class AdminFactory extends Factory
 
     public function definition(): array
     {
-        $user = User::factory()->create();
+        $staffNumber =  Staff::generateStaffNumber();
+
+        $user = User::factory(['password' => Hash::make($staffNumber),])->create();
 
         $staff = Staff::create([
             'user_id' => $user->id,
-            'staff_number' =>  Staff::generateStaffNumber(),
+            'staff_number' =>  $staffNumber,
             'staff_type' => 'admin',
             'employment_date' => now(),
         ]);
-        $user->update(['password' => $staff->staff_number]);
 
         return [
             'user_id' => $user->id,

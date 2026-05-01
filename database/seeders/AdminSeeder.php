@@ -10,15 +10,18 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminSeeder extends Seeder
 {
-    
+
     public function run()
     {
+        $staffNumber =  Staff::generateStaffNumber();
+
+
         $user = User::create([
             'first_name' => 'Super',
             'middle_name' => 'Test',
             'last_name' => 'Admin',
             'email' => 'admin@school.com',
-            'password' => Hash::make('12345678'),
+            'password' => Hash::make($staffNumber),
             'phone' => '08012345678',
             'date_of_birth' => '1990-01-01',
             'gender' => 'male',
@@ -32,7 +35,7 @@ class AdminSeeder extends Seeder
 
         $staff = Staff::create([
             'user_id' => $user->id,
-            'staff_number' =>  Staff::generateStaffNumber(),
+            'staff_number' =>  $staffNumber,
             'staff_type' => 'admin',
             'employment_date' => now(),
         ]);
@@ -46,9 +49,6 @@ class AdminSeeder extends Seeder
             'start_date' => now(),
             'employment_type' => 'full_time',
         ]);
-
-        $user->update(['password' => $staff->staff_number]);
-        // Seed random admins with factories
         Admin::factory()->count(10)->create();
     }
 }

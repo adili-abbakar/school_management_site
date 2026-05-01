@@ -12,13 +12,14 @@ class TeacherSeeder extends Seeder
 {
     public function run()
     {
-        // Seed a fixed teacher for guaranteed login
+        $staffNumber =  Staff::generateStaffNumber();
+
         $user = User::create([
             'first_name' => 'John',
             'middle_name' => 'Test',
             'last_name' => 'Teacher',
             'email' => 'teacher@school.com',
-            'password' => Hash::make('12345678'),
+            'password' => Hash::make($staffNumber),
             'phone' => '08098765432',
             'date_of_birth' => '1985-05-15',
             'gender' => 'female',
@@ -32,7 +33,7 @@ class TeacherSeeder extends Seeder
 
         $staff = Staff::create([
             'user_id' => $user->id,
-            'staff_number' =>  Staff::generateStaffNumber(),
+            'staff_number' =>  $staffNumber,
             'staff_type' => 'teacher',
             'employment_date' => now(),
         ]);
@@ -46,9 +47,7 @@ class TeacherSeeder extends Seeder
             'start_date' => now(),
             'employment_type' => 'full_time',
         ]);
-        $user->update(['password' => $staff->staff_number]);
 
-        // Seed random teachers with factories
         Teacher::factory()->count(10)->create();
     }
 }

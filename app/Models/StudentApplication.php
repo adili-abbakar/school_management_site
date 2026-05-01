@@ -5,13 +5,14 @@ namespace App\Models;
 use App\Models\Academic\AcademicClass;
 use App\Models\Academic\Session;
 use App\Models\Users\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StudentApplication extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
     protected $fillable =  [
         'student_first_name',
         'student_middle_name',
@@ -78,25 +79,33 @@ class StudentApplication extends Model
         ])));
     }
 
-    public static function generateApplicationNumber($sessionId)
+    public static function generateApplicationNumber(): string
     {
-        $session = Session::findOrFail($sessionId);
+        try {
+            return NumberingSetting::generateUnique(
+                'application_number',
+                self::class,
+                'application_number'
+            );
+        } catch (\Throwable $e) {
+            // fallback old method
+            $year = now()->year;
 
-        $sessionName = str_replace('/', '-', $session->name);
+            $last = self::whereYear('created_at', $year)
+                ->whereNotNull('application_number')
+                ->latest('id')
+                ->value('application_number');
 
-        $last = StudentApplication::where('session_id', $sessionId)
-            ->latest('id')
-            ->first();
+            if ($last && preg_match('/(\d+)$/', $last, $matches)) {
+                $nextNumber = (int) $matches[1] + 1;
+            } else {
+                $nextNumber = 1;
+            }
 
-        if ($last && preg_match('/(\d+)$/', $last->application_number, $matches)) {
-            $nextNumber = (int)$matches[1] + 1;
-        } else {
-            $nextNumber = 1;
+            $number = str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+
+            return "APP-{$year}-{$number}";
         }
-
-        $number = str_pad($nextNumber, 6, '0', STR_PAD_LEFT);
-
-        return "APP-{$sessionName}-{$number}";
     }
 
     public function class(): BelongsTo

@@ -93,3 +93,4 @@
 </div>
 
 @include('users.partials.address-field', ['user' => $teacher?->user])
+<script src="{{ asset('js/auto-generate-staff-id.js') }}"></script>
