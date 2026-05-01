@@ -48,28 +48,22 @@
 
                  <td class="px-6 py-4 text-center">
                      <div class="flex justify-center gap-2">
-                         <a href="">
-                             <button class="text-blue-500" title="Edit">
-                                 <i class="fas fa-edit"></i>
-                             </button>
+                         <a href="{{ route('guardians.edit', $guardian->user_id) }}" class="text-blue-500"
+                             title="Edit">
+                             <i class="fas fa-edit"></i>
                          </a>
 
-                         <a href="{{ route('user.edit-password', $guardian->user_id) }}">
-                             <button class="text-blue-500" title="Edit Password">
-                                 <i class="fas fa-key"></i>
-                             </button>
+                         <a href="{{ route('user.edit-password', $guardian->user_id) }}"class="text-blue-500"
+                             title="Edit Password">
+                             <i class="fas fa-key"></i>
                          </a>
 
-                         <a href="">
-                             <button class="text-green-500" title="View Details">
-                                 <i class="fas fa-eye"></i>
-                             </button>
+                         <a href="" class="text-green-500" title="View Details">
+                             <i class="fas fa-eye"></i>
                          </a>
 
-                         <a href="">
-                             <button class="text-red-500" title="Delete">
-                                 <i class="fas fa-trash"></i>
-                             </button>
+                         <a href="" class="text-red-500" title="Delete">
+                             <i class="fas fa-trash"></i>
                          </a>
                      </div>
                  </td>

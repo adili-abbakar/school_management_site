@@ -16,6 +16,10 @@ class Guardian extends Model
         'occupation',
         'place_of_work'
     ];
+    
+    protected $primaryKey = 'user_id';
+    public $incrementing = false;
+    protected $keyType = 'int';
 
     public function user()
     {
