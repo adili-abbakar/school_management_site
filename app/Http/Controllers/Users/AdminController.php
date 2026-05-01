@@ -301,13 +301,13 @@ class AdminController extends Controller
     {
         $user = $admin->load('user');
         $route = route('admins.destroy', $admin);
-        $userType = 'Teacher';
+        $userType = 'admin';
 
         $messages = [
             "This account will be deactivated. Their records will be hidden but can be restored later.",
             "All associated data and records will be reversibly removed from the system. They can be restored later if needed."
         ];
 
-        return view('users.soft-delete', compact('user', 'route', 'messages'));
+        return view('users.soft-delete', compact('user', 'route', 'messages', 'userType'));
     }
 }

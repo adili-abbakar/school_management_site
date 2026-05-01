@@ -9,7 +9,7 @@
         <div class="bg-gradient-to-r from-red-500 to-red-800 px-6 py-4 rounded-t-lg">
             <div class="flex items-center gap-3">
                 <i class="fas fa-exclamation-triangle text-white text-2xl"></i>
-                <h1 class="text-white text-lg font-bold">Archive {{ ucwords($user->user?->type) }} Account</h1>
+                <h1 class="text-white text-lg font-bold">Archive {{ ucwords($userType) }} Account</h1>
             </div>
         </div>
 
@@ -24,13 +24,15 @@
             </div>
 
             <p class="text-slate-700 text-sm mb-4">
-                You are about to archive the {{ $user->user?->type }} account:
+                You are about to archive the {{ $userType }} account:
             </p>
 
             <div class="bg-slate-100 rounded-lg p-3 mb-6">
                 <p class="text-slate-800 font-semibold text-sm">{{ $user->user?->full_name }}</p>
-                <p class="text-slate-600 text-xs mt-1">{{ $user->user?->type !== 'student' ? 'Staff' : 'Admission' }} Number
-                    : {{ $user->user?->type !== 'student' ? $user->staff_number : $user->admission_number }}</p>
+                @if ($userType !== 'guardian')
+                    <p class="text-slate-600 text-xs mt-1">{{ $userType !== 'student' ? 'Staff' : 'Admission' }} Number
+                        : {{ $userType !== 'student' ? $user?->staff?->staff_number : $user->admission_number }}</p>
+                @endif
                 <p class="text-slate-600 text-xs">Email: {{ $user->user?->email }}</p>
             </div>
 

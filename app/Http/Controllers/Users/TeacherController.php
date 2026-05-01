@@ -297,14 +297,14 @@ class TeacherController extends Controller
     public function delete(Teacher $teacher)
     {
         $user = $teacher->load('user');
-        $route = route('teachers.destroy', $teacher->user_id);
-        $userType = 'Teacher';
+        $route = route('guardians.destroy', $teacher->user_id);
+        $userType = 'teacher';
 
         $messages = [
             "This account will be deactivated. Their records will be hidden but can be restored later.",
             "All associated data and records will be reversibly removed from the system. They can be restored later if needed."
         ];
 
-        return view('users.soft-delete', compact('user', 'route', 'messages'));
+        return view('users.soft-delete', compact('user', 'route', 'messages', 'userType'));
     }
 }

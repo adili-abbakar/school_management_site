@@ -62,7 +62,7 @@
                              <i class="fas fa-eye"></i>
                          </a>
 
-                         <a href="" class="text-red-500" title="Delete">
+                         <a href="{{ route('guardians.delete', $guardian->user_id) }}" class="text-red-500" title="Delete">
                              <i class="fas fa-trash"></i>
                          </a>
                      </div>

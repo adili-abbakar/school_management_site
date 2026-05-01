@@ -222,6 +222,39 @@ class GuardianController extends Controller
      */
     public function destroy(Guardian $guardian)
     {
-        //
+        try {
+            DB::transaction(function () use ($guardian) {
+                $guardian->user->delete();
+                $guardian->delete();
+            });
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Guardian Deleted successfully',
+                'redirect' => redirect()
+                    ->intended(route('guardians.index'))
+                    ->with('success', 'Guardian Deleted successfully!')
+                    ->getTargetUrl(),
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'Error',
+                'message' => 'Something went wrong: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function delete(Guardian $guardian)
+    {
+        $user = $guardian->load('user');
+        $route = route('guardians.destroy', $guardian->user_id);
+        $userType = 'guardian';
+
+        $messages = [
+            "This account will be deactivated. Their records will be hidden but can be restored later.",
+            "All associated data and records will be reversibly removed from the system. They can be restored later if needed."
+        ];
+
+        return view('users.soft-delete', compact('user', 'route', 'messages', 'userType'));
     }
 }

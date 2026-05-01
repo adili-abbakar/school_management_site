@@ -17,7 +17,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('teachers/{teacher}/delete', [TeacherController::class, 'delete'])->name('teachers.delete');
 
     Route::resource('students', StudentController::class);
+
     Route::resource('guardians', GuardianController::class);
+    Route::get('guardians/{guardian}/delete', [GuardianController::class, 'delete'])->name('guardians.delete');
+
 
 
     Route::prefix('user/')->name('user.')->group(function () {
