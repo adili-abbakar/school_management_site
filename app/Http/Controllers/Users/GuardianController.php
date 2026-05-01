@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Models\Users\Guardian;
+use App\Models\Users\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class GuardianController extends Controller
 {
@@ -71,7 +74,65 @@ class GuardianController extends Controller
      */
     public function store(Request $request,)
     {
-        //
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'required|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required|string|max:20',
+            'date_of_birth' => 'required|date',
+            'gender' => 'required|in:male,female',
+            'nationality' => 'required|string|max:100',
+            'state' => 'required|string|max:100',
+            'local_government' => 'required|string|max:100',
+            'religion' => 'required|string|max:100',
+            'tribe' => 'required|string|max:100',
+            'address' => 'required|string|max:255',
+            'occupation' => 'required|string|max:255',
+        ]);
+
+        try {
+            DB::transaction(function () use ($validated) {
+                $user = User::create([
+                    'first_name' => $validated['first_name'],
+                    'middle_name' => $validated['middle_name'],
+                    'last_name' => $validated['last_name'] ?? null,
+                    'email' => $validated['email'],
+                    'password' => Hash::make(str()->random(8)),
+                    'phone' => $validated['phone'],
+                    'date_of_birth' => $validated['date_of_birth'],
+                    'gender' => $validated['gender'],
+                    'nationality' => $validated['nationality'],
+                    'state' => $validated['state'],
+                    'local_government' => $validated['local_government'],
+                    'religion' => $validated['religion'],
+                    'tribe' => $validated['tribe'],
+                    'address' => $validated['address'],
+                ]);
+
+                Guardian::create([
+                    'user_id' => $user->id,
+                    'occupation' => $validated['occupation'],
+                ]);
+            });
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Guardian created successfully',
+                'redirect' => redirect()
+                    ->intended(route('guardians.index'))
+                    ->with('success', 'Guardian created successfully!')
+                    ->getTargetUrl(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Something went wrong: ' . $e->getMessage(),
+                ],
+                500,
+            );
+        }
     }
 
     /**
