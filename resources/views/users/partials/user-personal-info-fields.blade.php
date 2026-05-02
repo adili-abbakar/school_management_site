@@ -1,10 +1,3 @@
-<div class="mb-6">
-    <h3 class="text-base font-bold text-primary mb-1 flex items-center gap-2">
-        <i class="fas fa-user text-accent text-xs"></i>
-        Personal Information
-    </h3>
-    <p class="text-xs text-slate-500">Basic details about the admin</p>
-</div>
 
 <!-- Added 2-3 column responsive grid layout for form fields -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">

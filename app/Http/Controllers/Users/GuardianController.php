@@ -98,7 +98,7 @@ class GuardianController extends Controller
                     'middle_name' => $validated['middle_name'],
                     'last_name' => $validated['last_name'] ?? null,
                     'email' => $validated['email'],
-                    'password' => Hash::make(str()->random(8)),
+                    'password' => Hash::make($validated['phone']),
                     'phone' => $validated['phone'],
                     'date_of_birth' => $validated['date_of_birth'],
                     'gender' => $validated['gender'],

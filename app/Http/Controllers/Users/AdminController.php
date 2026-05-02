@@ -77,7 +77,7 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        $autoGenerateStaffId = $request->boolean('auto_generate_staff_id');
+        $autoGenerateStaffId = $request->boolean('auto_generate_id');
 
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
@@ -94,7 +94,7 @@ class AdminController extends Controller
             'tribe' => 'required|string|max:100',
             'address' => 'required|string|max:255',
 
-            'auto_generate_staff_id' => 'nullable|boolean',
+            'auto_generate_id' => 'nullable|boolean',
 
             'staff_number' => [
                 $autoGenerateStaffId ? 'nullable' : 'required',

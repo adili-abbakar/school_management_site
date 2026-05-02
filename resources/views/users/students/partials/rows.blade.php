@@ -11,7 +11,7 @@
             </td>
             <td class="px-4 py-3 text-slate-600 font-medium">{{ $student->currentClassArm->full_name }}</td>
             <td class="px-4 py-3 text-slate-500">{{ ucwords($student->user->gender) }}</td>
-            <td class="px-4 py-3 text-slate-500">{{ $student->guardian->user->full_name }}</td>
+            <td class="px-4 py-3 text-slate-500">{{ $student?->guardian?->user?->full_name }}</td>
             <td class="px-4 py-3 text-center">
                 <div class="flex justify-center gap-2">
                     <button class="text-blue-500 hover:text-blue-700 transition-colors text-xs"><i

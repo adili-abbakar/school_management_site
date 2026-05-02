@@ -2,6 +2,15 @@
     $admin = $admin ?? null;
 @endphp
 
+
+<div class="mb-6">
+    <h3 class="text-base font-bold text-primary mb-1 flex items-center gap-2">
+        <i class="fas fa-user text-accent text-xs"></i>
+        Personal Information
+    </h3>
+    <p class="text-xs text-slate-500">Basic details about the admin</p>
+</div>
+
 @include('users.partials.user-personal-info-fields', ['user' => $admin?->user])
 
 
@@ -13,13 +22,14 @@
     </h3>
     <p class="text-xs text-slate-500">Teaching qualifications and experience</p>
 </div>
+
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
     <div>
         <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">
             Staff ID Number *
         </label>
 
-        <input type="text" placeholder="e.g., STF/2026/001" name="staff_number" id="staffNumberInput"
+        <input type="text" placeholder="e.g., STF/2026/001" name="staff_number" id="idNumberInput"
             class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none"
             value="{{ old('staff_number', $admin?->staff?->staff_number) }}">
 
@@ -28,11 +38,11 @@
 
     @if ($admin === null)
         <div class="flex items-center gap-2 mt-6">
-            <input type="checkbox" name="auto_generate_staff_id" value="1" id="autoGenerateStaffId"
+            <input type="checkbox" name="auto_generate_id" value="1" id="autoGenerateId"
                 class="w-4 h-4 text-accent border-slate-300 rounded focus:ring-accent"
-                {{ old('auto_generate_staff_id', true) ? 'checked' : '' }}>
+                {{ old('auto_generate_id', true) ? 'checked' : '' }}>
 
-            <label for="autoGenerateStaffId" class="text-xs text-slate-600 font-semibold">
+            <label for="autoGenerateId" class="text-xs text-slate-600 font-semibold">
                 Auto-generate Staff ID
             </label>
         </div>
@@ -101,7 +111,7 @@
     </div>
     <div>
         <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Date of Joining *</label>
-        <input type="date" name="start_date" value="{{ old('start_date', $admin?->start_date?->format('Y-m-d')) }}"
+        <input type="date" name="start_date" value="{{ old('start_date', $admin?->start_date?->format('Y-m-d') ?? now()->format('Y-m-d')) }}"
             class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none">
         <span class="text-red-600 text-[10px] error-message" data-name="start_date"></span>
     </div>
@@ -109,4 +119,4 @@
 
 
 @include('users.partials.address-field', ['user' => $admin?->user])
-<script src="{{ asset('js/auto-generate-staff-id.js') }}"></script>
+<script src="{{ asset('js/auto-generate-id.js') }}"></script>

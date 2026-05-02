@@ -1,5 +1,6 @@
-@props()
-
+@php
+    $student = $student ?? null;
+@endphp
 
 <div class="mb-6">
     <h3 class="text-base font-bold text-primary mb-1 flex items-center gap-2">
@@ -9,76 +10,8 @@
     <p class="text-xs text-slate-500">Basic details about the student</p>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-    <div>
-        <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">First Name *</label>
-        <input type="text" placeholder="Enter first name"
-            class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none"
-            required>S
-    </div>
-    <div>
-        <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Middle Name</label>
-        <input type="text" placeholder="Enter middle name"
-            class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none">
-    </div>
-    <div>
-        <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Last Name
-            (Optional)</label>
-        <input type="text" placeholder="Enter last name"
-            class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none"
-            required>
-    </div>
-    <div>
-        <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Date of Birth *</label>
-        <input type="date"
-            class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none"
-            required>
-    </div>
-    <div>
-        <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Gender *</label>
-        <select
-            class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none"
-            required>
-            <option value="">Select gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-        </select>
-    </div>
-    <div>
-        <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Religion</label>
-        <select
-            class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none">
-            <option value="">Select religion</option>
-            <option value="christianity">Christianity</option>
-            <option value="islam">Islam</option>
-            <option value="other">Other</option>
-        </select>
-    </div>
-    <div>
-        <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Nationality Of Origin
-            *</label>
-        <input type="text" placeholder="Enter nationality"
-            class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none"
-            required>
-    </div>
-    <div>
-        <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">State of Origin *</label>
-        <input type="text" placeholder="Enter state"
-            class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none">
-    </div>
-    <div>
-        <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Local Goverment Area of
-            Origin *</label>
-        <input type="text" placeholder="Enter LGA"
-            class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none">
-    </div>
-    <div>
-        <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Tribe </label>
-        <input type="text" placeholder="Enter Tribe"
-            class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none">
-    </div>
-</div>
+@include('users.partials.user-personal-info-fields', ['user' => $student?->user])
+
 
 <div class="mb-6">
     <h3 class="text-base font-bold text-primary mb-1 flex items-center gap-2">
@@ -90,16 +23,30 @@
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
     <div>
-        <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Student ID *</label>
-        <input type="text" placeholder="e.g., STU001"
-            class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none"
-            required>
+        <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Student ID </label>
+        <input type="text" placeholder="e.g., STU001" id="idNumberInput" name="admission_number"
+            class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none">
+        <span class="text-red-600 text-[10px] error-message" data-name="admission_number"></span>
+
     </div>
+    @if ($student === null)
+        <div class="flex items-center gap-2 mt-6">
+            <input type="checkbox" name="auto_generate_id" value="1" id="autoGenerateId"
+                class="w-4 h-4 text-accent border-slate-300 rounded focus:ring-accent"
+                {{ old('auto_generate_id', true) ? 'checked' : '' }}>
+
+            <label for="autoGenerateId" class="text-xs text-slate-600 font-semibold">
+                Auto-generate Student ID
+            </label>
+        </div>
+    @endif
     <div>
         <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Admission Date *</label>
         <input type="date"
             class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none"
             required>
+        <span class="text-red-600 text-[10px] error-message" data-name="admission_number"></span>
+
     </div>
     <div>
         <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Academic Session *</label>
@@ -110,6 +57,8 @@
             <option value="2024-2025">2024/2025</option>
             <option value="2025-2026">2025/2026</option>
         </select>
+        <span class="text-red-600 text-[10px] error-message" data-name="admission_number"></span>
+
     </div>
     <div>
         <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Class/Grade *</label>
@@ -124,6 +73,8 @@
             <option value="ss2">SS 2</option>
             <option value="ss3">SS 3</option>
         </select>
+        <span class="text-red-600 text-[10px] error-message" data-name="admission_number"></span>
+
     </div>
     <div>
         <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Section/Arm</label>
@@ -135,11 +86,15 @@
             <option value="blue">Blue</option>
             <option value="green">Green</option>
         </select>
+        <span class="text-red-600 text-[10px] error-message" data-name="admission_number"></span>
+
     </div>
     <div>
         <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Roll Number</label>
         <input type="text" placeholder="Enter roll number"
             class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none">
+        <span class="text-red-600 text-[10px] error-message" data-name="admission_number"></span>
+
     </div>
 </div>
 
@@ -276,3 +231,4 @@
             rows="3"></textarea>
     </div>
 </div>
+<script src="{{ asset('js/auto-generate-id.js') }}"></script>

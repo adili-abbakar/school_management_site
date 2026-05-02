@@ -17,7 +17,10 @@
             </div>
 
             <!-- Full student enrollment form with responsive 2-3 column grid -->
-            <form class="bg-white rounded-xl border border-slate-100 shadow-sm p-4 md:p-6">
+            <form class="bg-white rounded-xl border border-slate-100 shadow-sm p-4 md:p-6 form" method="POST"
+                action="{{ route('students.create') }}">
+                @csrf
+                @include('users.students.partials.form-fields')
 
                 <div class="flex flex-wrap gap-3 pt-6 border-t border-slate-100">
                     <button type="submit"

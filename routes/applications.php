@@ -16,7 +16,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('applications', ApplicationController::class)->except(['create', 'store']);
 
     Route::prefix('applications/')->name('applications.')->group(function () {
-        Route::put('{application}/approve/', [ApplicationController::class, 'approve'])->name('approve');
+        Route::put('{application}/s/', [ApplicationController::class, 'approve'])->name('approve');
         Route::put('{application}/reject/', [ApplicationController::class, 'reject'])->name('reject');
         Route::put('/mine/', [ApplicationController::class, 'mine'])->name('mine');
     });
