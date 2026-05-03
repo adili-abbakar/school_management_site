@@ -11,28 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('terms', function (Blueprint $table) {
+        Schema::create('class_levels', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('section_session_id')
-                ->constrained('section_sessions')
+            $table->foreignId('section_id')
+                ->constrained('sections')
                 ->cascadeOnDelete();
 
             $table->string('name');
 
-            $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
-
-            $table->enum('status', [
-                'pending',
-                'ongoing',
-                'finished'
-            ])->default('pending');
-
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['section_session_id', 'name']);
+            $table->unique(['section_id', 'name']);
         });
     }
 
@@ -41,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('terms');
+        Schema::dropIfExists('class_levels');
     }
 };

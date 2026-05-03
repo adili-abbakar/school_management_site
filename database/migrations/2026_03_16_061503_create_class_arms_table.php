@@ -13,12 +13,26 @@ return new class extends Migration
     {
         Schema::create('class_arms', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('class_id')->constrained('classes')->onDelete('cascade');
-            $table->foreignId('teacher_id')->nullable()->constrained('teachers', 'user_id')->onDelete('set null');
+
+            $table->foreignId('class_id')
+                ->constrained('classes')
+                ->cascadeOnDelete();
+
+            $table->foreignId('teacher_id')
+                ->nullable()
+                ->constrained('teachers', 'user_id')
+                ->nullOnDelete();
+
             $table->string('name', 50);
+
+            $table->unsignedInteger('capacity')->nullable();
+
+            $table->boolean('is_active')->default(true);
+
             $table->timestamps();
             $table->softDeletes();
 
+            $table->unique(['class_id', 'name']);
         });
     }
 

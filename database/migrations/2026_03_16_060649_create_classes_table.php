@@ -13,12 +13,30 @@ return new class extends Migration
     {
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('section_id')
+                ->constrained('sections')
+                ->cascadeOnDelete();
+
+            $table->foreignId('class_level_id')
+                ->nullable()
+                ->constrained('class_levels')
+                ->nullOnDelete();
+
             $table->string('name')->index();
-            $table->enum('level', ['nursery', 'primary', 'jss', 'sss'])->default('nursery')->index();
-            $table->foreignId('next_class_id')->nullable()->unique()->constrained('classes')->nullOnDelete();
+
+            $table->foreignId('next_class_id')
+                ->nullable()
+                ->unique()
+                ->constrained('classes')
+                ->nullOnDelete();
+
+            $table->boolean('is_active')->default(true);
+
             $table->timestamps();
             $table->softDeletes();
 
+            $table->unique(['section_id', 'name']);
         });
     }
 

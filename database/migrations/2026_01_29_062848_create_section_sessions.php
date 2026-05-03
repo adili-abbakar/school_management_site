@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('terms', function (Blueprint $table) {
+        Schema::create('section_sessions', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('section_session_id')
-                ->constrained('section_sessions')
+            $table->foreignId('section_id')
+                ->constrained('sections')
                 ->cascadeOnDelete();
 
-            $table->string('name');
+            $table->foreignId('session_id')
+                ->constrained('academic_sessions')
+                ->cascadeOnDelete();
 
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
@@ -30,9 +32,8 @@ return new class extends Migration
             ])->default('pending');
 
             $table->timestamps();
-            $table->softDeletes();
 
-            $table->unique(['section_session_id', 'name']);
+            $table->unique(['section_id', 'session_id']);
         });
     }
 
@@ -41,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('terms');
+        Schema::dropIfExists('section_sessions');
     }
 };
