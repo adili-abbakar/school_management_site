@@ -16,7 +16,8 @@ class Term extends Model
         'start_date',
         'end_date',
         'activity',
-        'session_id'
+        'session_id',
+        'section_session_id'
     ];
 
     protected function casts(): array
