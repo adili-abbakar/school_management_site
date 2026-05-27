@@ -26,4 +26,12 @@ class SectionSession extends Model
             'end_date' => 'date'
         ];
     }
+
+    public function session(){
+        return $this->belongsTo(Session::class);
+    }
+
+    public function section(){
+        return $this->belongsTo(Section::class);
+    }
 }

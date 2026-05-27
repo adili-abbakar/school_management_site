@@ -11,6 +11,16 @@ class Section extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name', 'slug', 'description', 'is_default', 'is_active'
+        'name',
+        'slug',
+        'description',
+        'is_default',
+        'is_active'
     ];
+
+
+    public function sectionSessions()
+    {
+        return $this->hasMany(SectionSession::class);
+    }
 }

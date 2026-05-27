@@ -29,20 +29,21 @@
 
             <div class="px-4 mt-4 mb-2 text-[9px] font-semibold text-slate-500 uppercase tracking-wider">User Management
             </div>
-            <a href="{{ route('students.index') }}"
-                class="sidebar-link {{ request()->is('students*') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
-                <i class="fas fa-user-graduate text-xs"></i>
-                <span>Students</span>
+            <a href="{{ route('admins.index') }}"
+                class="sidebar-link {{ request()->is('admins*') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+                <i class="fas fa-user-shield text-xs"></i>
+                <span>Admins</span>
             </a>
+            
             <a href="{{ route('teachers.index') }}"
                 class="sidebar-link {{ request()->is('teachers*') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
                 <i class="fas fa-chalkboard-teacher text-xs"></i>
                 <span>Teachers</span>
             </a>
-            <a href="{{ route('admins.index') }}"
-                class="sidebar-link {{ request()->is('admins*') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
-                <i class="fas fa-user-shield text-xs"></i>
-                <span>Admins</span>
+            <a href="{{ route('students.index') }}"
+                class="sidebar-link {{ request()->is('students*') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+                <i class="fas fa-user-graduate text-xs"></i>
+                <span>Students</span>
             </a>
             <a href="{{ route('guardians.index') }}"
                 class="sidebar-link {{ request()->is('guardians*') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">

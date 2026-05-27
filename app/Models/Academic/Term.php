@@ -38,9 +38,18 @@ class Term extends Model
         return $this->end_date ? $this->end_date->translatedFormat('l, jS F, Y') : 'Not Set';
     }
 
-    public function session(): BelongsTo
+    public function sectionSession(): BelongsTo
     {
-        return $this->belongsTo(Session::class, 'session_id');
+        return $this->belongsTo(SectionSession::class);
+    }
+
+    public function getSessionAttribute(){
+        return $this->sectionSession->session;
+    }
+
+    public function getSectionAttribute()
+    {
+        return $this->sectionSession->section;
     }
 
     public static function currentTerm()

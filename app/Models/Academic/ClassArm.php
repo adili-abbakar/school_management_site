@@ -17,7 +17,9 @@ class ClassArm extends Model
     protected $fillable = [
         'name',
         'teacher_id',
-        'class_id'
+        'class_id',
+        'is_active',
+        'capacity'
     ];
 
     public function class(): BelongsTo

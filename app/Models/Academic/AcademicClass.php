@@ -16,10 +16,15 @@ class AcademicClass extends Model
 
     protected $fillable = [
         'name',
-        'level',
-        'next_class_id'
+        'class_level_id',
+        'next_class_id',
+        'section_id',
+        'is_active'
     ];
 
+    public function level(){
+        return $this->belongsTo(ClassLevel::class);
+    }
 
     public function nextClass(): BelongsTo
     {
@@ -49,22 +54,18 @@ class AcademicClass extends Model
     public function wouldCreateCycle(AcademicClass $previousClass): bool
     {
         $visited = [];
-        $current = $this; // start from current class
-
+        $current = $this; 
         while ($current) {
-            // If we reach the previous class → cycle
             if ($current->id === $previousClass->id) {
                 return true;
             }
 
-            // safety check
             if (in_array($current->id, $visited)) {
                 break;
             }
 
             $visited[] = $current->id;
 
-            // move forward
             $current = $current->nextClass;
         }
 
