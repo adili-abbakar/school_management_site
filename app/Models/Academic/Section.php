@@ -23,4 +23,8 @@ class Section extends Model
     {
         return $this->hasMany(SectionSession::class);
     }
+
+    public function levels(){
+        return $this->hasMany(ClassLevel::class);
+    }
 }

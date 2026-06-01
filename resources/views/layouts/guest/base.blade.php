@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title> @yield('title') | {{ config('app.name') }} </title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('/icons/graduation-cap.svg') }}">
-    <script src="https://cdn.tailwindcss.com"></script>
+    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <script src="{{ asset('/js/jquery-3.7.1.min.js') }}"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -258,7 +260,7 @@
             }
         }
 
-       .modal {
+        .modal {
             display: none;
             position: fixed;
             inset: 0;

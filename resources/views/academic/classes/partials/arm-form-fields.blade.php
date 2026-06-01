@@ -7,16 +7,16 @@
 <div class="border-t pt-6">
     <div class="flex justify-between items-center mb-4">
         <h3 class="text-sm font-bold text-primary">Class Arms</h3>
-        <button type="button" id="addArmBtn"
+        <button type="button" id="addRepeaterItemBtn"
             class="bg-accent text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-blue-600 transition-all flex items-center gap-2">
             <i class="fas fa-plus"></i> Add Arm
         </button>
 
     </div>
 
-    <div id="armsContainer" class="space-y-4">
+    <div id="repeaterContainer" class="space-y-4">
         @forelse ($arms as $arm)
-            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 arm-item">
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 repeater-item">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-[10px] font-semibold text-slate-700 mb-2">Arm Name <span
@@ -53,7 +53,7 @@
                 </button>
             </div>
         @empty
-            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 arm-item">
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 repeater-item">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-[10px] font-semibold text-slate-700 mb-2">Arm Name <span
@@ -87,4 +87,4 @@
     </div>
 </div>
 
-<script src="{{ asset('js/class-form.js') }}"></script>
+<script src="{{ asset('js/itemRepeater.js') }}"></script>

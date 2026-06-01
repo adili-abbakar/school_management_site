@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Update Acadeimc Sessions')
+@section('title', 'Update Section')
 
 @section('page-content')
     <main class="flex-grow flex flex-col min-w-0  overflow-y-auto">
@@ -25,12 +25,12 @@
                         <h2 class="text-primary font-semibold">Update Academic Session</h2>
                     </div>
 
-                    <form class="form space-y-6" action="{{ route('sessions.update', $session->id) }}" method="POST">
+                    <form class="form space-y-6" action="{{ route('sections.update', $section->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 
-                        @include('academic.sessions.partials.form-fields', ['session' => $session])
-
+                        @include('academic.sections.partials.section-form-fields', ['section' => $section])
+                        @include('academic.sections.partials.level-form-fields', ['levels' => $section?->levels])
 
                         <!-- Form Actions -->
                         <div class="flex gap-3 justify-end">

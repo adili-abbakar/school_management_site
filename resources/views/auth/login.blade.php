@@ -34,7 +34,7 @@
           <label class="form-label">Email Address or Username</label>
           <div class="relative">
             <i class="fas fa-envelope absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-            <input type="text" name="email" id="email" class="form-input pl-10"
+            <input type="text" name="email" id="email" class="form-input p-10"
               placeholder="e.g. admin@school.com">
           </div>
           <span id="emailError" class="text-red-600 text-sm"></span>

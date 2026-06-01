@@ -1,5 +1,5 @@
-@if ($sessions->hasPages())
+@if ($sections->hasPages())
     <div class="flex justify-center">
-        {{ $sessions->links() }}
+        {{ $sections->links() }}
     </div>
 @endif

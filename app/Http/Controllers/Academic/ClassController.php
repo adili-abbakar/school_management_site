@@ -268,7 +268,7 @@ class ClassController extends Controller
 
                 foreach ($submittedArms as $arm) {
                     if (!empty($arm->id)) {
-                        $class->arms()->where('id', $arm['id'])->update([
+                        $class->arms()->where('id', $arm['id'])->update([   
                             'name' => $arm['name'],
                             'teacher_id' => $arm['form_teacher']
                         ]);
