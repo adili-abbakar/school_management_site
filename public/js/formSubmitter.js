@@ -40,7 +40,7 @@ $(".form").on("submit", function (e) {
                 $.each(errors, function (field, messages) {
                     $(`.error-message[data-name="${field}"]`).text(messages[0]);
                     let inputName = convertFormat(field);
-                    $(`[name="${inputName}"]`).addClass("border-red-600");
+                    $(`[name="${inputName}"]`).addClass("!border-red-600");
                 });
             } else {
                 console.error("Server error:", xhr.responseText);

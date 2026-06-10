@@ -31,7 +31,7 @@
             </div>
 
             <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
-                <div class="p-4 border-b flex justify-between items-center">
+                <div class="p-4 border-b border-slate-200 flex justify-between items-center">
                     <h3 class="font-bold text-primary text-sm">Configured Number Patterns</h3>
                     <span class="text-[9px] font-bold text-slate-400 uppercase">
                         {{ $numberingSettings->count() }} Settings
@@ -40,7 +40,7 @@
 
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
-                        <thead class="bg-slate-50 text-slate-500 uppercase text-[9px] font-bold tracking-wider">
+                        <thead class="bg-slate-100 text-slate-500 uppercase text-[9px] font-bold tracking-wider">
                             <tr>
                                 <th class="px-4 py-3">Type</th>
                                 <th class="px-4 py-3">Prefix</th>
@@ -53,7 +53,7 @@
                             </tr>
                         </thead>
 
-                        <tbody class="divide-y">
+                        <tbody class="divide-y divide-slate-100">
                             @forelse ($numberingSettings as $setting)
                                 @php
                                     $parts = [];

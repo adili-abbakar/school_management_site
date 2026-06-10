@@ -133,7 +133,7 @@
                                 <th class="px-6 py-3">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y">
+                        <tbody class="divide-y divide-slate-100">
                             <tr class="hover:bg-slate-50 transition-colors">
                                 <td class="px-6 py-3">1</td>
                                 <td class="px-6 py-3 font-semibold text-primary">Chimezie Amadi</td>

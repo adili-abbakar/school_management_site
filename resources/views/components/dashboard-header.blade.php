@@ -1,4 +1,5 @@
-<header class="h-14 bg-white border-b p-6 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+<header
+    class="h-14 bg-white border-b border-slate-200 p-6 flex items-center justify-between sticky top-0 z-10 shadow-sm">
     <button id="openSidebar" class="text-primary text-lg md:hidden mr-3">
         <i class="fas fa-bars"></i>
     </button>

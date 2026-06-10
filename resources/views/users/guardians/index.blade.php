@@ -36,7 +36,7 @@
                 <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs">
-                            <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold tracking-wider">
+                            <thead class="bg-slate-100 text-slate-500 uppercase text-[10px] font-bold tracking-wider">
                                 <tr>
                                     <th class="px-6 py-4">Name</th>
                                     {{-- <th class="px-6 py-4">Relationship</th> --}}
@@ -46,7 +46,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody class="divide-y" data-search-results>
+                            <tbody class="divide-y divide-slate-100" data-search-results>
                                 @include('users.guardians.partials.rows', ['guardians' => $guardians])
                             </tbody>
                         </table>

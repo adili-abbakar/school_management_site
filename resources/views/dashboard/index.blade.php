@@ -17,6 +17,7 @@
 
         </x-dashboard-header>
 
+
         <!-- Dashboard Content -->
         <div class="p-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
@@ -26,7 +27,7 @@
                 </div>
                 <div class="flex gap-2">
                     <button
-                        class="bg-white border text-primary px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm hover:bg-slate-50 transition-all flex items-center gap-1.5">
+                        class="bg-white border border-slate-200 text-primary px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm hover:bg-slate-50 transition-all flex items-center gap-1.5">
                         <i class="fas fa-download"></i>
                         <span class="hidden sm:inline">Export</span>
                     </button>
@@ -47,7 +48,7 @@
                         </div>
                         <span class="text-emerald-500 text-[9px] font-bold bg-emerald-50 px-1.5 py-0.5 rounded">+12%</span>
                     </div>
-                    <div class="text-2xl font-extrabold text-primary">{{  $studentsCount  }}</div>
+                    <div class="text-2xl font-extrabold text-primary">{{ $studentsCount }}</div>
                     <div class="text-slate-400 text-[9px] font-semibold uppercase tracking-wider mt-1">Total Students</div>
                 </div>
                 <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
@@ -87,7 +88,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Recent Admissions Table -->
                 <div class="lg:col-span-2 bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
-                    <div class="p-4 border-b flex justify-between items-center">
+                    <div class="p-4 border-b border-slate-200 bg-slate-100 flex justify-between items-center">
                         <h3 class="font-bold text-primary text-sm">Recent Student Admissions</h3>
                         <a href="#" class="text-accent text-[9px] font-bold hover:underline">View All</a>
                     </div>
@@ -101,27 +102,34 @@
                                     <th class="px-4 py-3 text-center">Status</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y">                             
-                                @foreach ($students as $student)
+                            <tbody class="divide-y divide-slate-100">
+                                @forelse ($students as $student)
                                     <tr class="hover:bg-slate-50 transition-colors">
                                         <td class="px-4 py-3">
                                             <div class="flex items-center gap-2">
                                                 <div
                                                     class="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500 text-[9px]">
                                                     MB</div>
-                                                <span class="font-semibold text-primary">{{ $student->user->full_name }}</span>
+                                                <span
+                                                    class="font-semibold text-primary">{{ $student->user->full_name }}</span>
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 text-slate-600 font-medium">{{ $student->class }}</td>
                                         <td class="px-4 py-3 text-slate-500">{{ $student->admission_date->format('d M') }}
-</td>
+                                        </td>
                                         <td class="px-4 py-3 text-center">
                                             <span
                                                 class="bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase">{{ $student->current_status }}</span>
                                         </td>
 
                                     </tr>
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center text-gray-500 p-4">
+                                            No admissions application found.
+                                        </td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>

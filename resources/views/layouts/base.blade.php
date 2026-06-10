@@ -11,7 +11,7 @@
     <script src="{{ asset('/js/jquery-3.7.1.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('css/all.min.css') }}" />
 
-    <script>
+    {{-- <script>
         tailwind.config = {
             theme: {
                 extend: {
@@ -25,7 +25,7 @@
                 }
             }
         }
-    </script>
+    </script> --}}
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
@@ -56,23 +56,23 @@
         }
 
         .text-xs {
-            font-size: 9px;
-        }
-
-        .text-sm {
-            font-size: 10px;
-        }
-
-        .text-base {
             font-size: 11px;
         }
 
-        .text-lg {
+        .text-sm {
             font-size: 12px;
         }
 
-        .text-xl {
+        .text-base {
             font-size: 13px;
+        }
+
+        .text-lg {
+            font-size: 14px;
+        }
+
+        .text-xl {
+            font-size: 15px;
         }
 
         .text-2xl {
@@ -91,7 +91,7 @@
         }
 
         .mobile-sidebar {
-            transform: translateX(-100%);
+            transform: translateX(0);
             transition: transform 0.3s ease-in-out;
         }
 
@@ -216,7 +216,6 @@
         }
     </style>
 </head>
-
 
 @yield('content')
 

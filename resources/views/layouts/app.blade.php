@@ -4,6 +4,7 @@
 
     <body class="flex h-screen overflow-hidden overflow-y-scroll scrollbar-hide"
         style="background-image: url('{{ asset('images/bg.png') }}');">
+
         @if (session('success'))
             <script>
                 document.addEventListener('DOMContentLoaded', () => {
