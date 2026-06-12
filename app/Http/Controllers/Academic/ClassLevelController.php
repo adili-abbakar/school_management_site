@@ -50,7 +50,6 @@ class ClassLevelController extends Controller
 
                 $section->levels()->create([
                     'name' => $validated['name'],
-                    'slug' => Str::slug($validated['name']),
                     'description'  => $validated['description'],
                 ]);
             });
@@ -112,7 +111,6 @@ class ClassLevelController extends Controller
 
                 $level->update([
                     'name' => $validated['name'],
-                    'slug' => Str::slug($validated['name']),
                     'description'  => $validated['description'],
                 ]);
                 $level->section()->touch();
@@ -143,5 +141,9 @@ class ClassLevelController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function delete(){
+        
     }
 }

@@ -47,7 +47,7 @@
             <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 repeater-item">
                 <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2  gap-4">
                     <div>
-                        <label class="block text-[10px] font-semibold text-slate-700 mb-2">Arm Name <span
+                        <label class="block text-[10px] font-semibold text-slate-700 mb-2">Level Name <span
                                 class="text-red-500">*</span></label>
                         <input type="text" placeholder="e.g., Primary, Nursery" data-field="name"
                             name="levels[0][name]"

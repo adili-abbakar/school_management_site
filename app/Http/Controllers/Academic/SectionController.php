@@ -23,7 +23,6 @@ class SectionController extends Controller
         $sections = Section::when($search, function ($query) use ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('slug', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%")
                     ->orWhere('is_active', 'like', "%{$search}%");
             });
@@ -85,7 +84,6 @@ class SectionController extends Controller
             DB::transaction(function () use ($validated) {
                 $newSection = Section::create([
                     'name'  => $validated['section_name'],
-                    'slug'  => Str::slug($validated['section_name']),
                     'description'  => $validated['section_description'],
                 ]);
 
@@ -93,7 +91,6 @@ class SectionController extends Controller
                     ClassLevel::create([
                         'name'       => $level['name'],
                         'section_id'   => $newSection->id,
-                        'slug'  => Str::slug($level['name']),
                         'description'  => $level['description'],
                     ]);
                 }
@@ -208,7 +205,6 @@ class SectionController extends Controller
             DB::transaction(function () use ($validated, $section) {
                 $section->update([
                     'name'  => $validated['section_name'],
-                    'slug'  => Str::slug($validated['section_name']),
                     'description'  => $validated['section_description'],
                 ]);
 
@@ -225,14 +221,12 @@ class SectionController extends Controller
 
                         $existingLevel->update([
                             'name' => $level['name'],
-                            'slug' => Str::slug($level['name']),
                             'description' => $level['description'],
                         ]);
                     } else {
 
                         $section->levels()->create([
                             'name' => $level['name'],
-                            'slug' => Str::slug($level['name']),
                             'description' => $level['description'],
                         ]);
                     }
@@ -265,5 +259,9 @@ class SectionController extends Controller
     public function destroy(Section $section)
     {
         //
+    }
+
+    public function delete(){
+        
     }
 }

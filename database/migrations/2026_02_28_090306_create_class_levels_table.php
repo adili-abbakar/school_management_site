@@ -18,8 +18,6 @@ return new class extends Migration
                 ->constrained('sections')
                 ->cascadeOnDelete();
 
-
-            $table->string('slug')->nullable();
             $table->text('description')->nullable();
 
             $table->string('name');

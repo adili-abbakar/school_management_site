@@ -12,7 +12,6 @@ class Section extends Model
 
     protected $fillable = [
         'name',
-        'slug',
         'description',
         'is_default',
         'is_active'

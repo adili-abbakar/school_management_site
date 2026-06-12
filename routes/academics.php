@@ -22,7 +22,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('sessions/{session}/delete', [SessionController::class, 'delete'])->name('sessions.delete');
 
     Route::resource('sections', SectionController::class);
-    Route::get('sections/{section}/delete', [SessionController::class, 'delete'])->name('sections.delete');
+    Route::get('sections/{section}/delete', [SectionController::class, 'delete'])->name('sections.delete');
 
     Route::resource('sections.levels', ClassLevelController::class)->except(['show', 'index']);
     Route::get('sections/{session}/level/{level}/delete', [ClassLevelController::class, 'delete'])->name('sections.levels.delete');
