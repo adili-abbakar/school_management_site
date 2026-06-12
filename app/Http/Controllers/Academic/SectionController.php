@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Monolog\Level;
+use Illuminate\Support\Facades\Validator;
 
 class SectionController extends Controller
 {
@@ -140,7 +140,8 @@ class SectionController extends Controller
      */
     public function update(Request $request, Section $section)
     {
-        $validated = $request->validate(
+        $validator = Validator::make(
+            $request->all(),
             [
                 'section_name' => [
                     'required',
@@ -151,6 +152,7 @@ class SectionController extends Controller
                 'section_description' => 'required|string|max:500',
 
                 'levels' => 'required|array|min:1',
+                'levels.*.id' => 'nullable|integer',
                 'levels.*.name' => "required|string|max:50|distinct",
                 'levels.*.description' => "required|string|max:500",
             ],
@@ -171,6 +173,37 @@ class SectionController extends Controller
 
             ]
         );
+
+        $validator->after(function ($validator) use ($request, $section) {
+            // throw new \Exception(json_encode($request->levels));
+            foreach ($request->levels ?? [] as $index => $level) {
+
+                $exists = ClassLevel::where('section_id', $section->id)
+                    ->where('name', $level['name'])
+                    ->when(
+                        !empty($level['id']),
+                        fn($query) => $query->where('id', '!=', $level['id'])
+                    )
+                    ->exists();
+
+                if ($exists) {
+                    $validator->errors()->add(
+                        "levels.$index.name",
+                        "The level '{$level['name']}' already exists in this section."
+                    );
+                }
+            }
+        });
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'validation error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $validated = $validator->validated();
+
         try {
             DB::transaction(function () use ($validated, $section) {
                 $section->update([
@@ -185,18 +218,22 @@ class SectionController extends Controller
 
 
                 foreach ($levels as $level) {
-                    if (!empty($level->id)) {
-                        $level->update([
-                            'name'       => $level['name'],
-                            'section_id'   => $section->id,
-                            'slug'  => Str::slug($level['name']),
-                            'description'  => $level['description'],
+
+                    if (!empty($level['id'])) {
+
+                        $existingLevel = ClassLevel::findOrFail($level['id']);
+
+                        $existingLevel->update([
+                            'name' => $level['name'],
+                            'slug' => Str::slug($level['name']),
+                            'description' => $level['description'],
                         ]);
                     } else {
+
                         $section->levels()->create([
-                            'name'       => $level['name'],
-                            'slug'  => Str::slug($level['name']),
-                            'description'  => $level['description'],
+                            'name' => $level['name'],
+                            'slug' => Str::slug($level['name']),
+                            'description' => $level['description'],
                         ]);
                     }
                 }

@@ -30,10 +30,12 @@
                         @method('PUT')
 
                         @include('academic.sections.partials.section-form-fields', ['section' => $section])
-                        @include('academic.sections.partials.level-form-fields', ['levels' => $section?->levels])
+                        @include('academic.sections.partials.level-form-fields', [
+                            'levels' => $section?->levels,
+                        ])
 
                         <!-- Form Actions -->
-                        <div class="flex gap-3 justify-end">
+                        <div class="flex gap-4 pt-6 border-t border-slate-200">
                             <x-buttons.transparent-cancel />
                             <x-buttons.light-blue-submit />
                         </div>

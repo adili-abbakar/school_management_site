@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\Academic\ClassLevelController;
 use App\Http\Controllers\Academic\SectionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Academic\SessionController;
 use App\Http\Controllers\Academic\TermController;
-use App\Models\Academic\ClassLevel;
+
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('sessions.terms', TermController::class)->except(['show', 'index']);
@@ -23,6 +24,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('sections', SectionController::class);
     Route::get('sections/{section}/delete', [SessionController::class, 'delete'])->name('sections.delete');
 
-    Route::resource('sections.levels', ClassLevel::class)->except(['show', 'index']);
-    Route::get('sections/{session}/level/{level}/delete', [ClassLevel::class, 'delete'])->name('sections.levels.delete');
+    Route::resource('sections.levels', ClassLevelController::class)->except(['show', 'index']);
+    Route::get('sections/{session}/level/{level}/delete', [ClassLevelController::class, 'delete'])->name('sections.levels.delete');
 });

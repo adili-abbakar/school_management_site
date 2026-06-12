@@ -3,14 +3,14 @@
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
               <div>
                   <h2 class="text-primary font-semibold text-lg mb-1">{{ $section->name }} Academic Section
-                      </h2>
+                  </h2>
                   <div class="flex flex-col md:flex-row gap-4 text-xs text-muted mt-2">
                       {{-- {{-- <div class="flex items-center gap-1.5">
                           <i class="fas fa-calendar text-accent"></i>
                           <span>Activity: <strong>{{ $section->startDate() }}</strong></span>
                       </div> --}}
-                      <div class="flex items-center gap-1.5">
-                          <i class="fas fa-info-circle"></i>
+                      <div class="flex items-top gap-1.5">
+                          <i class="fas fa-info-circle text-accent" style="padding-top: 0.5px"></i>
                           <span>Description: {{ $section->description }}</span>
                       </div>
                   </div>
@@ -43,6 +43,13 @@
                       <div class="bg-gradient-to-br  from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
                           <div class="flex items-start justify-between mb-2">
                               <h4 class="text-primary font-semibold text-sm">{{ $level->name }}</h4>
+                          </div>
+                          <div class="flex flex-col md:flex-row gap-4 text-xs text-muted mt-2">
+
+                              <div class="flex items-top gap-1.5">
+                                  <i class="fas fa-info-circle text-accent" style="padding-top: 0.5px"></i>
+                                  <span>Description: {{ $level->description }}</span>
+                              </div>
                           </div>
                           <div class="mt-3 flex gap-2">
                               <a href="{{ route('sections.levels.edit', [$section, $level]) }}"
