@@ -9,6 +9,7 @@ use App\Models\Academic\Session;
 use App\Models\Academic\Term;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class SessionController extends Controller
 {
@@ -53,23 +54,38 @@ class SessionController extends Controller
      */
     public function store(Request $request)
     {
-        $validated =  $request->validate([
-            'session_name' => 'required|string|max:255|unique:academic_sessions,name',
+        $validated =  $request->validate(
+            [
+                'session_name' => 'required|string|max:255|unique:academic_sessions,name',
 
-            'session_start_date' => ['required', 'date'],
-            'session_end_date'   => ['required', 'date', 'after:session_start_date'],
+                'session_start_date' => ['required', 'date'],
+                'session_end_date'   => ['required', 'date', 'after:session_start_date'],
 
 
-            'first_term_start_date' => ['required', 'date', 'after_or_equal:session_start_date', 'before_or_equal:session_end_date'],
-            'first_term_end_date'   => ['required', 'date', 'after:first_term_start_date', 'before_or_equal:session_end_date'],
 
-            'second_term_start_date' => ['required', 'date', 'after_or_equal:session_start_date', 'after:first_term_end_date', 'before_or_equal:session_end_date'],
-            'second_term_end_date'   => ['required', 'date', 'after:second_term_start_date', 'before_or_equal:session_end_date'],
+                'terms' => 'required|array|min:1',
+                'terms.*.name' => "required|string|max:60|distinct",
+                'terms.*.start_date' => "required|date",
+                'terms.*.end_date' => "required|date",
+            ],
+            [
+                'terms.required' => 'You must add at least one term.',
+                'terms.array' => 'terms must be submitted as a list.',
+                'terms.min' => 'You must add at least one term.',
 
-            'third_term_start_date' => ['required', 'date', 'after_or_equal:session_start_date', 'after:second_term_end_date', 'before_or_equal:session_end_date'],
-            'third_term_end_date'   => ['required', 'date', 'after:third_term_start_date', 'before_or_equal:session_end_date'],
-        ]);
+                'terms.*.name.required' => 'Each term must have a name.',
+                'terms.*.name.string' => 'Term names must be text.',
+                'terms.*.name.max' => 'Term names may not be longer than 50 characters.',
+                'terms.*.name.distinct' => 'Term names must be unique.',
 
+                'terms.*.start_date.required' => 'Each term must have a start date.',
+                'terms.*.start_date.date' => 'Term start date must be date.',
+
+                'terms.*.end_date.required' => 'Each term must have a end date.',
+                'terms.*.end_date.date' => 'Term end date must be date.',
+
+            ]
+        );
         try {
             DB::transaction(function () use ($validated) {
                 $session = Session::create([
@@ -78,27 +94,15 @@ class SessionController extends Controller
                     'end_date' => $validated['session_end_date'],
                 ]);
 
-                Term::create([
-                    'session_id' => $session->id,
-                    'name' => 'First Term',
-                    'start_date' => $validated['first_term_start_date'],
-                    'end_date' => $validated['first_term_end_date'],
-                ]);
 
-                Term::create([
-                    'session_id' => $session->id,
-                    'name' => 'Second Term',
-                    'start_date' => $validated['second_term_start_date'],
-                    'end_date' => $validated['second_term_end_date'],
-                ]);
-
-
-                Term::create([
-                    'session_id' => $session->id,
-                    'name' => 'Third Term',
-                    'start_date' => $validated['third_term_start_date'],
-                    'end_date' => $validated['third_term_end_date'],
-                ]);
+                foreach ($validated['terms'] as $term) {
+                    Term::create([
+                        'session_id' => $session->id,
+                        'name' => 'First Term',
+                        'start_date' => $term['start_date'],
+                        'end_date' => $term['end_date'],
+                    ]);
+                }
             });
             return response()->json([
                 'status' => 'success',
@@ -141,11 +145,68 @@ class SessionController extends Controller
      */
     public function update(Request $request, Session $session)
     {
-        $validated =  $request->validate([
-            'session_name' => 'required|string|max:255|unique:academic_sessions,name' . $session->id,
-            'session_start_date' => ['required', 'date'],
-            'session_end_date'   => ['required', 'date', 'after:session_start_date'],
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'session_name' => 'required|string|max:255|unique:academic_sessions,name' . $session->id,
+                'session_start_date' => ['required', 'date'],
+                'session_end_date'   => ['required', 'date', 'after:session_start_date'],
+
+
+                'terms' => 'required|array|min:1',
+                'terms.*.id' => 'nullable|integer',
+                'terms.*.name' => "required|string|max:60|distinct",
+                'terms.*.start_date' => "required|date",
+                'terms.*.end_date' => "required|date",
+            ],
+            [
+                'terms.required' => 'You must add at least one term.',
+                'terms.array' => 'terms must be submitted as a list.',
+                'terms.min' => 'You must add at least one term.',
+
+                'terms.*.name.required' => 'Each term must have a name.',
+                'terms.*.name.string' => 'Term names must be text.',
+                'terms.*.name.max' => 'Term names may not be longer than 50 characters.',
+                'terms.*.name.distinct' => 'Term names must be unique.',
+
+                'terms.*.start_date.required' => 'Each term must have a start date.',
+                'terms.*.start_date.date' => 'Term start date must be date.',
+
+                'terms.*.end_date.required' => 'Each term must have a end date.',
+                'terms.*.end_date.date' => 'Term end date must be date.',
+
+            ]
+
+        );
+
+        $validator->after(function ($validator) use ($request, $session) {
+            foreach ($request->terms ?? [] as $index => $term) {
+
+                $exists = Term::where('session_id', $session->id)
+                    ->where('name', $term['name'])
+                    ->when(
+                        !empty($term['id']),
+                        fn($query) => $query->where('id', '!=', $term['id'])
+                    )
+                    ->exists();
+
+                if ($exists) {
+                    $validator->errors()->add(
+                        "terms.$index.name",
+                        "The term '{$term['name']}' already exists in this session."
+                    );
+                }
+            }
+        });
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'validation error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $validated = $validator->validated();
 
         try {
             DB::transaction(
@@ -155,6 +216,31 @@ class SessionController extends Controller
                         'start_date' => $validated['session_start_date'],
                         'end_date' => $validated['session_end_date'],
                     ]);
+                    $terms = (collect($validated['terms']));
+
+                    $session->terms()->whereNotIn('id', $terms->pluck('id')->filter())->delete();
+
+
+                    foreach ($terms as $term) {
+
+                        if (!empty($term['id'])) {
+
+                            $existingTerm = Term::findOrFail($term['id']);
+
+                            $existingTerm->update([
+                                'name' => $term['name'],
+                                'start_date' => $term['start_date'],
+                                'end_date' => $term['end_date'],
+                            ]);
+                        } else {
+
+                            $session->terms()->create([
+                                'name' => $term['name'],
+                                'start_date' => $term['start_date'],
+                                'end_date' => $term['end_date'],
+                            ]);
+                        }
+                    }
                 }
             );
             return response()->json([

@@ -17,12 +17,6 @@ class Section extends Model
         'is_active'
     ];
 
-
-    public function sectionSessions()
-    {
-        return $this->hasMany(SectionSession::class);
-    }
-
     public function levels(){
         return $this->hasMany(ClassLevel::class);
     }

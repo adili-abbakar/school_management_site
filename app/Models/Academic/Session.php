@@ -43,9 +43,6 @@ class Session extends Model
         return $this->hasMany(Term::class, 'session_id')->orderBy('start_date', 'asc');
     }
 
-    public function sectionSessions(){
-        return $this->hasMany(SectionSession::class);
-    }
 
     // public static function currentSession()
     // {

@@ -172,7 +172,6 @@ class SectionController extends Controller
         );
 
         $validator->after(function ($validator) use ($request, $section) {
-            // throw new \Exception(json_encode($request->levels));
             foreach ($request->levels ?? [] as $index => $level) {
 
                 $exists = ClassLevel::where('section_id', $section->id)

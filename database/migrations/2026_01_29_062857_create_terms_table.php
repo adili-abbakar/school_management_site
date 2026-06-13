@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('terms', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('section_session_id')
-                ->constrained('section_sessions')
+            $table->foreignId('session_id')
+                ->constrained('academic_sessions')
                 ->cascadeOnDelete();
 
             $table->string('name');
@@ -23,16 +23,16 @@ return new class extends Migration
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
 
-            $table->enum('status', [
-                'pending',
-                'ongoing',
-                'finished'
-            ])->default('pending');
+            $table->enum('activity', [
+                'upcoming',
+                'active',
+                'completed'
+            ])->default('upcoming');
 
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['section_session_id', 'name']);
+            $table->unique(['session_id', 'name']);
         });
     }
 

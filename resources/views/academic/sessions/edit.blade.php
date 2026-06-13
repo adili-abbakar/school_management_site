@@ -29,9 +29,13 @@
                         @csrf
                         @method('PUT')
 
-                        @include('academic.sessions.partials.form-fields', ['session' => $session])
+                        <!-- Session Basic Information -->
+                        @include('academic.sessions.partials.session-form-fields', ['session' => $session])
+                        {{-- Term fields --}}
+                        @include('academic.sessions.partials.terms-form-fields', ['terms' => $session->terms])
 
-
+                        <!-- Divider -->
+                        <div class="border-t border-slate-200 pt-4"></div>
                         <!-- Form Actions -->
                         <div class="flex gap-3 justify-end">
                             <x-buttons.transparent-cancel />
