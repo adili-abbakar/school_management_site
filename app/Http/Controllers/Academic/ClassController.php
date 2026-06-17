@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Academic;
 use App\Http\Controllers\Controller;
 use App\Models\Academic\AcademicClass;
 use App\Models\Academic\ClassArm;
+use App\Models\Academic\Section;
 use App\Models\Users\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -85,8 +86,9 @@ class ClassController extends Controller
     public function create()
     {
         $classes = AcademicClass::get();
+        $sections = Section::orderBy('name')->get();
         $teachers = Teacher::with('user')->get();
-        return view('academic.classes.create', compact('classes', 'teachers'));
+        return view('academic.classes.create', compact('classes', 'teachers', 'sections'));
     }
 
     /**
@@ -97,7 +99,8 @@ class ClassController extends Controller
         $validated = $request->validate(
             [
                 'class_name' => 'required|string|max:255|unique:classes,name',
-                'class_level' => 'required|in:nursery,primary,jss,sss',
+                'class_section' => 'required',
+                'class_level' => 'required',
                 'previous_class_id' => 'nullable|exists:classes,id',
                 'force_overwrite' => 'sometimes|boolean',
 
@@ -125,7 +128,8 @@ class ClassController extends Controller
             DB::transaction(function () use ($validated) {
                 $newClass = AcademicClass::create([
                     'name'  => $validated['class_name'],
-                    'level' => $validated['class_level'],
+                    'section_id' => $validated['class_section'],
+                    'class_level_id' => $validated['class_level'],
                 ]);
 
                 foreach ($validated['arms'] as $arm) {
@@ -184,7 +188,9 @@ class ClassController extends Controller
     {
         $classes = AcademicClass::where('id', "!=", $class->id)->get();
         $teachers = Teacher::with('user')->get();
-        return view('academic.classes.edit', compact('class', 'classes', 'teachers'));
+        $sections = Section::orderBy('name')->get();
+
+        return view('academic.classes.edit', compact('class', 'classes', 'teachers', 'sections'));
     }
 
     /**
@@ -201,11 +207,13 @@ class ClassController extends Controller
                     'max:255',
                     Rule::unique('classes', 'name')->ignore($class->id),
                 ],
-                'class_level' => 'required|in:nursery,primary,jss,sss',
+                'class_section' => 'required',
+                'class_level' => 'required',
                 'previous_class_id' => 'nullable|exists:classes,id|different:' . $class->id,
                 'force_overwrite' => 'sometimes|boolean',
 
                 'arms' => 'required|array|min:1',
+                'arms.*.id' => 'nullable|integer',
                 'arms.*.name' => "required|string|max:50|distinct",
                 'arms.*.form_teacher' => 'required|exists:teachers,user_id',
             ],
@@ -223,6 +231,26 @@ class ClassController extends Controller
                 'arms.*.form_teacher.exists' => 'The selected teacher does not exist.',
             ]
         );
+
+        $validator->after(function ($validator) use ($request, $class) {
+            foreach ($request->levels ?? [] as $index => $level) {
+
+                $exists = ClassArm::where('class_id', $class->id)
+                    ->where('name', $level['name'])
+                    ->when(
+                        !empty($level['id']),
+                        fn($query) => $query->where('id', '!=', $level['id'])
+                    )
+                    ->exists();
+
+                if ($exists) {
+                    $validator->errors()->add(
+                        "arms.$index.name",
+                        "The arm '{$level['name']}' already exists in this class."
+                    );
+                }
+            }
+        });
 
         if (!$request->force_overwrite) {
             $validator->after(function ($validator) use ($request, $class) {
@@ -258,7 +286,8 @@ class ClassController extends Controller
 
                 $class->update([
                     'name' => $validated['class_name'],
-                    'level' => $validated['class_level'],
+                    'section_id' => $validated['class_section'],
+                    'class_level_id' => $validated['class_level'],
                     'next_class_id' => $newNextId
                 ]);
 
@@ -266,11 +295,16 @@ class ClassController extends Controller
 
                 $class->arms()->whereNotIn('id', $submittedArms->pluck('id')->filter())->delete();
 
+
                 foreach ($submittedArms as $arm) {
-                    if (!empty($arm->id)) {
-                        $class->arms()->where('id', $arm['id'])->update([   
+
+                    if (!empty($arm['id'])) {
+
+                        $existingArm = ClassArm::findOrFail($arm['id']);
+
+                        $existingArm->update([
                             'name' => $arm['name'],
-                            'teacher_id' => $arm['form_teacher']
+                            'teacher_id' => $arm['form_teacher'],
                         ]);
                     } else {
                         $class->arms()->create([

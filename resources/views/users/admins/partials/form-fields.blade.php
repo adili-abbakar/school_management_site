@@ -69,18 +69,15 @@
             class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none">
             <option value="">Select type</option>
 
-            <option value="full_time"
-                {{ old('employment_type', $admin?->employment_type) === 'full_time' ? 'selected' : '' }}>
+            <option value="full_time" @selected(old('employment_type', $admin?->employment_type) == 'full_time')>
                 Full Time
             </option>
 
-            <option value="part_time"
-                {{ old('employment_type', $admin?->employment_type) === 'part_time' ? 'selected' : '' }}>
+            <option value="part_time" @selected(old('employment_type', $admin?->employment_type) == 'part_time')>
                 Part Time
             </option>
 
-            <option value="contract"
-                {{ old('employment_type', $admin?->employment_type) === 'contract' ? 'selected' : '' }}>
+            <option value="contract" @selected(old('employment_type', $admin?->employment_type) == 'contract')>
                 Contract
             </option>
         </select>
@@ -111,7 +108,8 @@
     </div>
     <div>
         <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1.5">Date of Joining *</label>
-        <input type="date" name="start_date" value="{{ old('start_date', $admin?->start_date?->format('Y-m-d') ?? now()->format('Y-m-d')) }}"
+        <input type="date" name="start_date"
+            value="{{ old('start_date', $admin?->start_date?->format('Y-m-d') ?? now()->format('Y-m-d')) }}"
             class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-xs focus:ring-2 focus:ring-accent outline-none">
         <span class="text-red-600 text-[10px] error-message" data-name="start_date"></span>
     </div>

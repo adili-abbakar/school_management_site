@@ -29,7 +29,7 @@
                     ])
 
                     <!-- Form Actions -->
-                    <div class="flex gap-4 pt-6 border-t">
+                    <div class="flex gap-4 pt-6 border-t border-slate-200">
                         <button type="submit"
                             class="bg-accent text-white px-6 py-2.5 rounded-lg text-xs font-semibold hover:bg-blue-600 transition-all flex items-center gap-2">
                             <i class="fas fa-save"></i> Update Class

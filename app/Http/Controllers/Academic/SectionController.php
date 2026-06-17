@@ -260,7 +260,15 @@ class SectionController extends Controller
         //
     }
 
-    public function delete(){
-        
+    public function delete() {}
+
+    public function levels(Section $section)
+    {
+        return response()->json(
+            $section->levels()
+                ->select('id', 'name')
+                ->orderBy('name')
+                ->get()
+        );
     }
 }

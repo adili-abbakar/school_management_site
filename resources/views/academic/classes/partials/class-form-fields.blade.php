@@ -14,17 +14,45 @@
             <span class="text-red-600 text-[10px] error-message" data-name="class_name"></span>
         </div>
         <div>
-            <label class="block text-[10px] font-semibold text-slate-700 mb-2">Class Level <span
-                    class="text-red-500">*</span></label>
-            <select name="class_level"
+            <label class="block text-[10px] font-semibold text-slate-700 mb-2 flex gap-3">
+                <span>
+                    <span>Class Section</span>
+                    <span class="text-red-500">*</span>
+                </span>
+                <a href="{{ route('sections.create') }}" class="text-[12px]  underline text-accent hover:font-light">
+                    Add new Section
+                </a>
+            </label>
+            <select name="class_section" id="section_id"
                 class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none">
-                <option>Select Level</option>
-                <option value="nursery" {{ $class?->level === 'nursery' ? 'selected' : '' }}>Nursery</option>
-                <option value="primary" {{ $class?->level === 'primary' ? 'selected' : '' }}>Primary</option>
-                <option value="jss" {{ $class?->level === 'jss' ? 'selected' : '' }}>Junior Secondary (JSS)
-                </option>
-                <option value="sss" {{ $class?->level === 'sss' ? 'selected' : '' }}>Senior Secondary (SS)
-                </option>
+                <option value="{{ null }}" selected disabled>Select Section</option>
+                @forelse ($sections as $section)
+                    <option value="{{ $section->id }}" @selected(old('class_section', $class->section_id ?? '') == $section->id)
+                        {{ $class?->section_id === $section->id ? 'selected' : '' }}>
+                        {{ $section->name }}
+                    </option>
+                @empty
+                    <option>
+                        <span>No section found.</span>
+                    </option>
+                @endforelse
+            </select>
+            <span class="text-red-600 text-[10px] error-message" data-name="class_level"></span>
+        </div>
+        <div>
+            <label class="block text-[10px] font-semibold text-slate-700 mb-2 flex gap-3">
+                <span>
+                    <span>Class Level</span>
+                    <span class="text-red-500">*</span>
+                </span>
+                <a href="{{ route('sections.index') }}" class="text-[12px]  underline  text-accent hover:font-light">
+                    Add new level
+                </a>
+            </label>
+            <select name="class_level" id="level_id";
+                class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none disabled:cursor-not-allowed disabled:text-slate-400 disabled:bg-slate-50"
+                disabled data-selected="{{ old('class_level', $class?->class_level_id ?? '') }}">
+                <option class="text-slate-200" selected disabled>Select section first</option>
             </select>
             <span class="text-red-600 text-[10px] error-message" data-name="class_level"></span>
         </div>
@@ -78,3 +106,5 @@
     </div>
 
 </div>
+
+<script src="{{ asset('js/auto-select.js') }}"></script>
