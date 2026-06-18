@@ -29,27 +29,27 @@
 
                     <div id="statusTabs"
                         class="w-full sm:w-auto grid grid-cols-2 sm:flex gap-2 bg-white border border-slate-200 p-2 rounded-xl shadow-sm">
-                        <button onclick="filterApplications('all', this)"
+                        <button onclick="filterItem('all', this)"
                             class="status-btn active bg-primary text-white px-3 py-2 rounded-lg text-xs font-bold transition-all duration-200 text-center">
                             All ({{ count($applications) }})
                         </button>
 
-                        <button onclick="filterApplications('pending', this)"
+                        <button onclick="filterItem('pending', this)"
                             class="status-btn text-slate-500 px-3 py-2 rounded-lg text-xs font-bold hover:bg-slate-50 transition-all duration-200 text-center">
                             Pending ({{ $pending_coutn }})
                         </button>
 
-                        <button onclick="filterApplications('approved', this)"
+                        <button onclick="filterItem('approved', this)"
                             class="status-btn text-slate-500 px-3 py-2 rounded-lg text-xs font-bold hover:bg-slate-50 transition-all duration-200 text-center">
                             Approved ({{ $approved_coutn }})
                         </button>
 
-                        <button onclick="filterApplications('rejected', this)"
+                        <button onclick="filterItem('rejected', this)"
                             class="status-btn text-slate-500 px-3 py-2 rounded-lg text-xs font-bold hover:bg-slate-50 transition-all duration-200 text-center">
                             Rejected ({{ $rejected_coutn }})
                         </button>
 
-                        <button onclick="filterApplications('withdrawn', this)"
+                        <button onclick="filterItem('withdrawn', this)"
                             class="status-btn text-slate-500 px-3 py-2 rounded-lg text-xs font-bold hover:bg-slate-50 transition-all duration-200 text-center col-span-2 sm:col-span-1">
                             Withdrawn ({{ $withdrawn_coutn }})
                         </button>
@@ -68,40 +68,5 @@
         </div>
     </main>
     <script src="{{ asset('js/live-search.js') }}"></script>
-    <script>
-        function filterApplications(status, button) {
-            document.querySelectorAll('.status-btn').forEach(btn => {
-                btn.classList.remove('bg-primary', 'text-white');
-                btn.classList.add('text-slate-500');
-            });
-
-            button.classList.remove('text-slate-500');
-            button.classList.add('bg-primary', 'text-white');
-
-            let visibleCount = 0;
-
-            document.querySelectorAll('.admission-applications').forEach(el => {
-                const itemStatus = el.dataset.status;
-
-                if (status === 'all' || itemStatus === status) {
-                    el.classList.remove('hidden');
-                    el.classList.add('fade-in');
-                    visibleCount++;
-                } else {
-                    el.classList.add('hidden');
-                }
-            });
-
-            const emptyState = document.getElementById('emptyState');
-
-            if (visibleCount === 0) {
-                emptyState.classList.remove('hidden');
-                emptyState.textContent = status === 'all' ?
-                    'No admission applications found.' :
-                    `No ${status} admission applications found.`;
-            } else {
-                emptyState.classList.add('hidden');
-            }
-        }
-    </script>
+    <script src="{{ asset('js/filterItem.js') }}"></script>
 @endsection

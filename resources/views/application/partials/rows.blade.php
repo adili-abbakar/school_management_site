@@ -1,6 +1,6 @@
 @forelse ($applications as $app)
     <div data-status="{{ $app->status }}"
-        class="admission-applications bg-white rounded-lg border border-slate-100 p-4 shadow-sm hover:shadow-md transition-all border-l-4
+        class="item-to-filter admission-applications bg-white rounded-lg border border-slate-100 p-4 shadow-sm hover:shadow-md transition-all border-l-4
                 @switch($app->status)
                     @case('pending') border-l-amber-400 @break
                     @case('approved') border-l-green-400 @break

@@ -23,7 +23,12 @@ class AcademicClass extends Model
     ];
 
     public function level(){
-        return $this->belongsTo(ClassLevel::class);
+        return $this->belongsTo(ClassLevel::class, 'class_level_id');
+    }
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
     }
 
     public function nextClass(): BelongsTo

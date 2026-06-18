@@ -30,6 +30,49 @@
                     </a>
                 </div>
 
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-end gap-4 mb-6">
+
+                    <!-- Class Filter -->
+                    <div class="flex flex-col min-w-[160px]">
+                        <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-1">
+                            Section
+                        </label>
+                        <select name="section_id" id="section_id" data-search-filter
+                            class="bg-slate-100 border border-slate-200 rounded-lg py-2 px-3 text-xs outline-none focus:ring-2 focus:ring-accent focus:bg-white transition">
+                            <option value="{{ null }}">All Sections</option>
+                            @forelse ($sections as $section)
+                                <option value="{{ $section->id }}">
+                                    {{ $section->name }}
+                                </option>
+                            @empty
+                                <option value="" selected disabled>No Sections found</option>
+                            @endforelse
+                        </select>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div class="flex flex-col min-w-[140px]">
+                        <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-1">
+                            Level
+                        </label>
+                        <select name="class_level_id" data-search-filter id="level_id"
+                            class="bg-slate-100 border border-slate-200 rounded-lg py-2 px-3 text-xs outline-none focus:ring-2 focus:ring-accent focus:bg-white transition disabled:cursor-not-allowed disabled:text-slate-400 disabled:bg-slate-50"
+                            disabled>
+                            <option value="">Select section first</option>
+                        </select>
+                    </div>
+
+                    <!-- Filter Button -->
+                    <div class="flex items-end">
+                        <button type="button" data-search-filter-button
+                            class="bg-accent text-white px-4 py-2 rounded-lg text-xs font-semibold shadow-sm hover:bg-blue-600 transition flex items-center gap-1.5">
+                            <i class="fas fa-filter text-[10px]"></i>
+                            <span>Apply</span>
+                        </button>
+                    </div>
+
+                </div>
+
                 <!-- Classes List with Collapsible Arms -->
                 <div class="space-y-3 mb-8" data-search-results>
                     @include('academic.classes.partials.rows', ['classes' => $classes])
@@ -42,6 +85,7 @@
         </div>
     </main>
     <script src="{{ asset('js/live-search.js') }}"></script>
+    <script src="{{ asset('js/auto-select.js') }}"></script>
     <script>
         function toggleArms(button) {
             const container = button.nextElementSibling;

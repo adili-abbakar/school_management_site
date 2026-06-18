@@ -15,7 +15,8 @@
                                   ({{ $class->nextClass ? 'Next: ' . $class->nextClass->name : 'Final' }})
                               </small>
                           </h3>
-                          <p class="text-slate-500 text-xs mt-1">{{ ucwords($class->level) }}</p>
+                          <p class="text-slate-500 text-xs mt-1"><b><big>Section: </big></b>{{ ucwords($class->section->name) }} section</p>
+                          <p class="text-slate-500 text-xs mt-1"><b><big>Level: </big></b>{{ ucwords($class->level->name) }} level</p>
                       </div>
                   </div>
 
@@ -41,7 +42,7 @@
           </button>
 
           <!-- Arms Container -->
-          <div class="arms-container hidden border-t bg-slate-50">
+          <div class="arms-container hidden border-t border-slate-200 bg-slate-50">
               <div class="p-3 sm:p-4 space-y-3">
                   @foreach ($class->arms as $arm)
                       <div
