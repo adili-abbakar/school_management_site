@@ -1,5 +1,5 @@
     <!-- Mobile overlay for sidebar -->
-    <div id="sidebarOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"></div>
+    <div id="sidebarOverlay" class="hidden fixed inset-0 bg-black/50 z-30 md:hidden"></div>
 
     <!-- Sidebar now toggleable on mobile -->
     <aside id="sidebar"
@@ -34,7 +34,7 @@
                 <i class="fas fa-user-shield text-xs"></i>
                 <span>Admins</span>
             </a>
-            
+
             <a href="{{ route('teachers.index') }}"
                 class="sidebar-link {{ request()->is('teachers*') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
                 <i class="fas fa-chalkboard-teacher text-xs"></i>

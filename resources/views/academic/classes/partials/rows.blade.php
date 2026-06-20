@@ -50,7 +50,7 @@
 
                           <div class="flex-grow min-w-0">
                               <p class="font-semibold text-primary break-words">
-                                  {{ $class->name . ' ' . $arm->name }}
+                                  {{ $class->name . ' (' . $arm->name .')' }}
                               </p>
                               <p class="text-slate-500 text-[10px] sm:text-xs break-words">
                                   33 Students • Teacher: {{ $arm->teacher?->name() ?? 'Not assigned' }}

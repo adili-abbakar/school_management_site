@@ -91,12 +91,18 @@
         }
 
         .mobile-sidebar {
-            transform: translateX(0);
             transition: transform 0.3s ease-in-out;
         }
 
-        .mobile-sidebar.active {
-            transform: translateX(0);
+        /* Hidden on mobile */
+        @media (max-width: 767px) {
+            .mobile-sidebar {
+                transform: translateX(-100%);
+            }
+
+            .mobile-sidebar.active {
+                transform: translateX(0);
+            }
         }
 
         /* Chrome, Safari, Opera */
