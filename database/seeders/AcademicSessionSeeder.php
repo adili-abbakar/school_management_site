@@ -13,10 +13,6 @@ class AcademicSessionSeeder extends Seeder
     {
         $currentYear = now()->year;
 
-        // We want 3 sessions total:
-        // currentYear-3/currentYear-2
-        // currentYear-2/currentYear-1
-        // currentYear-1/currentYear
         for ($endYear = $currentYear - 2; $endYear <= $currentYear; $endYear++) {
             $startYear = $endYear - 1;
             $sessionName = "{$startYear}/{$endYear}";

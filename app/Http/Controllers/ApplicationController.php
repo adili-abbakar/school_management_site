@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Academic\AcademicClass;
 use App\Models\Academic\ClassArm;
+use App\Models\Academic\Program;
 use App\Models\Academic\Session;
 use App\Models\StudentApplication;
 use App\Models\Users\Guardian;
@@ -333,7 +334,8 @@ class ApplicationController extends Controller
     public function create()
     {
         $classes = AcademicClass::orderdChain()->flatten();
-        return view('application.create', compact('classes'));
+        $sections = Program::orderBy('name')->get();
+        return view('application.create', compact('classes', 'sections'));
     }
 
     /**
@@ -359,6 +361,7 @@ class ApplicationController extends Controller
             'previous_school_name' => 'nullable|string',
             'last_class_attended' => 'nullable|string',
             'class_id' => 'required|exists:classes,id',
+            'sections' => 'required|array',
 
 
             'guardian_relationship' => 'required|in:father,mother,brother,sister,grandfather,grandmother,uncle,aunt,other',
@@ -430,6 +433,7 @@ class ApplicationController extends Controller
             }
 
             $app = StudentApplication::create($validated);
+            $app->programs()->attach($validated['sections']);
 
             return response()->json([
                 'status' => 'success',

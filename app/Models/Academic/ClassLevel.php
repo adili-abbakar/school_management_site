@@ -13,11 +13,11 @@ class ClassLevel extends Model
     protected $fillable = [
         'name',
         'description',
-        'section_id'
+        'program_id'
     ];
 
-    public function section()
+    public function program()
     {
-        return $this->belongsTo(Section::class);
+        return $this->belongsTo(Program::class);
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Academic;
 use App\Http\Controllers\Controller;
 use App\Models\Academic\AcademicClass;
 use App\Models\Academic\ClassArm;
-use App\Models\Academic\Section;
+use App\Models\Academic\Program;
 use App\Models\Users\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -21,7 +21,7 @@ class ClassController extends Controller
     public function index(Request $request)
     {
         $search = trim($request->get('search', ''));
-        $sectionId = $request->filled('section_id') ? $request->get('section_id') : null;
+        $programId = $request->filled('program_id') ? $request->get('program_id') : null;
         $classLevelId = $request->filled('class_level_id') ? $request->get('class_level_id') : null;
 
         $classes = AcademicClass::orderdChain()
@@ -31,9 +31,9 @@ class ClassController extends Controller
             $class->loadMissing('arms.teacher.user');
         });
 
-        if ($sectionId) {
-            $classes = $classes->filter(function ($class) use ($sectionId) {
-                return $class->section_id == $sectionId;
+        if ($programId) {
+            $classes = $classes->filter(function ($class) use ($programId) {
+                return $class->program_id == $programId;
             });
 
             if ($classLevelId) {
@@ -50,7 +50,7 @@ class ClassController extends Controller
                 $classText = strtolower(str_replace(
                     ' ',
                     '',
-                    ($class->name ?? '') . ($class->level->name ?? '') . ($class->section->name ?? '')
+                    ($class->name ?? '') . ($class->level->name ?? '') . ($class->program->name ?? '')
                 ));
 
                 $teacherMatch = $class->arms->contains(function ($arm) use ($normalizedSearch) {
@@ -72,7 +72,7 @@ class ClassController extends Controller
         $perPage = 10;
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         $currentItems = $classes->slice(($currentPage - 1) * $perPage, $perPage)->values();
-        $sections = Section::orderBy('name')->get();
+        $programs = Program::orderBy('name')->get();
 
 
         $classes = new LengthAwarePaginator(
@@ -93,7 +93,7 @@ class ClassController extends Controller
             ]);
         }
 
-        return view('academic.classes.index', compact('classes', 'sections'));
+        return view('academic.classes.index', compact('classes', 'programs'));
     }
     /**
      * Show the form for creating a new resource.
@@ -101,9 +101,9 @@ class ClassController extends Controller
     public function create()
     {
         $classes = AcademicClass::get();
-        $sections = Section::orderBy('name')->get();
+        $programs = Program::orderBy('name')->get();
         $teachers = Teacher::with('user')->get();
-        return view('academic.classes.create', compact('classes', 'teachers', 'sections'));
+        return view('academic.classes.create', compact('classes', 'teachers', 'programs'));
     }
 
     /**
@@ -114,7 +114,7 @@ class ClassController extends Controller
         $validated = $request->validate(
             [
                 'class_name' => 'required|string|max:255|unique:classes,name',
-                'class_section' => 'required',
+                'class_program' => 'required',
                 'class_level' => 'required',
                 'previous_class_id' => 'nullable|exists:classes,id',
                 'force_overwrite' => 'sometimes|boolean',
@@ -143,7 +143,7 @@ class ClassController extends Controller
             DB::transaction(function () use ($validated) {
                 $newClass = AcademicClass::create([
                     'name'  => $validated['class_name'],
-                    'section_id' => $validated['class_section'],
+                    'program_id' => $validated['class_program'],
                     'class_level_id' => $validated['class_level'],
                 ]);
 
@@ -203,9 +203,9 @@ class ClassController extends Controller
     {
         $classes = AcademicClass::where('id', "!=", $class->id)->get();
         $teachers = Teacher::with('user')->get();
-        $sections = Section::orderBy('name')->get();
+        $programs = Program::orderBy('name')->get();
 
-        return view('academic.classes.edit', compact('class', 'classes', 'teachers', 'sections'));
+        return view('academic.classes.edit', compact('class', 'classes', 'teachers', 'programs'));
     }
 
     /**
@@ -222,7 +222,7 @@ class ClassController extends Controller
                     'max:255',
                     Rule::unique('classes', 'name')->ignore($class->id),
                 ],
-                'class_section' => 'required',
+                'class_program' => 'required',
                 'class_level' => 'required',
                 'previous_class_id' => 'nullable|exists:classes,id|different:' . $class->id,
                 'force_overwrite' => 'sometimes|boolean',
@@ -301,7 +301,7 @@ class ClassController extends Controller
 
                 $class->update([
                     'name' => $validated['class_name'],
-                    'section_id' => $validated['class_section'],
+                    'program_id' => $validated['class_program'],
                     'class_level_id' => $validated['class_level'],
                     'next_class_id' => $newNextId
                 ]);

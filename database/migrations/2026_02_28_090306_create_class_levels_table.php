@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('class_levels', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('section_id')
-                ->constrained('sections')
+            $table->foreignId('program_id')
+                ->constrained('programs')
                 ->cascadeOnDelete();
 
             $table->text('description')->nullable();
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['section_id', 'name']);
+            $table->unique(['program_id', 'name']);
         });
     }
 

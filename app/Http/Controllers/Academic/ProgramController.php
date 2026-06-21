@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Academic;
 
 use App\Http\Controllers\Controller;
 use App\Models\Academic\ClassLevel;
-use App\Models\Academic\Section;
+use App\Models\Academic\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 
-class SectionController extends Controller
+class ProgramController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,7 +20,7 @@ class SectionController extends Controller
     {
         $search = $request->get('search', '');
 
-        $sections = Section::when($search, function ($query) use ($search) {
+        $programs = Program::when($search, function ($query) use ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%")
@@ -30,13 +30,13 @@ class SectionController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('academic.sections.partials.rows', compact('sections'))->render(),
-                'pagination' => view('academic.sections.partials.pagination', compact('sections'))->render(),
+                'html' => view('academic.programs.partials.rows', compact('programs'))->render(),
+                'pagination' => view('academic.programs.partials.pagination', compact('programs'))->render(),
             ]);
         }
 
 
-        return view('academic.sections.index', compact('sections'));
+        return view('academic.programs.index', compact('programs'));
     }
 
     /**
@@ -44,7 +44,7 @@ class SectionController extends Controller
      */
     public function create()
     {
-        return view('academic.sections.create');
+        return view('academic.programs.create');
     }
 
     /**
@@ -54,8 +54,8 @@ class SectionController extends Controller
     {
         $validated = $request->validate(
             [
-                'section_name' => 'required|string|max:255|unique:sections,name',
-                'section_description' => 'required|string|max:500',
+                'program_name' => 'required|string|max:255|unique:programs,name',
+                'program_description' => 'required|string|max:500',
 
                 'levels' => 'required|array|min:1',
                 'levels.*.name' => "required|string|max:50|distinct",
@@ -82,15 +82,15 @@ class SectionController extends Controller
 
         try {
             DB::transaction(function () use ($validated) {
-                $newSection = Section::create([
-                    'name'  => $validated['section_name'],
-                    'description'  => $validated['section_description'],
+                $newProgram = Program::create([
+                    'name'  => $validated['program_name'],
+                    'description'  => $validated['program_description'],
                 ]);
 
                 foreach ($validated['levels'] as $level) {
                     ClassLevel::create([
                         'name'       => $level['name'],
-                        'section_id'   => $newSection->id,
+                        'program_id'   => $newProgram->id,
                         'description'  => $level['description'],
                     ]);
                 }
@@ -99,10 +99,10 @@ class SectionController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Section created successfully',
+                'message' => 'Program created successfully',
                 'redirect' => redirect()
-                    ->intended(route('sections.index'))
-                    ->with('success', 'Section created successfully!')
+                    ->intended(route('programs.index'))
+                    ->with('success', 'Program created successfully!')
                     ->getTargetUrl(),
             ]);
         } catch (\Exception $e) {
@@ -119,7 +119,7 @@ class SectionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Section $section)
+    public function show(Program $program)
     {
         //
     }
@@ -127,26 +127,26 @@ class SectionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Section $section)
+    public function edit(Program $program)
     {
-        return view('academic.sections.edit', compact('section'));
+        return view('academic.programs.edit', compact('program'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Section $section)
+    public function update(Request $request, Program $program)
     {
         $validator = Validator::make(
             $request->all(),
             [
-                'section_name' => [
+                'program_name' => [
                     'required',
                     'string',
                     'max:255',
-                    Rule::unique('sections', 'name')->ignore($section->id),
+                    Rule::unique('programs', 'name')->ignore($program->id),
                 ],
-                'section_description' => 'required|string|max:500',
+                'program_description' => 'required|string|max:500',
 
                 'levels' => 'required|array|min:1',
                 'levels.*.id' => 'nullable|integer',
@@ -171,10 +171,10 @@ class SectionController extends Controller
             ]
         );
 
-        $validator->after(function ($validator) use ($request, $section) {
+        $validator->after(function ($validator) use ($request, $program) {
             foreach ($request->levels ?? [] as $index => $level) {
 
-                $exists = ClassLevel::where('section_id', $section->id)
+                $exists = ClassLevel::where('program_id', $program->id)
                     ->where('name', $level['name'])
                     ->when(
                         !empty($level['id']),
@@ -185,7 +185,7 @@ class SectionController extends Controller
                 if ($exists) {
                     $validator->errors()->add(
                         "levels.$index.name",
-                        "The level '{$level['name']}' already exists in this section."
+                        "The level '{$level['name']}' already exists in this program."
                     );
                 }
             }
@@ -201,15 +201,15 @@ class SectionController extends Controller
         $validated = $validator->validated();
 
         try {
-            DB::transaction(function () use ($validated, $section) {
-                $section->update([
-                    'name'  => $validated['section_name'],
-                    'description'  => $validated['section_description'],
+            DB::transaction(function () use ($validated, $program) {
+                $program->update([
+                    'name'  => $validated['program_name'],
+                    'description'  => $validated['program_description'],
                 ]);
 
                 $levels = (collect($validated['levels']));
 
-                $section->levels()->whereNotIn('id', $levels->pluck('id')->filter())->delete();
+                $program->levels()->whereNotIn('id', $levels->pluck('id')->filter())->delete();
 
 
                 foreach ($levels as $level) {
@@ -224,7 +224,7 @@ class SectionController extends Controller
                         ]);
                     } else {
 
-                        $section->levels()->create([
+                        $program->levels()->create([
                             'name' => $level['name'],
                             'description' => $level['description'],
                         ]);
@@ -235,10 +235,10 @@ class SectionController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Section updated successfully',
+                'message' => 'Program updated successfully',
                 'redirect' => redirect()
-                    ->intended(route('sections.index'))
-                    ->with('success', 'Section updated successfully!')
+                    ->intended(route('programs.index'))
+                    ->with('success', 'Program updated successfully!')
                     ->getTargetUrl(),
             ]);
         } catch (\Exception $e) {
@@ -255,17 +255,17 @@ class SectionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Section $section)
+    public function destroy(Program $program)
     {
         //
     }
 
     public function delete() {}
 
-    public function levels(Section $section)
+    public function levels(Program $program)
     {
         return response()->json(
-            $section->levels()
+            $program->levels()
                 ->select('id', 'name')
                 ->orderBy('name')
                 ->get()

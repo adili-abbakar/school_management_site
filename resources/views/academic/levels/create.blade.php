@@ -24,10 +24,10 @@
                         <h2 class="text-primary font-semibold">New Level For</h2>
                     </div>
 
-                    <form class="form space-y-6" action="{{ route('sections.levels.store', $section->id) }}" method="POST">
+                    <form class="form space-y-6" action="{{ route('programs.levels.store', $program->id) }}" method="POST">
                         @csrf
                         @include('academic.levels.partials.form-fields', [
-                            'section' => $section,
+                            'program' => $program,
                         ])
                     </form>
                 </div>

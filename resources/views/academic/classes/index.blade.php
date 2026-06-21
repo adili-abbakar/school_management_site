@@ -35,17 +35,17 @@
                     <!-- Class Filter -->
                     <div class="flex flex-col min-w-[160px]">
                         <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-1">
-                            Section
+                            Program
                         </label>
-                        <select name="section_id" id="section_id" data-search-filter
+                        <select name="program_id" data-target="level_id" data-route="/programs/{id}/levels" id="program_id" data-search-filter
                             class="bg-slate-100 border border-slate-200 rounded-lg py-2 px-3 text-xs outline-none focus:ring-2 focus:ring-accent focus:bg-white transition">
-                            <option value="{{ null }}">All Sections</option>
-                            @forelse ($sections as $section)
-                                <option value="{{ $section->id }}">
-                                    {{ $section->name }}
+                            <option value="{{ null }}">All Programs</option>
+                            @forelse ($programs as $program)
+                                <option value="{{ $program->id }}">
+                                    {{ $program->name }}
                                 </option>
                             @empty
-                                <option value="" selected disabled>No Sections found</option>
+                                <option value="" selected disabled>No Programs found</option>
                             @endforelse
                         </select>
                     </div>
@@ -58,7 +58,7 @@
                         <select name="class_level_id" data-search-filter id="level_id"
                             class="bg-slate-100 border border-slate-200 rounded-lg py-2 px-3 text-xs outline-none focus:ring-2 focus:ring-accent focus:bg-white transition disabled:cursor-not-allowed disabled:text-slate-400 disabled:bg-slate-50"
                             disabled>
-                            <option value="">Select section first</option>
+                            <option value="">Select program first</option>
                         </select>
                     </div>
 

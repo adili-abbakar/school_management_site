@@ -44,8 +44,8 @@ class Session extends Model
     }
 
 
-    // public static function currentSession()
-    // {
-    //     return Term::currentTerm()?->session;
-    // }
+    public static function currentSession()
+    {
+        return Term::currentTerm()?->session;
+    }
 }

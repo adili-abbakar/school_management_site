@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Academic;
 
 use App\Http\Controllers\Controller;
 use App\Models\Academic\ClassLevel;
-use App\Models\Academic\Section;
+use App\Models\Academic\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -24,15 +24,15 @@ class ClassLevelController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Section $section)
+    public function create(Program $program)
     {
-        return view('academic.levels.create', compact('section'));
+        return view('academic.levels.create', compact('program'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Section $section)
+    public function store(Request $request, Program $program)
     {
         $validated = $request->validate([
             'name' => [
@@ -40,15 +40,15 @@ class ClassLevelController extends Controller
                 'string',
                 'max:50',
                 Rule::unique('class_levels', 'name')
-                    ->where(fn($query) => $query->where('section_id', $section->id))
+                    ->where(fn($query) => $query->where('program_id', $program->id))
             ],
             'description' => "required|string|max:500",
         ]);
 
         try {
-            DB::transaction(function () use ($validated, $section) {
+            DB::transaction(function () use ($validated, $program) {
 
-                $section->levels()->create([
+                $program->levels()->create([
                     'name' => $validated['name'],
                     'description'  => $validated['description'],
                 ]);
@@ -58,7 +58,7 @@ class ClassLevelController extends Controller
                 'status' => 'success',
                 'message' => 'Level created successfully',
                 'redirect' => redirect()
-                    ->intended(route('sections.index'))
+                    ->intended(route('programs.index'))
                     ->with('success', 'Level created successfully!')
                     ->getTargetUrl(),
             ]);
@@ -84,15 +84,15 @@ class ClassLevelController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Section $section, ClassLevel $level)
+    public function edit(Program $program, ClassLevel $level)
     {
-        return view('academic.levels.edit',  compact('section', 'level'));
+        return view('academic.levels.edit',  compact('program', 'level'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Section $section, ClassLevel $level)
+    public function update(Request $request, Program $program, ClassLevel $level)
     {
         $validated = $request->validate([
             'name' => [
@@ -100,27 +100,27 @@ class ClassLevelController extends Controller
                 'string',
                 'max:50',
                 Rule::unique('class_levels', 'name')
-                    ->where(fn($query) => $query->where('section_id', $section->id))
+                    ->where(fn($query) => $query->where('program_id', $program->id))
                     ->ignore($level->id)
             ],
             'description' => "required|string|max:500",
         ]);
 
         try {
-            DB::transaction(function () use ($validated, $level, $section) {
+            DB::transaction(function () use ($validated, $level, $program) {
 
                 $level->update([
                     'name' => $validated['name'],
                     'description'  => $validated['description'],
                 ]);
-                $level->section()->touch();
+                $level->program()->touch();
             });
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Level updated successfully',
                 'redirect' => redirect()
-                    ->intended(route('sections.index'))
+                    ->intended(route('programs.index'))
                     ->with('success', 'Level updated successfully!')
                     ->getTargetUrl(),
             ]);

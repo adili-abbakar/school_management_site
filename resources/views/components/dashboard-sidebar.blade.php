@@ -52,10 +52,10 @@
             </a>
 
             <div class="px-4 mt-4 mb-2 text-[9px] font-semibold text-slate-500 uppercase tracking-wider">Academics</div>
-            <a href="{{ route('sections.index') }}"
-                class="sidebar-link  {{ request()->is('sections*') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
+            <a href="{{ route('programs.index') }}"
+                class="sidebar-link  {{ request()->is('programs*') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">
                 <i class="fas fa-calendar-alt text-xs"></i>
-                <span>Sections</span>
+                <span>Programs</span>
             </a>
             <a href="{{ route('sessions.index') }}"
                 class="sidebar-link  {{ request()->is('sessions*') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">

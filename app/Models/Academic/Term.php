@@ -17,7 +17,7 @@ class Term extends Model
         'end_date',
         'activity',
         'session_id',
-        'section_session_id'
+        'program_session_id'
     ];
 
     protected function casts(): array
@@ -43,9 +43,9 @@ class Term extends Model
         return $this->belongsTo(Session::class);
     }
 
-    public function getSectionAttribute()
+    public function getProrogramAttribute()
     {
-        return $this->sectionSession->section;
+        return $this->programSession->program;
     }
 
     public static function currentTerm()

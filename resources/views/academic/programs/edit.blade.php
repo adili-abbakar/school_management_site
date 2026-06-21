@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Update Section')
+@section('title', 'Update Program')
 
 @section('page-content')
     <main class="flex-grow flex flex-col min-w-0  overflow-y-auto">
@@ -11,8 +11,8 @@
 
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
                     <div>
-                        <h1 class="text-xl font-extrabold text-primary">Update Session</h1>
-                        <p class="text-slate-500 text-xs">Update existing academic session & its terms.</p>
+                        <h1 class="text-xl font-extrabold text-primary">Update Program</h1>
+                        <p class="text-slate-500 text-xs">Update existing academic program & its terms.</p>
                     </div>
                     <x-buttons.gray-back-to-list />
 
@@ -22,16 +22,16 @@
                 <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
                     <div class="flex items-center gap-2 mb-6">
                         <i class="fas fa-plus-circle text-accent text-lg"></i>
-                        <h2 class="text-primary font-semibold">Update Academic Session</h2>
+                        <h2 class="text-primary font-semibold">Update Academic Program</h2>
                     </div>
 
-                    <form class="form space-y-6" action="{{ route('sections.update', $section->id) }}" method="POST">
+                    <form class="form space-y-6" action="{{ route('programs.update', $program->id) }}" method="POST">
                         @csrf
                         @method('PUT')
 
-                        @include('academic.sections.partials.section-form-fields', ['section' => $section])
-                        @include('academic.sections.partials.level-form-fields', [
-                            'levels' => $section?->levels,
+                        @include('academic.programs.partials.program-form-fields', ['program' => $program])
+                        @include('academic.programs.partials.level-form-fields', [
+                            'levels' => $program?->levels,
                         ])
 
                         <!-- Form Actions -->

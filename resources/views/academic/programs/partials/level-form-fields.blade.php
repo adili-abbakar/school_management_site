@@ -1,10 +1,10 @@
 @php
     $levels = $levels ?? [];
 @endphp
-<!-- Arms Section -->
+<!-- Program levels -->
 <div class="repeater-wrapper border-t border-slate-200 pt-6" data-group="levels">
     <div class="flex justify-between items-center mb-4">
-        <h3 class="text-sm font-bold text-primary">Section Levels</h3>
+        <h3 class="text-sm font-bold text-primary">Program Levels</h3>
         <button type="button"
             class="add-repeater-item-btn bg-accent text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-blue-600 transition-all flex items-center gap-2">
             <i class="fas fa-plus"></i> Add Level

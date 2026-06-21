@@ -1,68 +1,64 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const sectionSelect = document.getElementById("section_id");
-    const levelSelect = document.getElementById("level_id");
+    document.querySelectorAll("select[data-target]").forEach((parentSelect) => {
+        async function loadOptions() {
+            const targetId = parentSelect.dataset.target;
+            const targetSelect = document.getElementById(targetId);
 
-    async function loadLevels() {
-        const sectionId = sectionSelect.value;
-        const selectedLevel = levelSelect.dataset.selected;
+            const routeTemplate = parentSelect.dataset.route;
+            const value = parentSelect.value;
 
-        if (!sectionId) {
-            levelSelect.disabled = true;
-
-            levelSelect.innerHTML =
-                '<option value="" selected disabled>Select Section First</option>';
-
-            return;
-        }
-
-        try {
-            levelSelect.disabled = true;
-
-            levelSelect.innerHTML =
-                '<option value="" selected disabled>Loading levels...</option>';
-
-            const response = await fetch(`/sections/${sectionId}/levels`);
-
-            if (!response.ok) {
-                throw new Error("Failed to load levels");
+            if (!value) {
+                targetSelect.disabled = true;
+                targetSelect.innerHTML = `<option value="">Select first</option>`;
+                return;
             }
 
-            const levels = await response.json();
+            try {
+                targetSelect.disabled = true;
+                targetSelect.innerHTML = `<option value="">Loading...</option>`;
 
-            levelSelect.innerHTML =
-                '<option value="" selected disabled>Select Level</option>';
+                const url = routeTemplate.replace("{id}", value);
 
-            levels.forEach((level) => {
-                const option = document.createElement("option");
+                const response = await fetch(url);
 
-                option.value = level.id;
-                option.textContent = level.name;
-
-                if (selectedLevel == level.id) {
-                    option.selected = true;
+                if (!response.ok) {
+                    throw new Error("Failed to load data");
                 }
 
-                levelSelect.appendChild(option);
-            });
+                const items = await response.json();
 
-            levelSelect.disabled = false;
-        } catch (error) {
-            console.error(error);
+                const selectedValue = targetSelect.dataset.selected;
 
-            levelSelect.innerHTML =
-                '<option value="" selected disabled>Unable to load levels</option>';
+                targetSelect.innerHTML = `<option value="">Select option</option>`;
 
-            levelSelect.disabled = true;
+                items.forEach((item) => {
+                    const option = document.createElement("option");
+
+                    option.value = item.id;
+                    option.textContent = item.name;
+
+                    if (selectedValue == item.id) {
+                        option.selected = true;
+                    }
+
+                    targetSelect.appendChild(option);
+                });
+
+                targetSelect.disabled = false;
+            } catch (error) {
+                console.error(error);
+
+                targetSelect.innerHTML = `<option value="">Unable to load data</option>`;
+
+                targetSelect.disabled = true;
+            }
         }
-    }
 
-    // Load automatically on page load
-    loadLevels();
+        parentSelect.addEventListener("change", loadOptions);
 
-    // Reload when section changes
-    sectionSelect.addEventListener("change", () => {
-        levelSelect.dataset.selected = "";
-
-        loadLevels();
+        // Important for edit forms
+        if (parentSelect.value) {
+            loadOptions();
+        }
     });
 });

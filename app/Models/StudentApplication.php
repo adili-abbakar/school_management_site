@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Academic\AcademicClass;
+use App\Models\Academic\Program;
 use App\Models\Academic\Session;
 use App\Models\Users\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -139,5 +140,10 @@ class StudentApplication extends Model
         }
 
         return 'Existing_guardian';
+    }
+
+    public function programs()
+    {
+        return $this->belongsToMany(Program::class);
     }
 }

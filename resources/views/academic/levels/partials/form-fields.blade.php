@@ -1,15 +1,15 @@
 @php
-    $section = $section ?? null;
+    $program = $program ?? null;
     $level = $level ?? null;
 @endphp
 
 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
     <div>
-        <h2 class="text-primary font-semibold text-lg mb-1">{{ $section->name }} Academic Section</h2>
+        <h2 class="text-primary font-semibold text-lg mb-1">{{ $program->name }} Academic Program</h2>
         <div class="flex flex-col md:flex-row gap-4 text-xs text-muted mt-2">
             <div class="flex items-top gap-1.5">
                 <i class="fas fa-info-circle text-accent" style="padding-top: 0.5px"></i>
-                <span>Description: {{ $section->description }}</span>
+                <span>Description: {{ $program->description }}</span>
             </div>
         </div>
     </div>

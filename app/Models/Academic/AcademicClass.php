@@ -18,7 +18,7 @@ class AcademicClass extends Model
         'name',
         'class_level_id',
         'next_class_id',
-        'section_id',
+        'program_id',
         'is_active'
     ];
 
@@ -26,9 +26,9 @@ class AcademicClass extends Model
         return $this->belongsTo(ClassLevel::class, 'class_level_id');
     }
 
-    public function section()
+    public function program()
     {
-        return $this->belongsTo(Section::class);
+        return $this->belongsTo(Program::class);
     }
 
     public function nextClass(): BelongsTo

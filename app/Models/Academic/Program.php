@@ -2,11 +2,12 @@
 
 namespace App\Models\Academic;
 
+use App\Models\StudentApplication;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Section extends Model
+class Program extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -17,7 +18,13 @@ class Section extends Model
         'is_active'
     ];
 
-    public function levels(){
+    public function levels()
+    {
         return $this->hasMany(ClassLevel::class);
+    }
+
+    public function applications()
+    {
+        return $this->belongsToMany(StudentApplication::class);
     }
 }

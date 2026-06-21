@@ -25,12 +25,12 @@
                     </div>
 
                     <form class="form space-y-6"
-                        action="{{ route('sections.levels.update', ['section' => $section, 'level' => $level]) }}"
+                        action="{{ route('programs.levels.update', ['program' => $program, 'level' => $level]) }}"
                         method="POST">
                         @csrf
                         @method('PUT')
                         @include('academic.levels.partials.form-fields', [
-                            'section' => $section,
+                            'program' => $program,
                             'level' => $level,
                         ])
                     </form>

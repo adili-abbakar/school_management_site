@@ -15,7 +15,7 @@
                                   ({{ $class->nextClass ? 'Next: ' . $class->nextClass->name : 'Final' }})
                               </small>
                           </h3>
-                          <p class="text-slate-500 text-xs mt-1"><b><big>Section: </big></b>{{ ucwords($class->section->name) }} section</p>
+                          <p class="text-slate-500 text-xs mt-1"><b><big>Program: </big></b>{{ ucwords($class->program->name) }} program</p>
                           <p class="text-slate-500 text-xs mt-1"><b><big>Level: </big></b>{{ ucwords($class->level->name) }} level</p>
                       </div>
                   </div>

@@ -70,16 +70,29 @@
                                     name="last_class_attended" />
                                 <span class="text-red-600 text-[10px] error-message" data-name="last_class_attended"></span>
                             </div>
-
+                            <div>
+                                <label class="form-label">Choose the program(s) for your child</label>
+                                <select id="sections" class="form-input" name="sections[]" multiple>
+                                    @foreach ($sections as $section)
+                                        <option value="{{ $section->id }}">
+                                            {{ $section->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <span class="text-red-600 text-[10px] error-message" data-name="sections"></span>
+                            </div>
                         </div>
+
+                        
+
+
                     </section>
                     @auth
                         <section>
                             <h2 class="section-title">Parent / Guardian Information</h2>
                             <div class="grid grid-cols-1 gap-6">
                                 <div>
-                                    <label class="form-label">Relationship to student<span
-                                            class="text-red-500">*</span></label>
+                                    <label class="form-label">Relationship to student<span class="text-red-500">*</span></label>
                                     <select class="form-input" name="guardian_relationship">
                                         <option value="">Select Relationship</option>
                                         <option value="father">Father</option>
@@ -154,4 +167,12 @@
         </section>
     </main>
     <script src="{{ asset('/js/formSubmitter.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new TomSelect('#sections', {
+                plugins: ['remove_button'],
+                placeholder: 'Select program(s)...',
+            });
+        });
+    </script>
 @endsection
