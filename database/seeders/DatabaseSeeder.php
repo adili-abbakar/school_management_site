@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Users\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,12 +18,16 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call([
-            NumberingSettingSeeder::class,
-            AdminSeeder::class,
-            TeacherSeeder::class,
-            AcademicClassSeeder::class,
-            AcademicSessionSeeder::class,
-            StudentApplicationSeeder::class,
+            // NumberingSettingSeeder::class,
+            // AdminSeeder::class,
+            // TeacherSeeder::class,
+            // AcademicClassSeeder::class,
+            // AcademicSessionSeeder::class,
+            // StudentApplicationSeeder::class,
+
+            UserSeeder::class,
+            AcademicStructureSeeder::class,
+            SessionTermSeeder::class,
         ]);
     }
 }

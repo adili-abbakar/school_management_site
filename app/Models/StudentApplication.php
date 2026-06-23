@@ -42,14 +42,11 @@ class StudentApplication extends Model
         'guardian_address',
         'guardian_occupation',
         'guardian_relationship',
-        'previous_school_name',
-        'last_class_attended',
-        'class_id',
+
 
         'application_number',
         'previous_school_name',
         'last_class_attended',
-        'class_id',
         'stream',
         'session_id',
         'status',
@@ -109,11 +106,6 @@ class StudentApplication extends Model
         }
     }
 
-    public function class(): BelongsTo
-    {
-        return $this->belongsTo(AcademicClass::class, 'class_id');
-    }
-
     public function session(): BelongsTo
     {
         return $this->belongsTo(Session::class, 'session_id');
@@ -144,6 +136,6 @@ class StudentApplication extends Model
 
     public function programs()
     {
-        return $this->belongsToMany(Program::class);
+        return $this->hasMany(ApplicationProgram::class);
     }
 }

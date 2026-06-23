@@ -46,7 +46,7 @@
             </div>
 
             <!-- Details Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
                 <div class="bg-white rounded-lg border border-slate-100 p-4">
                     <h3 class="text-xs font-bold text-slate-900 mb-3"><i class="fas fa-user text-blue-600 mr-2"></i>Student
                         Info</h3>
@@ -76,17 +76,41 @@
                     <h3 class="text-xs font-bold text-slate-900 mb-3"><i
                             class="fas fa-school text-blue-600 mr-2"></i>Academic</h3>
                     <div class="space-y-1.5 text-xs">
-                        <div class="flex justify-between"><span class="text-slate-600">Class Applied for:</span><span
-                                class="font-semibold">{{ $app->class->name }}</span></div>
-                        <div class="flex justify-between"><span class="text-slate-600">Stream:</span><span
-                                class="font-semibold">{{ ucwords($app->stream) }}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-600">Class Applied for:</span>
+                            {{-- <span class="font-semibold">{{ $app->class->name }}</span> --}}
+                        </div>
                         <div class="flex justify-between"><span class="text-slate-600">Session:</span><span
                                 class="font-semibold">{{ $app->session->name }}</span></div>
                         <div class="flex justify-between"><span class="text-slate-600">Previous:</span><span
                                 class="font-semibold">{{ $app->previous_school_name ?? 'No previous school' }}</span></div>
                         <div class="flex justify-between"><span class="text-slate-600">Last Class Attended:</span><span
                                 class="font-semibold">{{ $app->last_class_attended ?? 'No previous school' }}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-600">Stream:</span><span
+                                class="font-semibold">{{ ucwords($app->stream) }}</span></div>
                     </div>
+                </div>
+                <div class="bg-white rounded-lg border border-slate-100 p-4">
+                    <h3 class="text-xs font-bold text-slate-900 mb-3"><i
+                            class="fas fa-school text-blue-600 mr-2"></i>Programs</h3>
+                    @forelse ($app->programs() as $program)
+                        <div class="space-y-1.5 text-xs">
+                            <div class="flex justify-between"><span class="text-slate-600">Program:</span><span
+                                    class="font-semibold">{{ $program->name }}</span></div>
+                                    <div class="flex justify-between"><span class="text-slate-600">Class Applied for:</span>
+                                <span class="font-semibold">{{ $program->requestedClass->name }}</span>
+                            </div>
+                            <div class="flex justify-between"><span class="text-slate-600">Previous:</span><span
+                                    class="font-semibold">{{ $app->previous_school_name ?? 'No previous school' }}</span>
+                            </div>
+                            <div class="flex justify-between"><span class="text-slate-600">Last Class Attended:</span><span
+                                    class="font-semibold">{{ $app->last_class_attended ?? 'No previous school' }}</span>
+                            </div>
+                            <div class="flex justify-between"><span class="text-slate-600">Stream:</span><span
+                                    class="font-semibold">{{ ucwords($app->stream) }}</span></div>
+                        </div>
+                    @empty
+                    <div class="text-center text-sm text-slate-400">No program is requested this application</div>
+                    @endforelse
                 </div>
                 <div class="bg-white rounded-lg border border-slate-100 p-4">
                     <h3 class="text-xs font-bold text-slate-900 mb-3"><i

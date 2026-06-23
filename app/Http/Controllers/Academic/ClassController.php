@@ -45,16 +45,25 @@ class ClassController extends Controller
 
         $classes = $classes
             ->filter(function ($class) use ($search) {
-                if ($search === '') return true;
+
+                if ($search === '') {
+                    return true;
+                }
+
                 $normalizedSearch = strtolower(str_replace(' ', '', $search));
+
                 $classText = strtolower(str_replace(
                     ' ',
                     '',
-                    ($class->name ?? '') . ($class->level->name ?? '') . ($class->program->name ?? '')
+                    ($class->name ?? '') .
+                        ($class->level->name ?? '') .
+                        ($class->program->name ?? '')
                 ));
 
                 $teacherMatch = $class->arms->contains(function ($arm) use ($normalizedSearch) {
+
                     $user = $arm->teacher?->user;
+
                     $teacherText = strtolower(str_replace(
                         ' ',
                         '',
@@ -66,8 +75,20 @@ class ClassController extends Controller
                     return str_contains($teacherText, $normalizedSearch);
                 });
 
-                return str_contains($classText, $normalizedSearch) || $teacherMatch;
-            })->values();
+                $armMatch = $class->arms->contains(function ($arm) use ($normalizedSearch) {
+
+                    $armText = strtolower(
+                        str_replace(' ', '', $arm->name ?? '')
+                    );
+
+                    return str_contains($armText, $normalizedSearch);
+                });
+
+                return str_contains($classText, $normalizedSearch)
+                    || $teacherMatch
+                    || $armMatch;
+            })
+            ->values();
 
         $perPage = 10;
         $currentPage = LengthAwarePaginator::resolveCurrentPage();

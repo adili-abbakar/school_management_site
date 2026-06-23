@@ -27,4 +27,8 @@ class Program extends Model
     {
         return $this->belongsToMany(StudentApplication::class);
     }
+
+    public function classes(){
+        return $this->hasMany(AcademicClass::class);
+    }
 }

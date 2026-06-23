@@ -6,6 +6,7 @@ use App\Models\Academic\AcademicClass;
 use App\Models\Academic\ClassArm;
 use App\Models\Academic\Program;
 use App\Models\Academic\Session;
+use App\Models\ApplicationProgram;
 use App\Models\StudentApplication;
 use App\Models\Users\Guardian;
 use App\Models\Users\Student;
@@ -334,8 +335,8 @@ class ApplicationController extends Controller
     public function create()
     {
         $classes = AcademicClass::orderdChain()->flatten();
-        $sections = Program::orderBy('name')->get();
-        return view('application.create', compact('classes', 'sections'));
+        $programs = Program::orderBy('name')->get();
+        return view('application.create', compact('classes', 'programs'));
     }
 
     /**
@@ -360,8 +361,9 @@ class ApplicationController extends Controller
 
             'previous_school_name' => 'nullable|string',
             'last_class_attended' => 'nullable|string',
-            'class_id' => 'required|exists:classes,id',
-            'sections' => 'required|array',
+
+            'programs.*.program_id' => 'required|exists:programs,id',
+            'programs.*.requested_class' => 'required|exists:classes,id',
 
 
             'guardian_relationship' => 'required|in:father,mother,brother,sister,grandfather,grandmother,uncle,aunt,other',
@@ -369,30 +371,10 @@ class ApplicationController extends Controller
 
 
         $messages = [
-            'class_id.required' => 'Class to apply for is required',
+            'programs.required' => 'You must choose atleats one program',
+            'programs.*.requested_class.required' =>            'You must select a class to apply for',
         ];
-        $class = AcademicClass::find($request->class_id);
-        if ($class) {
-            $class_rules = [];
-            $class_message = [];
-            if ($class->level === 'sss') {
-                $class_rules = [
-                    'stream' => 'required|in:science,arts'
-                ];
-                $class_message = [
-                    'stream.in' => 'Only Science or Arts is allowed for SS classes.'
-                ];
-            } else {
-                $class_rules = [
-                    'stream' => 'required|in:general'
-                ];
-                $class_message = [
-                    'stream.in' => 'Only General stream is allowed for Nursery, Primary and JSS classes.',
-                ];
-            }
-            $rules = array_merge($rules, $class_rules);
-            $messages = array_merge($messages, $class_message);
-        }
+
         if (!auth()->check()) {
             $rules =  array_merge($rules, [
                 // GUARDIAN DATA
@@ -413,8 +395,16 @@ class ApplicationController extends Controller
             ],);
         }
 
-
         $validated = Validator::make($request->all(), $rules, $messages)->validate();
+        $selectedPrograms = collect($request->programs ?? [])
+            ->filter(fn($program) => !empty($program['program_id'] ?? null));
+
+        if ($selectedPrograms->isEmpty()) {
+            return response()->json([
+                'status' => 'field-error',
+                'message' => 'You must choose at least one program.'
+            ]);
+        }
 
         $session = Session::currentSession();
         if (!$session) {
@@ -426,23 +416,46 @@ class ApplicationController extends Controller
             );
         }
         try {
-            $validated['session_id'] = $session->id;
-            $validated['application_number']  = StudentApplication::generateApplicationNumber($session->id);
-            if (auth()->check()) {
-                $validated['submitted_by_user_id'] = auth()->user()->id;
-            }
 
-            $app = StudentApplication::create($validated);
-            $app->programs()->attach($validated['sections']);
+            DB::transaction(function () use ($validated, $session) {
+                $validated['session_id'] = $session->id;
+                $validated['application_number']  = StudentApplication::generateApplicationNumber();
+                if (auth()->check()) {
+                    $validated['submitted_by_user_id'] = auth()->user()->id;
+                }
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Application submitted successfully',
-                'redirect' => redirect()
-                    ->intended(route('applications.track.show', $app->id))
-                    ->with('success', 'Application submitted successfully!')
-                    ->getTargetUrl(),
-            ]);
+                $app = StudentApplication::create($validated);
+                foreach ($validated['programs'] as $program) {
+                    ApplicationProgram::create([
+                        'application_id' => $app->id,
+                        'program_id' => $program['program_id'],
+                        'requested_class_id' => $program['requested_class']
+                    ]);
+                }
+
+                // $app = StudentApplication::create([
+                //     'student_first_name' => $validated['student_first_name'],
+                //     'student_middle_name' => $validated['student_middle_name'],
+                //     'student_last_name' => $validated['student_date_of_birth'],
+                //     'student_date_of_birth' => $validated[''],
+                //     'student_gender' => $validated['student_gender'],
+                //     'student_nationality' => $validated['student_state'],
+                //     'student_state' => $validated[''],
+                //     'student_local_government' => $validated['student_local_government'],
+                //     'student_religion' => $validated['student_religion'],
+                //     'student_tribe' => $validated['student_tribe'],
+                //     'student_address' => $validated['student_address'],
+                // ]);
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Application submitted successfully',
+                    'redirect' => redirect()
+                        ->intended(route('applications.track.show', $app->id))
+                        ->with('success', 'Application submitted successfully!')
+                        ->getTargetUrl(),
+                ]);
+            });
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',

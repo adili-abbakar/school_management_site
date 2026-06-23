@@ -14,7 +14,7 @@ $(".form").on("submit", function (e) {
     showLoader();
 
     $(".error-message").text("");
-    $("input, select, textarea").removeClass("border-red-600");
+    $("input, select, textarea").removeClass("!border-red-600");
 
     let form = $(this);
     let actionUrl = form.attr("action");
