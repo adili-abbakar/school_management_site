@@ -3,7 +3,7 @@
 
     <!-- Sidebar now toggleable on mobile -->
     <aside id="sidebar"
-        class="mobile-sidebar md:translate-x-0 w-56 bg-sidebar text-slate-300 flex-shrink-0 flex flex-col fixed md:relative z-40 h-full hide-scrollbar">
+        class="mobile-sidebar md:translate-x-0 w-56 bg-sidebar text-slate-300 shrink-0 flex flex-col fixed md:relative z-40 h-full hide-scrollbar">
         <div class="p-4 flex items-center gap-3 border-b border-slate-800">
             <div class="bg-accent text-white p-1.5 rounded text-xs">
                 <i class="fas fa-graduation-cap"></i>
@@ -14,7 +14,7 @@
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        <nav class="flex-grow py-4 space-y-1 overflow-y-auto text-xs overflow-y-auto hide-scrollbar">
+        <nav class="grow py-4 space-y-1 overflow-y-auto text-xs hide-scrollbar">
             <div class="px-4 mb-2 text-[9px] font-semibold text-slate-500 uppercase tracking-wider">Main Menu</div><a
                 href="{{ route('home') }}"
                 class="sidebar-link {{ url()->current() == route('home') ? 'active' : '' }} flex items-center px-4 py-2 hover:bg-slate-800 transition-colors gap-2">

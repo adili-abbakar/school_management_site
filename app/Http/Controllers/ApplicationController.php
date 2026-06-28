@@ -361,6 +361,7 @@ class ApplicationController extends Controller
 
             'previous_school_name' => 'nullable|string',
             'last_class_attended' => 'nullable|string',
+            'stream' => 'nullable',
 
             'programs.*.program_id' => 'required|exists:programs,id',
             'programs.*.requested_class' => 'required|exists:classes,id',
@@ -369,13 +370,12 @@ class ApplicationController extends Controller
             'guardian_relationship' => 'required|in:father,mother,brother,sister,grandfather,grandmother,uncle,aunt,other',
         ];
 
-
         $messages = [
             'programs.required' => 'You must choose atleats one program',
             'programs.*.requested_class.required' =>            'You must select a class to apply for',
         ];
 
-        if (!auth()->check()) {
+        if (!Auth::check()) {
             $rules =  array_merge($rules, [
                 // GUARDIAN DATA
                 'guardian_first_name' => 'required|string|max:255',
@@ -416,46 +416,36 @@ class ApplicationController extends Controller
             );
         }
         try {
+            $app = DB::transaction(function () use ($validated, $session) {
 
-            DB::transaction(function () use ($validated, $session) {
                 $validated['session_id'] = $session->id;
-                $validated['application_number']  = StudentApplication::generateApplicationNumber();
-                if (auth()->check()) {
-                    $validated['submitted_by_user_id'] = auth()->user()->id;
+                $validated['application_number'] = StudentApplication::generateApplicationNumber();
+
+                if (Auth::check()) {
+                    $validated['submitted_by_user_id'] = Auth::id();
                 }
 
                 $app = StudentApplication::create($validated);
+
                 foreach ($validated['programs'] as $program) {
                     ApplicationProgram::create([
-                        'application_id' => $app->id,
+                        'student_application_id' => $app->id,
                         'program_id' => $program['program_id'],
-                        'requested_class_id' => $program['requested_class']
+                        'requested_class_id' => $program['requested_class'],
                     ]);
                 }
 
-                // $app = StudentApplication::create([
-                //     'student_first_name' => $validated['student_first_name'],
-                //     'student_middle_name' => $validated['student_middle_name'],
-                //     'student_last_name' => $validated['student_date_of_birth'],
-                //     'student_date_of_birth' => $validated[''],
-                //     'student_gender' => $validated['student_gender'],
-                //     'student_nationality' => $validated['student_state'],
-                //     'student_state' => $validated[''],
-                //     'student_local_government' => $validated['student_local_government'],
-                //     'student_religion' => $validated['student_religion'],
-                //     'student_tribe' => $validated['student_tribe'],
-                //     'student_address' => $validated['student_address'],
-                // ]);
-
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Application submitted successfully',
-                    'redirect' => redirect()
-                        ->intended(route('applications.track.show', $app->id))
-                        ->with('success', 'Application submitted successfully!')
-                        ->getTargetUrl(),
-                ]);
+                return $app;
             });
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Application submitted successfully',
+                'redirect' => redirect()
+                    ->intended(route('applications.track.show', $app->id))
+                    ->with('success', 'Application submitted successfully!')
+                    ->getTargetUrl(),
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -496,5 +486,162 @@ class ApplicationController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+
+    public function decisionShow(StudentApplication $application)
+    {
+        return view('application.decision-show', ['app' => $application]);
+    }
+
+    public function decisionMake(StudentApplication $application, Request $request)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:approved,rejected',
+            'decision_date' => 'required|date',
+            'remarks' => 'nullable',
+
+            'programs' => "array",
+            'programs.*.id' => 'required|exists:application_programs,id',
+            'programs.*.approved_class_id' => "required|exists:classes,id",
+            'programs.*.status' => "required|in:approved,rejected",
+            'programs.*.approved_stream' => "nullable|exists:class_arms,id",
+            'programs.*.remarks' => 'nullable',
+
+        ], [
+            'programs.*.approved_class_id.required' => 'Please select the approved class.',
+            'programs.*.approved_class_id.exists' => 'The selected approved class is invalid.',
+
+            'programs.*.status.required' => 'Please choose a decision for each program.',
+            'programs.*.status.in' => 'The selected decision must be either Approved or Rejected.',
+
+            'programs.*.approved_stream.exists' => 'The selected class stream is invalid.',
+        ]);
+
+        try {
+            DB::transaction(function () use ($application, $validated) {
+                if (empty($validated['remarks'])) {
+                    $validated['remarks'] = $validated['status'] === 'approved'
+                        ? 'Your application has been approved.'
+                        : 'Your application has been rejected.';
+                }
+
+                $application->update([
+                    'status' => $validated['status'],
+                    'decision_date' => $validated['decision_date'],
+                    'decision_by' => Auth::id(),
+                    'remarks' => $validated['remarks'],
+                ]);
+
+
+                $submittedProgrmas = (collect($validated['programs']));
+
+                foreach ($submittedProgrmas as $program) {
+                    if (!empty($program['id'])) {
+                        if (empty($program['remarks'])) {
+                            $program['remarks'] = $program['status'] === 'approved'
+                                ? 'Your program has been approved.'
+                                : 'Your program has been rejected.';
+                        }
+                        $existingProgram = $application
+                            ->programs()
+                            ->findOrFail($program['id']);
+
+                        $existingProgram->update([
+                            'approved_class_id' => $program['approved_class_id'],
+                            'status' => $program['status'],
+                            'remarks' => $program['remarks']
+                        ]);
+                    }
+                }
+
+                if ($validated['status'] === 'approved') {
+                    $guardian = null;
+                    if ($application->submitted_by_user_id) {
+                        $guardian = Guardian::firstOrCreate(
+                            ['user_id' => $application->submitted_by_user_id],
+                            ['occupation' => $application->guardian_occupation ?? null]
+                        );
+                    } else {
+                        $guardian = Guardian::whereHas('user', function ($query) use ($application) {
+                            $query->where('email', $application->guardian_email);
+                        })->first();
+
+
+                        if (!$guardian) {
+                            $guardianUser = User::create([
+                                'first_name' => $application->guardian_first_name,
+                                'middle_name' => $application->guardian_middle_name,
+                                'last_name' => $application->guardian_last_name,
+                                'email' => $application->guardian_email,
+                                'phone' => $application->guardian_phone,
+                                'date_of_birth' => $application->guardian_date_of_birth,
+                                'gender' => $application->guardian_gender,
+                                'nationality' => $application->guardian_nationality,
+                                'state' => $application->guardian_state,
+                                'local_government' => $application->guardian_local_government,
+                                'religion' => $application->guardian_religion,
+                                'tribe' => $application->guardian_tribe,
+                                'address' => $application->guardian_address,
+                                'password' => bcrypt(str()->random(12)),
+                            ]);
+
+                            $guardian = Guardian::create([
+                                'user_id' => $guardianUser->id,
+                                'occupation' => $application->guardian_occupation,
+                            ]);
+                        }
+                    }
+
+
+
+                    $studentUser = User::create([
+                        'first_name' => $application->student_first_name,
+                        'middle_name' => $application->student_middle_name,
+                        'last_name' => $application->student_last_name,
+                        'date_of_birth' => $application->student_date_of_birth,
+                        'gender' => $application->student_gender,
+                        'nationality' => $application->student_nationality,
+                        'state' => $application->student_state,
+                        'local_government' => $application->student_local_government,
+                        'religion' => $application->student_religion,
+                        'tribe' => $application->student_tribe,
+                        'address' => $application->student_address,
+                        'password' => bcrypt(str()->random(12)),
+                    ]);
+
+
+                    if (!empty($validated['approved_stream'])) {
+                        $classArm = ClassArm::find($validated['approved_stream']);
+                    } else {
+                        $classArm = ClassArm::resolveClassArmForApplication($application);
+                    }
+
+                    $student = Student::create([
+                        'user_id' => $studentUser->id,
+                        'admission_number' => Student::generateAdmissionNumber(),
+                        'current_class_arm_id' => $classArm?->id,
+                        'guardian_user_id' => $guardian->user_id,
+                        'guardian_relationship' => $application->guardian_relationship,
+                    ]);
+                    $studentUser->update(['password' => bcrypt($student->admission_number)]);
+                    $application->update(['status' => 'approved']);
+                }
+            });
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Application decided successfully',
+                'redirect' => redirect()
+                    ->intended(route('applications.show', $application->id))
+                    ->with('success', 'Application decided successfully!')
+                    ->getTargetUrl(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "Something went wrong: " . $e->getMessage()
+            ]);
+        }
     }
 }

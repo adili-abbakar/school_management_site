@@ -9,6 +9,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('classes', ClassController::class);
     Route::get('classes/{class}/delete', [ClassController::class, 'delete'])->name('classes.delete');
     Route::resource('class-arms', ClassArmController::class);
+    Route::get('/classes/{class}/arms', [ClassController::class, 'arms'])->name('class.arms');
 
 
     Route::get('/class-arms/{class_arm}/delete', [ClassArmController::class, 'delete'])

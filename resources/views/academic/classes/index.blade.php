@@ -3,11 +3,11 @@
 @section('title', 'Class management')
 
 @section('page-content')
-    <main class="flex-grow flex flex-col min-w-0  overflow-y-auto">
+    <main class="grow flex flex-col min-w-0  overflow-y-auto">
         <x-loader-component />
         <div data-live-search data-search-url="{{ route('classes.index') }}" data-search-delay="300">
             <x-dashboard-header>
-                <div class="flex items-center gap-4 flex-grow max-w-xl">
+                <div class="flex items-center gap-4 grow max-w-xl">
                     <div class="relative w-full">
                         <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                         <input data-search-input type="text" placeholder="Search classes..."
@@ -33,12 +33,13 @@
                 <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-end gap-4 mb-6">
 
                     <!-- Class Filter -->
-                    <div class="flex flex-col min-w-[160px]">
+                    <div class="flex flex-col min-w-40">
                         <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-1">
                             Program
                         </label>
-                        <select name="program_id" data-target="level_id" data-route="/programs/{id}/levels" id="program_id" data-search-filter
-                            class="bg-slate-100 border border-slate-200 rounded-lg py-2 px-3 text-xs outline-none focus:ring-2 focus:ring-accent focus:bg-white transition">
+                        <select name="program_id" data-target="level_id" data-route="/programs/{id}/levels"
+                            data-search-filter
+                            class="program_id bg-slate-100 border border-slate-200 rounded-lg py-2 px-3 text-xs outline-none focus:ring-2 focus:ring-accent focus:bg-white transition">
                             <option value="{{ null }}">All Programs</option>
                             @forelse ($programs as $program)
                                 <option value="{{ $program->id }}">
@@ -51,12 +52,12 @@
                     </div>
 
                     <!-- Status Filter -->
-                    <div class="flex flex-col min-w-[140px]">
+                    <div class="flex flex-col min-w-35">
                         <label class="text-[10px] font-semibold text-slate-500 uppercase tracking-wide mb-1">
                             Level
                         </label>
-                        <select name="class_level_id" data-search-filter id="level_id"
-                            class="bg-slate-100 border border-slate-200 rounded-lg py-2 px-3 text-xs outline-none focus:ring-2 focus:ring-accent focus:bg-white transition disabled:cursor-not-allowed disabled:text-slate-400 disabled:bg-slate-50"
+                        <select name="class_level_id" data-search-filter
+                            class="level_id bg-slate-100 border border-slate-200 rounded-lg py-2 px-3 text-xs outline-none focus:ring-2 focus:ring-accent focus:bg-white transition disabled:cursor-not-allowed disabled:text-slate-400 disabled:bg-slate-50"
                             disabled>
                             <option value="">Select program first</option>
                         </select>

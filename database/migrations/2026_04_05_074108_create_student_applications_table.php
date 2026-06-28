@@ -58,7 +58,7 @@ return new class extends Migration
             $table->string('application_number')->unique();
             $table->string('previous_school_name')->nullable();
             $table->string('last_class_attended')->nullable();
-            $table->enum('stream', ['arts', 'science']);
+            $table->enum('stream', ['arts', 'science'])->nullable();
             $table->unsignedBigInteger('session_id')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected', 'withdrawn'])->default('pending');
 
@@ -67,6 +67,10 @@ return new class extends Migration
                 ->references('id')
                 ->on('users')
                 ->nullOnDelete();
+
+            $table->text('remarks')->nullable();
+            $table->foreignId('decision_by')->nullable()->constrained('users');
+            $table->date('decision_date')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

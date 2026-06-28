@@ -5,7 +5,7 @@
                <span>EduPro Academy</span>
            </a>
            <!-- Desktop Menu -->
-           <div class="hidden md:flex items-center gap-6 text-sm">
+           <div class="hidden md:flex items-center gap-6 font-medium">
                <a href="{{ route('home') }}"
                    class="hover:text-[#6B8DD6] transition-colors {{ url()->current() === route('home') ? 'text-[#6B8DD6]' : '' }}">Home</a>
                <a href="{{ route('about') }}"
@@ -25,20 +25,20 @@
                        <div class="w-60 bg-white text-slate-700 rounded-xl shadow-xl border border-slate-100 py-2">
                            <a href="{{ route('applications.create') }}"
                                class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-slate-50 hover:text-[#6B8DD6] transition-colors">
-                               <i class="fas fa-file-signature text-xs text-slate-400"></i>
+                               <i class="fas fa-file-signature text-sm text-slate-500"></i>
                                <span>Apply for Admission</span>
                            </a>
 
                            <a href="{{ route('applications.track.search.form') }}"
                                class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-slate-50 hover:text-[#6B8DD6] transition-colors">
-                               <i class="fas fa-magnifying-glass text-xs text-slate-400"></i>
+                               <i class="fas fa-search text-sm text-slate-500"></i>
                                <span>Track Admission Application</span>
                            </a>
 
                            @auth
                                <a href="{{ route('applications.mine') }}"
                                    class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-slate-50 hover:text-[#6B8DD6] transition-colors">
-                                   <i class="fas fa-folder-open text-xs text-slate-400"></i>
+                                   <i class="fas fa-folder-open text-sm text-slate-500"></i>
                                    <span>My Applications</span>
                                </a>
                            @endauth
@@ -77,7 +77,7 @@
    </nav>
 
    <!-- Mobile Menu Overlay -->
-   <div id="mobileMenuOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"></div>
+   <div id="mobileMenuOverlay" class="hidden fixed inset-0 bg-black/50 z-40 md:hidden"></div>
    <!-- Mobile Side Menu Overlay -->
    <div id="mobileMenu"
        class="mobile-menu fixed top-0 right-0 h-full w-64 bg-navy-900 text-white z-50 shadow-2xl md:hidden">
@@ -102,19 +102,22 @@
 
                <div id="admissionsSubmenu" class="hidden pl-4 mt-2 space-y-2 border-l border-gray-700">
                    <a href="{{ route('applications.create') }}"
-                       class="block py-2 text-xs hover:text-[#6B8DD6] transition-colors">
-                       Apply for Admission
+                       class="block py-2 text-xs hover:text-[#6B8DD6] transition-colors gap-2">
+                        <i class="fas fa-file-signature text-sm text-slate-500"></i>
+                               <span class="pl-1.5">Apply for Admission</span>
                    </a>
 
                    <a href="{{ route('applications.track.search.form') }}"
-                       class="block py-2 text-xs hover:text-[#6B8DD6] transition-colors">
-                       Track Admission Application
+                       class="block py-2 text-xs hover:text-[#6B8DD6] transition-colors gap-2">
+                      <i class="fas fa-search text-sm text-slate-500"></i>
+                               <span class="pl-1.5">Track Admission Application</span>
                    </a>
 
                    @auth
                        <a href="{{ route('applications.mine') }}"
-                           class="block py-2 text-xs hover:text-[#6B8DD6] transition-colors">
-                           My Applications
+                           class="block py-2 text-xs hover:text-[#6B8DD6] transition-colors gap-2">
+                            <i class="fas fa-folder-open text-sm text-slate-500"></i>
+                                   <span class="pl-1.5">My Applications</span>
                        </a>
                    @endauth
                </div>
@@ -123,19 +126,20 @@
            <a href="{{ route('contact') }}" class="hover:text-[#6B8DD6] transition-colors py-2">Contact</a>
            @auth
                <a href="{{ route('dashboard.index') }}" class="hover:text-[#6B8DD6] transition-colors py-2">Dashboard</a>
-               <a href="{{ route('logout') }}">
+               <form action="{{ route('logout') }}" method="POST">
+                @csrf
                    <button
                        class="w-full flex items-center justify-center gap-2 bg-[#6B8DD6] hover:bg-opacity-90 text-white px-4 py-2
-                       rounded-md font-medium transition-colors text-sm inline-block text-center mt-4">
+                       rounded-md font-medium transition-colors text-sm text-center mt-4">
                        <i class="fas fa-sign-out-alt"></i>
                        <span>Logout</span>
                    </button>
-               </a>
+               </form>
            @else
                <a href="{{ route('login') }}">
                    <button
                        class="w-full flex items-center justify-center gap-2 bg-[#6B8DD6] hover:bg-opacity-90 text-white px-4 py-2
-                       rounded-md font-medium transition-colors text-sm inline-block text-center mt-4">
+                       rounded-md font-medium transition-colors text-sm text-center mt-4">
                        <i class="fas fa-sign-in-alt"></i>
                        <span>Login</span>
                    </button>

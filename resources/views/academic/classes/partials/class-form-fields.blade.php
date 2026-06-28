@@ -14,7 +14,7 @@
             <span class="text-red-600 text-[10px] error-message" data-name="class_name"></span>
         </div>
         <div>
-            <label class="block text-[10px] font-semibold text-slate-700 mb-2 flex gap-3">
+            <label class="text-[10px] font-semibold text-slate-700 mb-2 flex gap-3">
                 <span>
                     <span>Program</span>
                     <span class="text-red-500">*</span>
@@ -23,9 +23,9 @@
                     Add new Program
                 </a>
             </label>
-            <select name="class_program" id="program_id" data-target="level_id" data-route="/programs/{id}/levels"
+            <select name="class_program" data-target="level_id" data-route="/programs/{id}/levels"
                 data-placeholder="Select program"
-                class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none">
+                class="program_id w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none">
                 <option value="{{ null }}" selected disabled>Select Program</option>
                 @forelse ($programs as $program)
                     <option value="{{ $program->id }}" @selected(old('class_program', $class->program_id ?? '') == $program->id)>
@@ -40,7 +40,7 @@
             <span class="text-red-600 text-[10px] error-message" data-name="class_level"></span>
         </div>
         <div>
-            <label class="block text-[10px] font-semibold text-slate-700 mb-2 flex gap-3">
+            <label class="text-[10px] font-semibold text-slate-700 mb-2 flex gap-3">
                 <span>
                     <span>Class Level</span>
                     <span class="text-red-500">*</span>
@@ -49,8 +49,8 @@
                     Add new level
                 </a>
             </label>
-            <select name="class_level" id="level_id";
-                class="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none disabled:cursor-not-allowed disabled:text-slate-400 disabled:bg-slate-50"
+            <select name="class_level"
+                class="level_id w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-accent focus:border-transparent outline-none disabled:cursor-not-allowed disabled:text-slate-400 disabled:bg-slate-50"
                 disabled data-selected="{{ old('class_level', $class?->class_level_id ?? '') }}">
                 <option class="text-slate-200" selected disabled>Select program first</option>
             </select>

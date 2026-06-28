@@ -3,7 +3,7 @@
 @section('title', 'Application Details')
 
 @section('page-content')
-    <main class="flex-grow">
+    <main class="grow">
         <header class="bg-navy-900 text-white py-12 mb-10">
             <div class="container mx-auto px-4 text-center" data-aos="fade-up">
                 <h1 class="text-3xl font-extrabold mb-3 tracking-tight">
@@ -176,13 +176,8 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         <div class="info-card">
-                            <p class="detail-label">Class Applied For</p>
-                            <p class="detail-value">{{ $application->class?->name ?? 'Not specified' }}</p>
-                        </div>
-
-                        <div class="info-card">
                             <p class="detail-label">Stream</p>
-                            <p class="detail-value capitalize">{{ $application->stream ?: 'General' }}</p>
+                            <p class="detail-value capitalize">{{ $application->stream ?: 'Not provided' }}</p>
                         </div>
 
                         <div class="info-card">
@@ -205,6 +200,56 @@
                             <p class="detail-label">Application Date</p>
                             <p class="detail-value">{{ $application->created_at->format('d M, Y') }}</p>
                         </div>
+                    </div>
+                </section>
+
+                <section class="bg-white p-8 md:p-10 rounded-xl border border-gray-200 shadow-sm" data-aos="fade-up">
+                    <h2 class="section-title">Programs Details</h2>
+
+
+                    <div class="flex gap-2 flex-col">
+                        @forelse ($application->programs as $program)
+                            <div
+                                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 border border-slate-200 rounded-md p-2">
+                                <div class="info-card">
+                                    <p class="detail-label">Program name</p>
+                                    <p class="detail-value capitalize">{{ $program->program->name }}</p>
+                                </div>
+                                <div class="info-card">
+                                    <p class="detail-label">Requested Class</p>
+                                    <p class="detail-value">{{ $program->requestedClass?->name ?? 'Not specified' }}</p>
+                                </div>
+
+                                <div class="info-card">
+                                    <p class="detail-label">Approved Class</p>
+                                    <p class="detail-value">{{ $program->approvedClass?->name ?? 'Not specified' }}</p>
+                                </div>
+                                <div class="info-card">
+                                    <p class="detail-label">Current Status</p>
+                                    <p class="detail-value capitalize">{{ $program->status }}</p>
+                                </div>
+                                <div class="info-card">
+                                    <p class="detail-label">School Remark</p>
+
+                                    <p class="detail-value">
+                                        @if ($program->remark)
+                                            {{ $program->remark }}
+                                        @elseif ($program->status == 'pending')
+                                            Application is currently under review.
+                                        @elseif ($program->status == 'approved')
+                                            Your application has been approved.
+                                        @elseif ($program->status == 'rejected')
+                                            Your application was not approved. Please contact the school for more
+                                            information.
+                                        @else
+                                            No remarks available.
+                                        @endif
+                                    </p>
+                                </div>
+                            </div>
+                        @empty
+                            <p class="text-center">No Program Found</p>
+                        @endforelse
                     </div>
                 </section>
 

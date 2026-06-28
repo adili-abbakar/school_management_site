@@ -3,11 +3,11 @@
 @section('title', 'Admission Applications')
 
 @section('page-content')
-    <main class="flex-grow flex flex-col min-w-0  overflow-y-auto">
+    <main class="grow flex flex-col min-w-0  overflow-y-auto">
         <x-loader-component />
         <div data-live-search data-search-url="{{ route('applications.index') }}" data-search-delay="300">
             <x-dashboard-header>
-                <div class="flex items-center gap-4 flex-grow max-w-xl">
+                <div class="flex items-center gap-4 grow max-w-xl">
                     <div class="relative w-full">
                         <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                         <input data-search-input type="text" placeholder="Search application..."

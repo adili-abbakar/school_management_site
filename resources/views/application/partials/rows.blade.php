@@ -18,7 +18,7 @@
 
                 <div class="min-w-0 flex-1">
                     <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-1">
-                        <h3 class="text-sm font-bold text-primary break-words">
+                        <h3 class="text-sm font-bold text-primary wrap-break-words">
                             {{ $app->student_name }}
                         </h3>
 
@@ -85,32 +85,23 @@
                 </a>
 
                 @if ($app->status === 'pending')
-                    <form method="POST" action="{{ route('applications.reject', $app) }}">
-                        @csrf
-                        @method('PUT')
+                    <a href="{{ route('applications.decision.show', $app) }}"
+                        class="bg-blue-50 text-blue-600 border border-blue-100 hover:bg-blue-100
+               px-4 py-2 rounded-lg text-xs font-semibold transition-all
+               flex items-center gap-2">
 
-                        <button onclick="showLoader()" type="submit"
-                            class="bg-rose-50 text-rose-600 px-3 py-2 rounded-lg text-xs font-semibold hover:bg-rose-100 transition-all border border-rose-100 flex items-center gap-1">
-                            <i class="fas fa-times"></i>
-                            Reject
-                        </button>
-                    </form>
-                @endif
+                        <i class="fas fa-gavel"></i>
+                        <span>Make Admission Decision</span>
+                    </a>
+                @else
+                    <a href="{{ route('applications.decision.show', $app) }}"
+                        class="bg-amber-50 text-amber-600 border border-amber-100 hover:bg-amber-100
+               px-4 py-2 rounded-lg text-xs font-semibold transition-all
+               flex items-center gap-2">
 
-                @if ($app->status === 'pending' || $app->status === 'rejected')
-                    <form method="POST" action="{{ route('applications.approve', $app) }}">
-                        @csrf
-                        @method('PUT')
-
-                        <button onclick="showLoader()" type="submit"
-                            class="px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-1 border
-                                    {{ $app->status === 'rejected'
-                                        ? 'bg-amber-50 text-amber-600 border-amber-100 hover:bg-amber-100'
-                                        : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100' }}">
-                            <i class="fas {{ $app->status === 'rejected' ? 'fa-redo' : 'fa-check' }}"></i>
-                            <span>{{ $app->status === 'rejected' ? 'Reconsider & Approve' : 'Approve' }}</span>
-                        </button>
-                    </form>
+                        <i class="fas fa-pen-to-square"></i>
+                        <span>Review / Edit Admission Decision</span>
+                    </a>
                 @endif
             </div>
         </div>

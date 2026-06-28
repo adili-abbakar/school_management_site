@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
+use function Pest\Laravel\json;
+
 class ClassController extends Controller
 {
     /**
@@ -414,5 +416,12 @@ class ClassController extends Controller
         ];
 
         return view('academic.classes.soft-delete', compact('data', 'title', 'route', 'messages'));
+    }
+
+    public function arms(AcademicClass $class)
+    {
+        return response()->json(
+            $class->arms()->select('id', 'name')->orderBy('name')->get()
+        );
     }
 }

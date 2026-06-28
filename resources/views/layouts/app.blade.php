@@ -42,7 +42,5 @@
         <script src="{{ asset('/js/successAlert.js') }}"></script>
         <script src="{{ asset('js/failureAlert.js') }}"></script>
         <script src="{{ asset('js/infoAlert.js') }}"></script>
-
-
     </body>
 @endsection

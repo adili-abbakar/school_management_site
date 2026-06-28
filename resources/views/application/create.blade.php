@@ -3,7 +3,7 @@
 @section('title', 'Apply For Admission')
 
 @section('page-content')
-    <main class="flex-grow">
+    <main class="grow">
         <x-loader-component />
 
         <!-- Header Section -->
@@ -89,7 +89,7 @@
                             <div>
                                 <label for="form-label">Stream (for SS classes only)</label>
                                 <select name="stream" class="form-input">
-                                    <option value="general">Choose stream</option>
+                                    <option value="">Choose stream</option>
                                     <option value="science">Science (SS Classes only)</option>
                                     <option value="arts">Arts (SS Classes only)</option>
                                 </select>

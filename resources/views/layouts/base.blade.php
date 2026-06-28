@@ -6,29 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> @yield('title') | {{ config('app.name') }}</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('/icons/graduation-cap.svg') }}">
-    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="{{ asset('/js/jquery-3.7.1.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('css/all.min.css') }}" />
 
-    {{-- <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#1a2b4b',
-                        secondary: '#f0f4f8',
-                        accent: '#3b82f6',
-                        muted: '#6b7280',
-                        sidebar: '#0f172a',
-                    }
-                }
-            }
-        }
-    </script> --}}
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
         /* Reduced all font sizes significantly for dashboard */
         body {
             font-family: 'Inter', sans-serif;

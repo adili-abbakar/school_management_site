@@ -50,6 +50,7 @@ class StudentApplication extends Model
         'stream',
         'session_id',
         'status',
+        'remarks',
         'submitted_by_user_id'
     ];
 
@@ -114,6 +115,10 @@ class StudentApplication extends Model
     public function getExpectedDecisionAttribute()
     {
         return $this->created_at->copy()->addDays(7)->diffForHumans() . ' (' . $this->created_at->copy()->addDays(7)->format("d M, Y") . ')';
+    }
+
+    public function getAppliedOnAttribute(){
+        return $this->created_at->format("D d M, Y");
     }
 
     public function submittedBy()

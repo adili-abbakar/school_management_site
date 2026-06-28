@@ -15,5 +15,5 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('programs.levels', ClassLevelController::class)->except(['show', 'index']);
     Route::get('programs/{session}/level/{level}/delete', [ClassLevelController::class, 'delete'])->name('programs.levels.delete');
 
-    Route::get('/programs/{program}/levels', [ProgramController::class, 'levels'])->name('program.levels');
+    Route::get('/programs/{program}/levels', [ProgramController::class, 'levels'])->name('program.levels'); 
 });
