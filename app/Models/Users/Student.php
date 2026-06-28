@@ -2,7 +2,7 @@
 
 namespace App\Models\Users;
 
-use App\Models\Academic\ClassArm;
+use App\Models\Academic\StudentProgramEnrollment;
 use App\Models\NumberingSetting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -63,5 +63,24 @@ class Student extends Model
 
             return 'ADM/' . $year . '/' . str_pad($number, 3, '0', STR_PAD_LEFT);
         }
+    }
+
+    public function programEnrollments()
+    {
+        return $this->hasMany(StudentProgramEnrollment::class, 'student_id', 'user_id');
+    }
+
+    public function activeProgramEnrollments()
+    {
+        return $this->programEnrollments()
+            ->where('status', 'active');
+    }
+
+    public function isEnrolledIn(int $programId): bool
+    {
+        return $this->programEnrollments()
+            ->where('program_id', $programId)
+            ->where('status', 'active')
+            ->exists();
     }
 }
