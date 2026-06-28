@@ -18,7 +18,6 @@ class Student extends Model
     protected $fillable = [
         'user_id',
         'admission_number',
-        'current_class_arm_id',
         'current_status',
         'admission_date',
         'graduation_date',
@@ -37,20 +36,12 @@ class Student extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function currentClassArm()
-    {
-        return $this->belongsTo(ClassArm::class, 'current_class_arm_id', 'id');
-    }
 
     public function guardian()
     {
         return $this->belongsTo(Guardian::class, 'guardian_user_id', 'user_id');
     }
 
-    public function getclassAttribute(): string
-    {
-        return $this->currentClassArm->class->name . ' ' . $this->currentClassArm->name;
-    }
 
     public static function generateAdmissionNumber()
     {

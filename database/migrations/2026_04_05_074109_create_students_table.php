@@ -15,10 +15,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->primary();
             $table->string('admission_number', 50)->unique();
 
-            $table->foreignId('current_class_arm_id')
-                ->nullable()
-                ->constrained('class_arms')
-                ->nullOnDelete();
 
             $table->enum('current_status', ['active', 'graduated', 'withdrawn', 'suspended'])
                 ->default('active');
