@@ -14,14 +14,9 @@ return new class extends Migration
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('program_id')
-                ->constrained('programs')
-                ->cascadeOnDelete();
+            $table->foreignId('program_id')->constrained('programs')->cascadeOnDelete();
 
-            $table->foreignId('class_level_id')
-                ->nullable()
-                ->constrained('class_levels')
-                ->nullOnDelete();
+            $table->foreignId('class_level_id')->nullable()->constrained('class_levels')->nullOnDelete();
 
             $table->string('name')->index();
 

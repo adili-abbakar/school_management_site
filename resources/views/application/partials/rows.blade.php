@@ -2,11 +2,37 @@
     <div data-status="{{ $app->status }}"
         class="item-to-filter admission-applications bg-white rounded-lg border border-slate-100 p-4 shadow-sm hover:shadow-md transition-all border-l-4
                 @switch($app->status)
-                    @case('pending') border-l-amber-400 @break
-                    @case('approved') border-l-green-400 @break
-                    @case('withdrawn') border-l-gray-400 @break
-                    @case('rejected') border-l-red-400 @break
-                @endswitch">
+    @case('pending')
+        border-l-amber-400
+        @break
+
+    @case('processing')
+        border-l-blue-400
+        @break
+
+    @case('approved')
+        border-l-green-400
+        @break
+
+    @case('awaiting_guardian_response')
+        border-l-violet-400
+        @break
+
+    @case('completed')
+        border-l-green-500
+        @break
+
+    @case('rejected')
+        border-l-red-400
+        @break
+
+    @case('withdrawn')
+        border-l-slate-400
+        @break
+
+    @default
+        border-l-slate-300
+@endswitch">
 
         <div class="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-4">
 
@@ -22,39 +48,68 @@
                             {{ $app->student_name }}
                         </h3>
 
-                        <span
-                            class="status-badge w-fit
-                @switch($app->status)
-                    @case('pending') status-pending @break
-                    @case('approved') status-approved @break
-                    @case('rejected') status-rejected @break
-                    @case('withdrawn') status-withdrawn @break
-                @endswitch">
-                            @switch($app->status)
-                                @case('pending')
-                                    <i class="fas fa-clock"></i>
-                                @break
+                        @switch($app->status)
+                            @case('pending')
+                                <span class="status-pending text-xs font-bold px-3 py-1 rounded">
+                                    <i class="fas fa-clock mr-1"></i>Pending
+                                </span>
+                            @break
 
-                                @case('approved')
-                                    <i class="fas fa-check-circle"></i>
-                                @break
+                            @case('processing')
+                                <span class="status-processing text-xs font-bold px-3 py-1 rounded">
+                                    <i class="fas fa-spinner mr-1"></i>Processing
+                                </span>
+                            @break
 
-                                @case('rejected')
-                                    <i class="fas fa-times-circle"></i>
-                                @break
+                            @case('approved')
+                                <span class="status-approved text-xs font-bold px-3 py-1 rounded">
+                                    <i class="fas fa-check-circle mr-1"></i>Approved
+                                </span>
+                            @break
 
-                                @case('withdrawn')
-                                    <i class="fas fa-minus-circle"></i>
-                                @break
-                            @endswitch
-                            {{ ucwords($app->status) }}
-                        </span>
+                            @case('awaiting_guardian_response')
+                                <span class="status-awaiting-guardian-response text-xs font-bold px-3 py-1 rounded">
+                                    <i class="fas fa-user-clock mr-1"></i>Awaiting Guardian Response
+                                </span>
+                            @break
+
+                            @case('completed')
+                                <span class="status-approved text-xs font-bold px-3 py-1 rounded">
+                                    <i class="fas fa-clipboard-check mr-1"></i>Completed
+                                </span>
+                            @break
+
+                            @case('rejected')
+                                <span class="status-rejected text-xs font-bold px-3 py-1 rounded">
+                                    <i class="fas fa-minus-circle mr-1"></i>Rejected
+                                </span>
+                            @break
+
+                            @case('withdrawn')
+                                <span class="status-withdrawn text-xs font-bold px-3 py-1 rounded">
+                                    <i class="fas fa-times-circle mr-1"></i>Withdrawn
+                                </span>
+                            @break
+
+                            @default
+                                <span class="status-withdrawn text-xs font-bold px-3 py-1 rounded">
+                                    <i class="fas fa-question-circle mr-1"></i>Unknown
+                                </span>
+                        @endswitch
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-2 text-xs text-slate-500">
                         <span class="flex items-center gap-1 min-w-0">
                             <i class="fas fa-school text-accent shrink-0"></i>
-                            <span class="truncate">{{ $app->class?->name }}</span>
+                            <span class="truncate flex flex-col">
+                                @forelse ($app->programs as $program)
+                                    <span> {{ $program->program->name }}: {{ $program->requestedClass->name }} </span>
+                                @empty
+                                    <span>
+                                        No Class is requested
+                                    </span>
+                                @endforelse
+                            </span>
                         </span>
 
                         <span class="flex items-center gap-1 min-w-0">
@@ -106,12 +161,12 @@
             </div>
         </div>
     </div>
-    @empty
-        <div class="bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-lg p-4 text-center text-sm">
-            No admission applications found.
-        </div>
-    @endforelse
-
-    <div id="emptyState"
-        class="hidden bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-lg p-4 text-center text-sm">
+@empty
+    <div class="bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-lg p-4 text-center text-sm">
+        No admission applications found.
     </div>
+@endforelse
+
+<div id="emptyState"
+    class="hidden bg-yellow-50 border border-yellow-200 text-yellow-700 rounded-lg p-4 text-center text-sm">
+</div>

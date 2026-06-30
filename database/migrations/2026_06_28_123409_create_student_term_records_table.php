@@ -14,13 +14,9 @@ return new class extends Migration
         Schema::create('student_term_records', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('student_session_record_id')
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->foreignId('student_session_record_id')->constrained()->cascadeOnDelete();
 
-            $table->foreignId('term_id')
-                ->constrained()
-                ->restrictOnDelete();
+            $table->foreignId('term_id')->constrained('terms')->restrictOnDelete();
 
             $table->enum('status', [
                 'active',
@@ -29,6 +25,7 @@ return new class extends Migration
 
             $table->date('started_at')->nullable();
             $table->date('completed_at')->nullable();
+            $table->text('remarks')->nullable();
 
             $table->timestamps();
 

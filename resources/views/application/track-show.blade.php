@@ -54,29 +54,59 @@
                         </div>
 
                         <div class="flex flex-col sm:flex-row gap-3 sm:items-center">
-                            @php
-                                $statusClasses = match ($application->status) {
-                                    'approved' => 'bg-emerald-50 text-emerald-700 border border-emerald-100',
-                                    'rejected' => 'bg-rose-50 text-rose-700 border border-rose-100',
-                                    'withdrawn' => 'bg-slate-100 text-slate-700 border border-slate-200',
-                                    default => 'bg-amber-50 text-amber-700 border border-amber-100',
-                                };
+                            @switch($application->status)
+                                @case('pending')
+                                    <span class="status-pending text-xs font-bold px-3 py-1 rounded">
+                                        <i class="fas fa-clock mr-1"></i>Pending
+                                    </span>
+                                @break
 
-                                $statusIcon = match ($application->status) {
-                                    'approved' => 'fa-check-circle',
-                                    'rejected' => 'fa-times-circle',
-                                    'withdrawn' => 'fa-ban',
-                                    default => 'fa-clock',
-                                };
-                            @endphp
+                                @case('processing')
+                                    <span class="status-processing text-xs font-bold px-3 py-1 rounded">
+                                        <i class="fas fa-spinner mr-1"></i>Processing
+                                    </span>
+                                @break
 
-                            <div
-                                class="px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 {{ $statusClasses }}">
-                                <i class="fas {{ $statusIcon }}"></i>
-                                <span class="capitalize">{{ $application->status }}</span>
-                            </div>
+                                @case('approved')
+                                    <span class="status-approved text-xs font-bold px-3 py-1 rounded">
+                                        <i class="fas fa-check-circle mr-1"></i>Approved
+                                    </span>
+                                @break
 
-                            @if ($application->status === 'pending')
+                                @case('awaiting_guardian_response')
+                                    <span class="status-awaiting-guardian-response text-xs font-bold px-3 py-1 rounded">
+                                        <i class="fas fa-user-clock mr-1"></i>Awaiting Guardian Response
+                                    </span>
+                                @break
+
+                                @case('completed')
+                                    <span class="status-approved text-xs font-bold px-3 py-1 rounded">
+                                        <i class="fas fa-clipboard-check mr-1"></i>Completed
+                                    </span>
+                                @break
+
+                                @case('rejected')
+                                    <span class="status-rejected text-xs font-bold px-3 py-1 rounded">
+                                        <i class="fas fa-minus-circle mr-1"></i>Rejected
+                                    </span>
+                                @break
+
+                                @case('withdrawn')
+                                    <span class="status-withdrawn text-xs font-bold px-3 py-1 rounded">
+                                        <i class="fas fa-times-circle mr-1"></i>Withdrawn
+                                    </span>
+                                @break
+
+                                @default
+                                    <span class="status-withdrawn text-xs font-bold px-3 py-1 rounded">
+                                        <i class="fas fa-question-circle mr-1"></i>Unknown
+                                    </span>
+                            @endswitch
+
+                            @if (
+                                ($application->status === 'pending') |
+                                    ($application->status === 'processing') |
+                                    ($application->status === 'awaiting_guardian_response'))
                                 <form method="POST" id="withdrawal-form"
                                     action="{{ route('applications.withdraw', $application) }}">
                                     @csrf

@@ -15,24 +15,51 @@
                     </div>
                     @switch($app->status)
                         @case('pending')
-                            <span class="status-pending text-xs font-bold px-3 py-1 rounded"><i
-                                    class="fas fa-clock mr-1"></i>Pending</span>
+                            <span class="status-pending text-xs font-bold px-3 py-1 rounded">
+                                <i class="fas fa-clock mr-1"></i>Pending
+                            </span>
                         @break
 
-                        @case('rejected')
-                            <span class="status-rejected text-xs font-bold px-3 py-1 rounded"><i
-                                    class="fas fa-minus-circle mr-1"></i>Rejected</span>
+                        @case('processing')
+                            <span class="status-processing text-xs font-bold px-3 py-1 rounded">
+                                <i class="fas fa-spinner mr-1"></i>Processing
+                            </span>
                         @break
 
                         @case('approved')
-                            <span class="status-approved text-xs font-bold px-3 py-1 rounded"><i
-                                    class="fas fa-check-circle mr-1"></i>Approved</span>
+                            <span class="status-approved text-xs font-bold px-3 py-1 rounded">
+                                <i class="fas fa-check-circle mr-1"></i>Approved
+                            </span>
+                        @break
+
+                        @case('awaiting_guardian_response')
+                            <span class="status-awaiting-guardian-response text-xs font-bold px-3 py-1 rounded">
+                                <i class="fas fa-user-clock mr-1"></i>Awaiting Guardian Response
+                            </span>
+                        @break
+
+                        @case('completed')
+                            <span class="status-approved text-xs font-bold px-3 py-1 rounded">
+                                <i class="fas fa-clipboard-check mr-1"></i>Completed
+                            </span>
+                        @break
+
+                        @case('rejected')
+                            <span class="status-rejected text-xs font-bold px-3 py-1 rounded">
+                                <i class="fas fa-minus-circle mr-1"></i>Rejected
+                            </span>
                         @break
 
                         @case('withdrawn')
-                            <span class="status-withdrawn text-xs font-bold px-3 py-1 rounded"><i
-                                    class="fas fa-times-circle mr-1"></i>Withdrawn</span>
+                            <span class="status-withdrawn text-xs font-bold px-3 py-1 rounded">
+                                <i class="fas fa-times-circle mr-1"></i>Withdrawn
+                            </span>
                         @break
+
+                        @default
+                            <span class="status-withdrawn text-xs font-bold px-3 py-1 rounded">
+                                <i class="fas fa-question-circle mr-1"></i>Unknown
+                            </span>
                     @endswitch
                 </div>
                 <div class="flex flex-col gap-2">

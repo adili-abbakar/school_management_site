@@ -27,9 +27,22 @@ class ClassArm extends Model
         return $this->belongsTo(AcademicClass::class, 'class_id');
     }
 
-    public function students(): HasMany
+    public function studentSessionRecords(): HasMany
     {
-        return $this->hasMany(Student::class, 'current_class_arm_id', 'id');
+        return $this->hasMany(StudentSessionRecord::class, 'class_arm_id', 'id');
+    }
+
+    public function getCurrentSessionStudentsAttribute()
+    {
+        $currentSession = Session::currentSession();
+
+        if (!$currentSession) {
+            return collect();
+        }
+
+        return $this->studentSessionRecords()
+            ->where('session_id', $currentSession->id)
+            ->get();
     }
 
     public function teacher(): BelongsTo
@@ -42,54 +55,41 @@ class ClassArm extends Model
         return $this->class->name . ' ' . $this->name;
     }
 
-    public static function resolveTargetClass($application): ?AcademicClass
+
+
+    public static function resolveClassArmForApplicationProgram($approvedClassId): ?self
     {
-        if (!empty($application->class_id)) {
-            return AcademicClass::find($application->class_id);
-        }
-
-        if (!empty($application->class_name)) {
-            return AcademicClass::where('name', $application->class_name)->first();
-        }
-
-        return null;
-    }
-
-    public static function resolveClassArmForApplication($application): ?self
-    {
-        $class = self::resolveTargetClass($application);
+        $class = AcademicClass::find($approvedClassId);
 
         if (!$class) {
             return null;
         }
 
-        $arms = $class->arms()
-            ->withCount([
-                'students as active_students_count' => function ($q) {
-                    $q->where('current_status', 'active');
-                }
-            ])
-            ->get();
+        $currentSession = Session::currentSession();
+
+        if (!$currentSession) {
+            return null;
+        }
+
+        $arms = $class->arms()->get();
 
         if ($arms->isEmpty()) {
             return null;
         }
 
-        $stream = strtolower(trim((string) ($application->stream ?? 'general')));
+        foreach ($arms as $arm) {
+            $arm->student_count = $arm->studentSessionRecords()
+                ->where('session_id', $currentSession->id)
+                ->count();
 
-        if (in_array($stream, ['science', 'arts'])) {
-            $matchedArm = $arms->first(function ($arm) use ($stream) {
-                return str_contains(strtolower($arm->name), $stream);
-            });
-
-            if ($matchedArm) {
-                return $matchedArm;
+            if ($arm->student_count < 30) {
+                return $arm;
             }
         }
 
-        $lowestCount = $arms->min('active_students_count');
+        $lowestCount = $arms->min('student_count');
 
-        return $arms->where('active_students_count', $lowestCount)
+        return $arms->where('student_count', $lowestCount)
             ->values()
             ->random();
     }

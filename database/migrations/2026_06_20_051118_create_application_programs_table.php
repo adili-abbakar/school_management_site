@@ -21,6 +21,7 @@ return new class extends Migration
                 'pending',
                 'approved',
                 'rejected',
+                'awaiting_guardian_response',
                 'withdrawn'
             ])->default('pending');
             $table->timestamps();

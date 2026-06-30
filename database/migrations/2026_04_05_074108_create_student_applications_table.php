@@ -60,7 +60,14 @@ return new class extends Migration
             $table->string('last_class_attended')->nullable();
             $table->enum('stream', ['arts', 'science'])->nullable();
             $table->unsignedBigInteger('session_id')->nullable();
-            $table->enum('status', ['pending', 'approved', 'rejected', 'withdrawn'])->default('pending');
+            $table->enum('status', [
+                'pending',
+                'processing',
+                'approved',
+                'awaiting_guardian_response',
+                'rejected',
+                'withdrawn',
+            ])->default('pending');
 
             $table->unsignedBigInteger('submitted_by_user_id')->nullable();
             $table->foreign('submitted_by_user_id')

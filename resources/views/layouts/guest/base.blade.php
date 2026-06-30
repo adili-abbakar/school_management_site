@@ -293,14 +293,29 @@
             color: #92400e;
         }
 
+        .status-processing {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
         .status-approved {
             background-color: #d1fae5;
             color: #065f46;
         }
 
+        .status-awaiting-guardian-response {
+            background-color: #ede9fe;
+            color: #5b21b6;
+        }
+
         .status-rejected {
             background-color: #fee2e2;
             color: #7f1d1d;
+        }
+
+        .status-withdrawn {
+            background-color: #f1f5f9;
+            color: #475569;
         }
 
         .document-preview {

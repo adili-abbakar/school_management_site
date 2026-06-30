@@ -14,22 +14,13 @@ return new class extends Migration
         Schema::create('student_session_records', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('student_program_enrollment_id')
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->foreignId('student_program_enrollment_id')->constrained('student_program_enrollments')->cascadeOnDelete();
 
-            $table->foreignId('session_id')
-                ->constrained()
-                ->restrictOnDelete();
+            $table->foreignId('session_id')->constrained('academic_sessions')->restrictOnDelete();
 
-            $table->foreignId('class_id')
-                ->constrained()
-                ->restrictOnDelete();
+            $table->foreignId('class_id')->constrained('classes')->restrictOnDelete();
 
-            $table->foreignId('class_arm_id')
-                ->nullable()
-                ->constrained()
-                ->nullOnDelete();
+            $table->foreignId('class_arm_id')->nullable()->constrained('class_arms')->nullOnDelete();
 
             $table->enum('status', [
                 'active',
@@ -39,6 +30,7 @@ return new class extends Migration
                 'graduated',
                 'withdrawn'
             ])->default('active');
+            $table->text('remarks')->nullable();
 
             $table->date('started_at')->nullable();
             $table->date('completed_at')->nullable();

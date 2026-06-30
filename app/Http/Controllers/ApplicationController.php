@@ -6,6 +6,10 @@ use App\Models\Academic\AcademicClass;
 use App\Models\Academic\ClassArm;
 use App\Models\Academic\Program;
 use App\Models\Academic\Session;
+use App\Models\Academic\StudentProgramEnrollment;
+use App\Models\Academic\StudentSessionRecord;
+use App\Models\Academic\StudentTermRecord;
+use App\Models\Academic\Term;
 use App\Models\ApplicationProgram;
 use App\Models\StudentApplication;
 use App\Models\Users\Guardian;
@@ -14,6 +18,7 @@ use App\Models\Users\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
 class ApplicationController extends Controller
@@ -393,6 +398,10 @@ class ApplicationController extends Controller
                 'guardian_address' => 'required|string|max:2055',
                 'guardian_occupation' =>  'required|string|max:100',
             ],);
+
+            $messages = array_merge($messages, [
+                'guardian_email.unique' => 'An account already exists with this guardian email address. Please sign in using that account to submit an admission application'
+            ]);
         }
 
         $validated = Validator::make($request->all(), $rules, $messages)->validate();
@@ -459,6 +468,11 @@ class ApplicationController extends Controller
      */
     public function show(StudentApplication $application)
     {
+        if ($application->status === 'pending') {
+            $application->update([
+                'status' => 'processing'
+            ]);
+        }
         return view('application.show', [
             'app' => $application
         ]);
@@ -491,20 +505,26 @@ class ApplicationController extends Controller
 
     public function decisionShow(StudentApplication $application)
     {
+        if ($application->status === 'pending') {
+            $application->update([
+                'status' => 'processing'
+            ]);
+        }
         return view('application.decision-show', ['app' => $application]);
     }
 
     public function decisionMake(StudentApplication $application, Request $request)
     {
         $validated = $request->validate([
-            'status' => 'required|in:approved,rejected',
+            'status' => 'required|in:approved,rejected,awaiting_guardian_response',
             'decision_date' => 'required|date',
             'remarks' => 'nullable',
 
-            'programs' => "array",
             'programs.*.id' => 'required|exists:application_programs,id',
+            'programs.*.program_id' => 'required|exists:programs,id',
+            'programs.*.requested_class_id' => "required|exists:classes,id",
             'programs.*.approved_class_id' => "required|exists:classes,id",
-            'programs.*.status' => "required|in:approved,rejected",
+            'programs.*.status' => "required|in:approved,rejected,awaiting_guardian_response",
             'programs.*.approved_stream' => "nullable|exists:class_arms,id",
             'programs.*.remarks' => 'nullable',
 
@@ -520,10 +540,17 @@ class ApplicationController extends Controller
 
         try {
             DB::transaction(function () use ($application, $validated) {
+                $currentSession = Session::currentSession();
                 if (empty($validated['remarks'])) {
-                    $validated['remarks'] = $validated['status'] === 'approved'
-                        ? 'Your application has been approved.'
-                        : 'Your application has been rejected.';
+                    if ($validated['status'] === 'approved') {
+                        $validated['remarks'] = 'Congratulations! Your admission application has been approved.';
+                    } elseif ($validated['status'] === 'rejected') {
+                        $validated['remarks'] = 'We regret to inform you that your admission application was not approved. Thank you for your interest in our institution.';
+                    } elseif ($validated['status'] === 'awaiting_guardian_response') {
+                        $validated['remarks'] = 'Your application is awaiting your guardian\'s response before the admission process can continue.';
+                    } else {
+                        $validated['remarks'] = 'Your admission application is currently under review. You will be notified once there is an update.';
+                    }
                 }
 
                 $application->update([
@@ -535,97 +562,162 @@ class ApplicationController extends Controller
 
 
                 $submittedProgrmas = (collect($validated['programs']));
+                $nonRequestedClassesApproved = [];
 
                 foreach ($submittedProgrmas as $program) {
+                    if (
+                        $program['status'] === 'approved' &&
+                        $program['requested_class_id'] != $program['approved_class_id']
+                    ) {
+                        $nonRequestedClassesApproved[] = $program['id'];
+                    }
                     if (!empty($program['id'])) {
                         if (empty($program['remarks'])) {
                             $program['remarks'] = $program['status'] === 'approved'
                                 ? 'Your program has been approved.'
                                 : 'Your program has been rejected.';
                         }
+                        switch ($program['remarks']) {
+                            case 'approved':
+                                $program['remarks'] = 'Congratulations! Your application for this program has been approved.';
+                                break;
+
+                            case 'rejected':
+                                $program['remarks'] = 'We regret to inform you that your application for this program was not approved.';
+                                break;
+
+                            case 'awaiting_guardian_response':
+                                $program['remarks'] = 'The selected program could not be approved at this time. Your application is currently awaiting your guardian\'s response before further processing.';
+                                break;
+
+                            default:
+                                $program['remarks'] = 'Your application is currently under review. You will be notified once there is an update.';
+                                break;
+                        }
                         $existingProgram = $application
                             ->programs()
                             ->findOrFail($program['id']);
 
+                        $status = $program['status'];
+
+                        if (
+                            $status === 'approved' &&
+                            $program['requested_class_id'] != $program['approved_class_id']
+                        ) {
+                            $status = 'awaiting_guardian_response';
+                        }
+
                         $existingProgram->update([
                             'approved_class_id' => $program['approved_class_id'],
-                            'status' => $program['status'],
+                            'status' => $status,
                             'remarks' => $program['remarks']
                         ]);
                     }
                 }
 
-                if ($validated['status'] === 'approved') {
-                    $guardian = null;
-                    if ($application->submitted_by_user_id) {
-                        $guardian = Guardian::firstOrCreate(
-                            ['user_id' => $application->submitted_by_user_id],
-                            ['occupation' => $application->guardian_occupation ?? null]
-                        );
-                    } else {
-                        $guardian = Guardian::whereHas('user', function ($query) use ($application) {
-                            $query->where('email', $application->guardian_email);
-                        })->first();
+                if (empty($nonRequestedClassesApproved)) {
+                    if ($validated['status'] === 'approved') {
+                        $guardian = null;
+                        if ($application->submitted_by_user_id) {
+                            $guardian = Guardian::firstOrCreate(
+                                ['user_id' => $application->submitted_by_user_id],
+                                ['occupation' => $application->guardian_occupation ?? null]
+                            );
+                        } else {
+                            $guardian = Guardian::whereHas('user', function ($query) use ($application) {
+                                $query->where('email', $application->guardian_email);
+                            })->first();
 
 
-                        if (!$guardian) {
-                            $guardianUser = User::create([
-                                'first_name' => $application->guardian_first_name,
-                                'middle_name' => $application->guardian_middle_name,
-                                'last_name' => $application->guardian_last_name,
-                                'email' => $application->guardian_email,
-                                'phone' => $application->guardian_phone,
-                                'date_of_birth' => $application->guardian_date_of_birth,
-                                'gender' => $application->guardian_gender,
-                                'nationality' => $application->guardian_nationality,
-                                'state' => $application->guardian_state,
-                                'local_government' => $application->guardian_local_government,
-                                'religion' => $application->guardian_religion,
-                                'tribe' => $application->guardian_tribe,
-                                'address' => $application->guardian_address,
-                                'password' => bcrypt(str()->random(12)),
+                            if (!$guardian) {
+                                $guardianUser = User::create([
+                                    'first_name' => $application->guardian_first_name,
+                                    'middle_name' => $application->guardian_middle_name,
+                                    'last_name' => $application->guardian_last_name,
+                                    'email' => $application->guardian_email,
+                                    'phone' => $application->guardian_phone,
+                                    'date_of_birth' => $application->guardian_date_of_birth,
+                                    'gender' => $application->guardian_gender,
+                                    'nationality' => $application->guardian_nationality,
+                                    'state' => $application->guardian_state,
+                                    'local_government' => $application->guardian_local_government,
+                                    'religion' => $application->guardian_religion,
+                                    'tribe' => $application->guardian_tribe,
+                                    'address' => $application->guardian_address,
+                                    'password' => bcrypt(str()->random(12)),
+                                ]);
+
+                                $guardian = Guardian::create([
+                                    'user_id' => $guardianUser->id,
+                                    'occupation' => $application->guardian_occupation,
+                                ]);
+                            }
+                        }
+
+
+
+                        $studentUser = User::create([
+                            'first_name' => $application->student_first_name,
+                            'middle_name' => $application->student_middle_name,
+                            'last_name' => $application->student_last_name,
+                            'date_of_birth' => $application->student_date_of_birth,
+                            'gender' => $application->student_gender,
+                            'nationality' => $application->student_nationality,
+                            'state' => $application->student_state,
+                            'local_government' => $application->student_local_government,
+                            'religion' => $application->student_religion,
+                            'tribe' => $application->student_tribe,
+                            'address' => $application->student_address,
+                            'password' => bcrypt(str()->random(12)),
+                        ]);
+
+                        $student = Student::create([
+                            'user_id' => $studentUser->id,
+                            'admission_number' => Student::generateAdmissionNumber(),
+                            'guardian_user_id' => $guardian->user_id,
+                            'guardian_relationship' => $application->guardian_relationship,
+                        ]);
+                        $studentUser->update(['password' => bcrypt($student->admission_number)]);
+                        $application->update(['status' => 'approved']);
+
+                        $approvedPrograms = collect($validated['programs'])
+                            ->where('status', 'approved');
+                        foreach ($approvedPrograms as $program) {
+                            $enrolledProgram = StudentProgramEnrollment::create([
+                                'student_id' => $student->user_id,
+                                'program_id' => $program['program_id'],
+                                'application_program_id' => $program['id'],
+                                'admission_date' => now(),
+                                'status' => 'active',
                             ]);
 
-                            $guardian = Guardian::create([
-                                'user_id' => $guardianUser->id,
-                                'occupation' => $application->guardian_occupation,
+
+                            if (!empty($program['approved_stream'])) {
+                                $classArm = ClassArm::find($program['approved_stream']);
+                            } else {
+                                $classArm = ClassArm::resolveClassArmForApplicationProgram($program['approved_class_id']);
+                            }
+
+                            $studentSessionRecord = StudentSessionRecord::create([
+                                'student_program_enrollment_id' => $enrolledProgram->id,
+                                'session_id' => $currentSession->id,
+                                'class_id' => $program['approved_class_id'],
+                                'class_arm_id' => $classArm->id,
+                                'status' => 'active',
+                                'started_at' => now(),
+                            ]);
+
+                            StudentTermRecord::create([
+                                'student_session_record_id' => $studentSessionRecord->id,
+                                'term_id' => Term::currentTerm()->id,
+                                'started_at' => now(),
                             ]);
                         }
                     }
-
-
-
-                    $studentUser = User::create([
-                        'first_name' => $application->student_first_name,
-                        'middle_name' => $application->student_middle_name,
-                        'last_name' => $application->student_last_name,
-                        'date_of_birth' => $application->student_date_of_birth,
-                        'gender' => $application->student_gender,
-                        'nationality' => $application->student_nationality,
-                        'state' => $application->student_state,
-                        'local_government' => $application->student_local_government,
-                        'religion' => $application->student_religion,
-                        'tribe' => $application->student_tribe,
-                        'address' => $application->student_address,
-                        'password' => bcrypt(str()->random(12)),
+                } else {
+                    $application->update([
+                        'status' => 'awaiting_guardian_response'
                     ]);
-
-
-                    if (!empty($validated['approved_stream'])) {
-                        $classArm = ClassArm::find($validated['approved_stream']);
-                    } else {
-                        $classArm = ClassArm::resolveClassArmForApplication($application);
-                    }
-
-                    $student = Student::create([
-                        'user_id' => $studentUser->id,
-                        'admission_number' => Student::generateAdmissionNumber(),
-                        'current_class_arm_id' => $classArm?->id,
-                        'guardian_user_id' => $guardian->user_id,
-                        'guardian_relationship' => $application->guardian_relationship,
-                    ]);
-                    $studentUser->update(['password' => bcrypt($student->admission_number)]);
-                    $application->update(['status' => 'approved']);
                 }
             });
 

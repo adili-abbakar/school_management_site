@@ -21,7 +21,7 @@ class StudentProgramEnrollment extends Model
 
     public function student(): BelongsTo
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Student::class, 'student_id', 'user_id');
     }
 
     public function program(): BelongsTo

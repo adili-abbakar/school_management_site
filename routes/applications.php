@@ -17,7 +17,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('applications/')->name('applications.')->group(function () {
         Route::get('{application}/descision/', [ApplicationController::class, 'decisionShow'])->name('decision.show');
-        Route::get('{application}/descision/make', [ApplicationController::class, 'decisionMake'])->name('decision.make');
+        Route::put('{application}/descision/make', [ApplicationController::class, 'decisionMake'])->name('decision.make');
         Route::put('{application}/approve/', [ApplicationController::class, 'approve'])->name('approve');
         Route::put('{application}/reject/', [ApplicationController::class, 'reject'])->name('reject');
         Route::put('/mine/', [ApplicationController::class, 'mine'])->name('mine');
