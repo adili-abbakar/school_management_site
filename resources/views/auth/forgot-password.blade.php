@@ -48,11 +48,6 @@
                     <i class="fas fa-arrow-left mr-2"></i> Back to Login
                 </a>
 
-                <a href="{{ route('password.reset') }}"
-                    class="block text-center text-xs font-bold text-gray-400 hover:text-blue-900 uppercase tracking-widest transition-colors">
-                    <i class="fas fa-arrow-left mr-2"></i> Reset Password
-                </a>
-
             </form>
         </div>
     </div>

@@ -30,6 +30,9 @@
                 <input type="hidden" name="email" value="{{ $email }}">
                 <input type="hidden" name="token" value="{{ $token }}">
 
+     
+<span id="emailError" class="text-red-600 text-sm"></span>
+<span id="tokenError" class="text-red-600 text-sm"></span>
                 <div id="globalError" class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out mb-4">
                     <div class="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
                         <i class="fas fa-exclamation-circle text-red-600"></i>
@@ -49,7 +52,7 @@
 
                         <input type="password" name="password" id="password" class="form-input pl-10!"
                             placeholder="••••••••" autocomplete="new-password">
-                    </div>A
+                    </div>  
 
                     <span id="passwordError" class="text-red-600 text-sm"></span>
 
