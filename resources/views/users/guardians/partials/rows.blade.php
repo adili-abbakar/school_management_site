@@ -53,7 +53,7 @@
                              <i class="fas fa-edit"></i>
                          </a>
 
-                         <a href="{{ route('user.edit-password', $guardian->user_id) }}"class="text-blue-500"
+                         <a href="{{ route('user.edit-password', $guardian->user_id) }}?user_type=guardian"class="text-blue-500"
                              title="Edit Password">
                              <i class="fas fa-key"></i>
                          </a>

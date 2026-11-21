@@ -10,7 +10,7 @@
                   <a href="{{ route('teachers.edit', $teacher->user_id) }}">
                       <button class="text-blue-500"><i class="fas fa-edit"></i></button>
                   </a>
-                  <a href="{{ route('user.edit-password', $teacher->user_id) }}">
+                  <a href="{{ route('user.edit-password', $teacher->user_id) }}?user_type=teacher">
                       <button class="text-blue-500" title="Edit Password"><i class="fas fa-key"></i></button>
                   </a>
                   <a href="{{ route('teachers.show', $teacher->user_id) }}">

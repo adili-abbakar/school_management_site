@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function editPassword(User $user)
+    public function editPassword(User $user, Request $request)
     {
-        return view('users.edit-password', compact('user'));
+        $user_type = $request->get('user_type');
+        return view('users.edit-password', compact('user', 'user_type'));
     }
 
     public function updatePassword(Request $request, User $user)
@@ -21,13 +22,14 @@ class UserController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
+        $user_type = $request->input('user_type');
         try {
-            DB::transaction(function () use ($validated, $user) {
+            DB::transaction(function () use ($validated, $user, $user_type) {
                 $user->update([
                     'password' => Hash::make($validated['password']),
                 ]);
 
-                $relation = match ($user->type) {
+                $relation = match ($user_type) {
                     'admin'   => $user->admin,
                     'teacher' => $user->teacher,
                     'guardian' => $user->guardian,
@@ -40,12 +42,17 @@ class UserController extends Controller
                 }
             });
 
-            $redirectUrl = match ($user->type) {
+            $redirectUrl = match ($user_type) {
                 'admin' => 'admins.index',
                 'teacher' => 'teachers.index',
                 'guardian' => 'guardians.index',
                 'student' => 'students.index',
+                default   => null,
             };
+
+            if (!$redirectUrl) {
+                $redirectUrl =  'dashboard.index';
+            }
 
             return response()->json(
                 [

@@ -3,7 +3,7 @@
 @section('title', 'Edit User Password')
 
 @section('page-content')
-    <main class="flex-grow flex flex-col min-w-0  overflow-y-auto">
+    <main class="grow flex flex-col min-w-0  overflow-y-auto">
         <x-dashboard-header />
 
 
@@ -25,6 +25,7 @@
                 class="form bg-white rounded-xl border border-slate-100 shadow-sm p-4 md:p-6">
                 @csrf
                 @method('PUT')
+                <input type="text" name="user_type" value="{{ $user_type }}" hidden>
 
                 @include('users.partials.password-fields')
 

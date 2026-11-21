@@ -33,7 +33,7 @@
                     <i class="fas fa-edit"></i>
                 </a>
 
-                <a href="{{ route('user.edit-password', $admin) }}" class="text-blue-500" title="Edit Password">
+                <a href="{{ route('user.edit-password', $admin) }}?user_type=admin" class="text-blue-500" title="Edit Password">
                     <i class="fas fa-key"></i>
                 </a>
 
