@@ -18,13 +18,13 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call([
-            // NumberingSettingSeeder::class,
             // AdminSeeder::class,
             // TeacherSeeder::class,
             // AcademicClassSeeder::class,
             // AcademicSessionSeeder::class,
             // StudentApplicationSeeder::class,
 
+            NumberingSettingSeeder::class,
             UserSeeder::class,
             AcademicStructureSeeder::class,
             SessionTermSeeder::class,

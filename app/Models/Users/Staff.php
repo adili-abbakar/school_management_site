@@ -38,24 +38,13 @@ class Staff extends Model
         return $this->hasOne(Admin::class, 'staff_id');
     }
 
+
     public static function generateStaffNumber(): string
     {
-        try {
-            return NumberingSetting::generateUnique(
-                'staff_number',
-                self::class,
-                'staff_number'
-            );
-        } catch (\Throwable $e) {
-            $year = now()->year;
-
-            $last = self::whereYear('created_at', $year)
-                ->orderByDesc('staff_number')
-                ->value('staff_number');
-
-            $number = $last ? ((int) substr($last, -3) + 1) : 1;
-
-            return 'STF/' . $year . '/' . str_pad($number, 3, '0', STR_PAD_LEFT);
-        }
+        return NumberingSetting::generateUnique(
+            'staff_number',
+            self::class,
+            'staff_number'
+        );
     }
 }

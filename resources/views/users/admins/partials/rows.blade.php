@@ -1,5 +1,6 @@
 @forelse ($admins as $admin)
-    <tr class="hover:bg-slate-50 transition-colors">
+    <tr class="hover:bg-slate-50 transition-colors cursor-pointer"
+        onclick="window.location.href='{{ route('admins.show', $admin) }}'">
         <td class="px-6 py-4 font-bold text-slate-400 uppercase">
             {{ $admin->staff->staff_number }}
         </td>
@@ -33,7 +34,8 @@
                     <i class="fas fa-edit"></i>
                 </a>
 
-                <a href="{{ route('user.edit-password', $admin) }}?user_type=admin" class="text-blue-500" title="Edit Password">
+                <a href="{{ route('user.edit-password', $admin) }}?user_type=admin" class="text-blue-500"
+                    title="Edit Password">
                     <i class="fas fa-key"></i>
                 </a>
 

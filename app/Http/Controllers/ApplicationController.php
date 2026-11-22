@@ -560,7 +560,6 @@ class ApplicationController extends Controller
                     'remarks' => $validated['remarks'],
                 ]);
 
-
                 $submittedProgrmas = (collect($validated['programs']));
                 $nonRequestedClassesApproved = [];
 

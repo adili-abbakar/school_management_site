@@ -55,8 +55,6 @@ class ResetPasswordController extends Controller
         }
 
         if (!Hash::check($validated['token'], $passwordReset->token)) {
-            $passwordReset->delete();
-
             return response()->json([
                 'status' => 'error',
                 'type' => 'auth',

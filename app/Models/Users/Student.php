@@ -2,6 +2,7 @@
 
 namespace App\Models\Users;
 
+use App\Models\Academic\ClassArm;
 use App\Models\Academic\StudentProgramEnrollment;
 use App\Models\NumberingSetting;
 use Illuminate\Database\Eloquent\Model;
@@ -42,6 +43,11 @@ class Student extends Model
         return $this->belongsTo(Guardian::class, 'guardian_user_id', 'user_id');
     }
 
+
+    // public function currentClassArm()
+    // {
+    //     return $this->activeProgramEnrollments()->first()?->classArm();
+    // }
 
     public static function generateAdmissionNumber()
     {

@@ -16,7 +16,6 @@ class UserSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call([
-            NumberingSettingSeeder::class,
             AdminSeeder::class,
             TeacherSeeder::class
         ]);

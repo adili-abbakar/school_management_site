@@ -1,38 +1,38 @@
 @forelse ($applications as $app)
-    <div data-status="{{ $app->status }}"
-        class="item-to-filter admission-applications bg-white rounded-lg border border-slate-100 p-4 shadow-sm hover:shadow-md transition-all border-l-4
+    <div data-status="{{ $app->status }}" onclick="window.location.href='{{ route('applications.show', $app) }}'"
+        class="item-to-filter admission-applications bg-white rounded-lg border border-slate-100 p-4 shadow-sm hover:shadow-md transition-all border-l-4 cursor-pointer
                 @switch($app->status)
-    @case('pending')
-        border-l-amber-400
-        @break
+                    @case('pending')
+                        border-l-amber-400
+                        @break
 
-    @case('processing')
-        border-l-blue-400
-        @break
+                    @case('processing')
+                        border-l-blue-400
+                        @break
 
-    @case('approved')
-        border-l-green-400
-        @break
+                    @case('approved')
+                        border-l-green-400
+                        @break
 
-    @case('awaiting_guardian_response')
-        border-l-violet-400
-        @break
+                    @case('awaiting_guardian_response')
+                        border-l-violet-400
+                        @break
 
-    @case('completed')
-        border-l-green-500
-        @break
+                    @case('completed')
+                        border-l-green-500
+                        @break
 
-    @case('rejected')
-        border-l-red-400
-        @break
+                    @case('rejected')
+                        border-l-red-400
+                        @break
 
-    @case('withdrawn')
-        border-l-slate-400
-        @break
+                    @case('withdrawn')
+                        border-l-slate-400
+                        @break
 
-    @default
-        border-l-slate-300
-@endswitch">
+                    @default
+                        border-l-slate-300
+                @endswitch">
 
         <div class="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-4">
 

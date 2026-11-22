@@ -14,7 +14,7 @@ class NumberingSettingSeeder extends Seeder
     public function run(): void
     {
         NumberingSetting::create([
-            'type'  => 'staff_id',
+            'type'  => 'staff_number',
             'prefix' => "STF",
             'separator' => '',
             'padding' => 3,

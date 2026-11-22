@@ -1,5 +1,6 @@
   @forelse($teachers as  $teacher)
-      <tr class="hover:bg-slate-50 transition-colors">
+      <tr class="hover:bg-slate-50 transition-colors cursor-pointer"
+          onclick="window.location.href='{{ route('teachers.show', $teacher->user_id) }}'">
           <td class="px-6 py-4 font-bold text-slate-400 uppercase">{{ $teacher->staff->staff_number }}</td>
           <td class="px-6 py-4 font-semibold text-primary">{{ $teacher->user->full_name }}</td>
           <td class="px-6 py-4 text-slate-600">{{ $teacher->specialized_subject }}</td>

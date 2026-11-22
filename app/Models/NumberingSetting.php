@@ -35,8 +35,16 @@ class NumberingSetting extends Model
                     $parts[] = $setting->prefix;
                 }
 
+                if ($setting->separator) {
+                    $parts[] = $setting->separator;
+                }
+
                 if ($setting->include_year) {
                     $parts[] = now()->year;
+                }
+
+                if ($setting->separator) {
+                    $parts[] = $setting->separator;
                 }
 
                 $parts[] = str_pad(

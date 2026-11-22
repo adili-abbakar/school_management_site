@@ -21,7 +21,7 @@ class StudentController extends Controller
 
         $classes = AcademicClass::orderdChain()->flatten();
 
-        $students = Student::with(['user', 'currentClassArm.class'])
+        $students = Student::with(['user'])
             ->when($search, function ($query) use ($search, $searchNoSpace) {
                 $query->where(function ($q) use ($search, $searchNoSpace) {
                     $q->where('admission_number', 'like', "%{$search}%")
@@ -48,26 +48,8 @@ class StudentController extends Controller
                                     "CONCAT(last_name, ' ', first_name) LIKE ?",
                                     ["%{$search}%"]
                                 );
-                        })
-                        ->orWhereHas('currentClassArm', function ($classArmQuery) use ($search, $searchNoSpace) {
-                            $classArmQuery->join('classes', 'classes.id', '=', 'class_arms.class_id')
-                                ->where(function ($classQuery) use ($search, $searchNoSpace) {
-                                    $classQuery->where('class_arms.name', 'like', "%{$search}%")
-                                        ->orWhere('classes.name', 'like', "%{$search}%")
-                                        ->orWhereRaw(
-                                            "CONCAT(classes.name, ' ', class_arms.name) LIKE ?",
-                                            ["%{$search}%"]
-                                        )
-                                        ->orWhereRaw(
-                                            "REPLACE(CONCAT(classes.name, ' ', class_arms.name), ' ', '') LIKE ?",
-                                            ["%{$searchNoSpace}%"]
-                                        );
-                                });
                         });
                 });
-            })
-            ->when($classArmId, function ($query) use ($classArmId) {
-                $query->where('current_class_arm_id', $classArmId);
             })
             ->when($status, function ($query) use ($status) {
                 $query->where('current_status', $status);
@@ -105,17 +87,17 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Student $student)
     {
-        //
+        return view('users.students.show', compact('student'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Student $student)
     {
-        //
+        return view('users.students.edit', compact('student'));
     }
 
     /**

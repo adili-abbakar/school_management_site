@@ -1,5 +1,6 @@
          @forelse ($guardians as $guardian)
-             <tr class="hover:bg-slate-50 transition-colors">
+             <tr class="hover:bg-slate-50 transition-colors cursor-pointer"
+                 onclick="window.location.href='{{ route('guardians.show', $guardian->user_id) }}'">
                  <td class="px-6 py-4">
                      <div class="flex flex-col">
                          <span class="font-semibold text-primary">
@@ -11,12 +12,7 @@
                      </div>
                  </td>
 
-                 {{-- <td class="px-6 py-4">
-                     <span class="bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase">
-                         {{ $guardian->relationship ? str_replace('_', ' ', $guardian->relationship) : 'Not set' }}
-                     </span>
-                 </td> --}}
-
+               
                  <td class="px-6 py-4 text-slate-500">
                      {{ $guardian->user->phone ?? 'No phone number' }}
                  </td>
@@ -62,7 +58,8 @@
                              <i class="fas fa-eye"></i>
                          </a>
 
-                         <a href="{{ route('guardians.delete', $guardian->user_id) }}" class="text-red-500" title="Delete">
+                         <a href="{{ route('guardians.delete', $guardian->user_id) }}" class="text-red-500"
+                             title="Delete">
                              <i class="fas fa-trash"></i>
                          </a>
                      </div>

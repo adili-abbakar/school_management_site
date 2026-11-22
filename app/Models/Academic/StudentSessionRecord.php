@@ -34,6 +34,11 @@ class StudentSessionRecord extends Model
         return $this->belongsTo(AcademicClass::class, 'class_id');
     }
 
+    public function student(): BelongsTo
+    {
+      return $this->enrollment->student();
+    }
+
     public function classArm(): BelongsTo
     {
         return $this->belongsTo(ClassArm::class);

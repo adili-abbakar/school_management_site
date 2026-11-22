@@ -38,4 +38,9 @@ class StudentProgramEnrollment extends Model
     {
         return $this->hasMany(StudentSessionRecord::class);
     }
+
+    public function activeSessionRecord()
+    {
+        return $this->hasOne(StudentSessionRecord::class)->where('status', 'active');
+    }
 }
